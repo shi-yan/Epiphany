@@ -5,8 +5,10 @@ A customized editor
 2. image gallery
 3. video embedded
 4. twitter embedded
-5. reference
-6. redo/undo
-7. history (version control)
-8. realtime-markdown
-9. colaboration?
+5. redo/undo
+6. history (version control)
+7. realtime-markdown
+8. emoji
+
+9. reference
+10. colaboration?
