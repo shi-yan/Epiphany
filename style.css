@@ -1,0 +1,9 @@
+#editor {
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+[contenteditable]:focus {
+  outline: 0px solid transparent;
+}
