@@ -5,10 +5,12 @@ import { EditorView } from "prosemirror-view"
 import { Schema, DOMParser } from "prosemirror-model"
 import 'prosemirror-view/style/prosemirror.css'
 import 'prosemirror-menu/style/menu.css'
+import 'prosemirror-gapcursor/style/gapcursor.css'
 import './style.css'
 import { baseKeymap } from "prosemirror-commands"
 import TagsView from "./tags"
 import Gallery from "./gallery"
+import { gapCursor } from "prosemirror-gapcursor"
 
 const textSchema = new Schema({
   nodes: {
@@ -45,7 +47,6 @@ const textSchema = new Schema({
     gallery: {
       group: "block",
       content: "image*",
-      draggable: true,
       toDOM() { return ["gallery", 0] },
       parseDOM: [{ tag: "gallery" }]
     },
@@ -67,7 +68,8 @@ const textSchema = new Schema({
       parseDOM: [{ tag: "tags" }]
     },
     doc: {
-      content: "title tags block+"
+      content: "title tags block+",
+      allowGapCursor: true
     }
   }
 })
@@ -80,7 +82,8 @@ window.editorView = new EditorView(document.querySelector("#editor"), {
     doc: DOMParser.fromSchema(textSchema).parse('<h1>test</h1><tags></tags>'),
     plugins: [
 
-      keymap(baseKeymap)
+      keymap(baseKeymap),
+      gapCursor()
     ]
   }),
   nodeViews: {
