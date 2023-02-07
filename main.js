@@ -8,6 +8,7 @@ import 'prosemirror-menu/style/menu.css'
 import './style.css'
 import { baseKeymap } from "prosemirror-commands"
 import TagsView from "./tags"
+import Gallery from "./gallery"
 
 const textSchema = new Schema({
   nodes: {
@@ -83,17 +84,22 @@ window.editorView = new EditorView(document.querySelector("#editor"), {
     ]
   }),
   nodeViews: {
-    tags(node, view, getPos) { return new TagsView(node, view, getPos) }
+    tags(node, view, getPos) { return new TagsView(node, view, getPos) },
+    gallery(node, view, getPos) {return new Gallery(node, view, getPos) }
   }
 })
 
 imageButton.onclick = (e) => {
   e.preventDefault();
+  let type = textSchema.nodes.gallery;
+
   let nn = textSchema.nodes.gallery.createAndFill(null, null);
  // let tr = new Transform(node);
   let {$from} = window.editorView.state.selection;
   let index = $from.index();
   console.log("index",index);
+
+  window.editorView.dispatch(window.editorView.state.tr.replaceSelectionWith(textSchema.nodes.gallery.create()))
 
 
   //tr.replaceWith(0, node.nodeSize - 2, [nn]);
