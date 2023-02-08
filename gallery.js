@@ -1,3 +1,6 @@
+import textSchema from "./textschema";
+import { Transform, StepMap } from "prosemirror-transform"
+
 export default class Gallery {
     constructor(node, view, getPos) {
         this.node = node;
@@ -11,7 +14,27 @@ export default class Gallery {
         let inputElem = document.createElement("input");
         inputElem.type = "file";
         inputElem.id = "actual-btn";
-        inputElem.hidden = true;
+        inputElem.hidden = false;
+        inputElem.onchange = function (e) {
+            console.log(e)
+            e.preventDefault();
+            let nn = textSchema.nodes.image.createAndFill({
+                file: 'file'
+            }, null);
+            let tr = new Transform(node);
+
+            tr.replaceWith(0, node.nodeSize - 2, [nn]);
+            console.log(tr);
+            let offsetMap = StepMap.offset(getPos() + 1);
+            let outerTr = view.state.tr;
+            let steps = tr.steps
+            for (let j = 0; j < steps.length; j++) {
+                outerTr.step(steps[j].map(offsetMap))
+            }
+            if (outerTr.docChanged) view.dispatch(outerTr);
+
+            console.log('trigger', getPos(), node)
+        };
 
         let labelElem = document.createElement("label");
         labelElem.for = "actual-btn"
@@ -21,10 +44,44 @@ export default class Gallery {
         this.dom.appendChild(labelElem)
     }
 
+    createDom(node) {
+
+    }
+
     update(node) {
+        console.log("image node updated", node)
+
+        if (node.childCount > 0 ){
+            console.log('img set')
+            let imgElem=document.createElement("img");
+            imgElem.src = "https://www.cam.ac.uk/sites/www.cam.ac.uk/files/styles/content-885x432/public/news/research/news/crop_178.jpg";
+            this.dom.appendChild(imgElem)
+            let inputElem = document.createElement("input");
+            this.dom.appendChild(inputElem)
+            let button = document.createElement("button");
+            button.innerText = "set"
+            this.dom.appendChild(button);
+            console.log(node.child(0))
+            let tr = new Transform(node);
+       
+            tr.setNodeAttribute( 0, 'file',  'changed_file');
+            console.log(tr);
+/*
+            let offsetMap = StepMap.offset(this.getPos() + 1);
+            let outerTr = this.outerView.state.tr;
+            let steps = tr.steps
+            for (let j = 0; j < steps.length; j++) {
+                outerTr.step(steps[j].map(offsetMap))
+            }
+            if (outerTr.docChanged)*/ this.outerView.dispatch(tr);
+
+            console.log('trigger', this.getPos(), node)
+
+        }
+
         return true;
     }
 
-    selectNode() {}
-    deselectNode() {}
+    selectNode() { }
+    deselectNode() { }
 }

@@ -1,3 +1,6 @@
+import textSchema from "./textschema";
+import { Transform, StepMap } from "prosemirror-transform"
+
 
 export default class TagsView {
     constructor(node, view, getPos) {
