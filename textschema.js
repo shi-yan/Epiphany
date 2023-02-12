@@ -67,6 +67,17 @@ const textSchema = new Schema({
         },
         parseDOM: [{ tag: "equation" }]
       },
+      inline_equation: {
+        atom: true,
+        group: "inline",
+        content: "inline*",
+        inline: true,
+        marks:"",
+        toDOM(node) {
+          return ["inline_equation", 0]
+        },
+        parseDOM: [{ tag: "inline_equation" }]
+      },
       doc: {
         content: "title tags block+",
         allowGapCursor: true

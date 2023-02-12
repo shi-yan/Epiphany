@@ -14,12 +14,11 @@ import EquationView from "./equation"
 import { gapCursor } from "prosemirror-gapcursor"
 import textSchema from "./textschema"
 import EquationManager from "./equation_manager"
+import InlineEquationView from "./inline_equation"
 
 function menuPlugin(items) {
   return new Plugin({
     filterTransaction(tr, state) {
-      console.log("filter", tr)
-     // window.confirm("sometext");
 
       return true;
     },
@@ -36,25 +35,10 @@ function menuPlugin(items) {
       imageButton.id = 'image';
       imageButton.innerText = "Im"
 
-
       imageButton.onclick = (e) => {
         e.preventDefault();
-        let type = textSchema.nodes.gallery;
-      
-        let nn = textSchema.nodes.gallery.createAndFill(null, null);
-       // let tr = new Transform(node);
-        let {$from} = window.editorView.state.selection;
-        let index = $from.index();
-        console.log("index",index);
-      
-        window.editorView.dispatch(window.editorView.state.tr.replaceSelectionWith(textSchema.nodes.gallery.create()))
-      
-      
-        //tr.replaceWith(0, node.nodeSize - 2, [nn]);
-        //console.log(tr);
+        window.editorView.dispatch(window.editorView.state.tr.replaceSelectionWith(textSchema.nodes.gallery.create()));
       }
-
-
 
       let equationButton = document.createElement('button');
 
@@ -63,30 +47,28 @@ function menuPlugin(items) {
 
       equationButton.onclick = (e) => {
         e.preventDefault();
-        let type = textSchema.nodes.equation;
-      
-        let nn = textSchema.nodes.equation.createAndFill(null, null);
-       // let tr = new Transform(node);
-        let {$from} = window.editorView.state.selection;
-        let index = $from.index();
-        console.log("index",index);
-      
-        window.editorView.dispatch(window.editorView.state.tr.replaceSelectionWith(textSchema.nodes.equation.create()))
-      
-      
+        window.editorView.dispatch(window.editorView.state.tr.replaceSelectionWith(textSchema.nodes.equation.create()));
+      }
+
+      let inlineEquationButton = document.createElement('button');
+
+      inlineEquationButton.id = 'equation';
+      inlineEquationButton.innerText = "IEq"
+
+      inlineEquationButton.onclick = (e) => {
+        e.preventDefault();
+        window.editorView.dispatch(window.editorView.state.tr.replaceSelectionWith(textSchema.nodes.inline_equation.create()));
       }
 
       menuView.appendChild(imageButton);
       menuView.appendChild(equationButton);
+      menuView.appendChild(inlineEquationButton);
       editorView.dom.parentNode.insertBefore(menuView, editorView.dom);
       return menuView;
     }
   })
 }
 
-
-let imageButton = document.getElementById('gallery');
-let equationButton = document.getElementById('equation');
 let equationManager = new EquationManager();
 
 window.editorView = new EditorView(document.querySelector("#editor"), {
@@ -101,12 +83,8 @@ window.editorView = new EditorView(document.querySelector("#editor"), {
   }),
   nodeViews: {
     tags(node, view, getPos) { return new TagsView(node, view, getPos) },
-    gallery(node, view, getPos) {return new GalleryView(node, view, getPos) },
-    equation(node, view, getPos) {return new EquationView(node, view, getPos, equationManager) },
+    gallery(node, view, getPos) { return new GalleryView(node, view, getPos) },
+    equation(node, view, getPos) { return new EquationView(node, view, getPos, equationManager) },
+    inline_equation(node, view, getPos) {return new InlineEquationView(node, view, getPos)}
   }
 })
-/*
-
-
-
-*/
