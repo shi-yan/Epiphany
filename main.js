@@ -1,6 +1,6 @@
 import { keymap } from "prosemirror-keymap"
 import { Transform, StepMap } from "prosemirror-transform"
-import { EditorState, Plugin } from "prosemirror-state"
+import { EditorState, Plugin, Selection } from "prosemirror-state"
 import { EditorView } from "prosemirror-view"
 import { Schema, DOMParser } from "prosemirror-model"
 import 'prosemirror-view/style/prosemirror.css'
@@ -111,8 +111,9 @@ function menuPlugin() {
   })
 }
 
+let editorElm = document.querySelector("#editor");
 
-window.editorView = new EditorView(document.querySelector("#editor"), {
+window.editorView = new EditorView(editorElm, {
   state: EditorState.create({
     doc: DOMParser.fromSchema(textSchema).parse('<h1>test</h1><tags></tags>'),
     plugins: [
@@ -134,3 +135,24 @@ window.editorView = new EditorView(document.querySelector("#editor"), {
    
   }*/
 })
+
+editorElm.onclick = (e) => {
+  if (e.target !== editorElm) {
+    return;
+  }
+  e.preventDefault();
+
+
+  let lastNode = window.editorView.state.doc.lastChild;
+  let rpos = window.editorView.state.doc.resolve(window.editorView.state.doc.nodeSize - 2);
+  let selection = Selection.near(rpos, 1)
+  console.log("last sel", lastNode, rpos, selection)
+  let tr = window.editorView.state.tr.setSelection(selection).scrollIntoView()
+  setTimeout(() => {
+    window.editorView.dispatch(tr)
+    window.editorView.focus()
+  }, 100);
+
+  e.stopImmediatePropagation();
+  e.stopPropagation();
+}

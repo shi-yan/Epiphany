@@ -19,37 +19,27 @@ export default class EquationView {
         this.dom = document.createElement("div");
         this.dom.setAttribute('data-key', this.key);
         this.dom.classList.add('limpid-equation');
-        this.input = document.createElement("textarea");
-
-        this.input.style.display = "block";
-        this.input.value = "c = \\pm\\sqrt{a^2 + b^2}";
-        this.input.style.width = "100%";
-        this.input.style.border = "none";
-        this.input.style.outline = "none";
-        this.input.style.minHeight = "100px";
-        this.dom.appendChild(this.input);
         this.dom.style.padding = "10px";
         this.dom.style.textAlign = "center";
 
-        this.display = document.createElement("div");
-        this.display.style.display = "none";
-        this.display.style.marginLeft = "auto";
-        this.display.style.marginRight = "auto";
+        this.input = document.createElement("textarea");
+        this.input.className = "limpid-equation-input"
+        this.input.classList.add("limpid-equation-input-edit-mode");
+        this.dom.appendChild(this.input);
 
+        this.display = document.createElement("div");
+        this.display.className = "limpid-equation-display";
+        this.display.classList.add("limpid-equation-display-edit-mode");
         this.dom.appendChild(this.display);
 
-        this.idElm = document.createElement("span");
-        this.idElm.classList.add('limpid-equation-counter');
+        this.idElm = document.createElement("div");
+        this.idElm.className = 'limpid-equation-counter';
+        this.idElm.classList.add('limpid-equation-counter-edit-mode');
         this.idElm.setAttribute('data-key', this.key);
-        this.idElm.style.float = 'right';
         this.idElm.innerText = '(' + this.displayId + ')';
         this.dom.appendChild(this.idElm);
 
-        katex.render("c = \\pm\\sqrt{a^2 + b^2}", this.display, {
-            throwOnError: false
-        });
         let self = this;
-        //select the current node after creation
         let ns = new NodeSelection(this.outerView.state.doc.resolve(getPos()));
 
         let tr = self.outerView.state.tr.setSelection(ns).scrollIntoView()
@@ -59,11 +49,7 @@ export default class EquationView {
         });
 
         this.input.addEventListener('keydown', (e) => {
-
-            if (!!(~['Enter', 'Tab', 'Comma'].indexOf(e.code))) {
-
-            }
-            else if (e.code === 'ArrowUp') {
+            if (e.code === 'ArrowUp') {
                 self.input.blur();
                 let targetPos = getPos()
                 let selection = Selection.near(self.outerView.state.doc.resolve(targetPos), -1)
@@ -87,30 +73,42 @@ export default class EquationView {
             e.stopPropagation();
         });
 
-
         this.manager.register(this.key, this);
     }
 
     update(node) {
-        console.log('node update', node)
         this.node = node;
         return true;
     }
 
     selectNode() {
-        console.log('node selected')
         this.dom.classList.add("ProseMirror-selectednode")
-        this.input.style.display = 'block';
-        this.display.style.display = 'none';
-
-        this.input.value = "c = \\pm\\sqrt{a^2 + b^2}";
+        this.input.classList.add("limpid-equation-input-edit-mode");
+        this.display.classList.add("limpid-equation-display-edit-mode");
+        this.idElm.classList.add('limpid-equation-counter-edit-mode');
+        console.log("node", this.node);
+        if (this.node.content.size == 0) {
+            this.input.value = "c = \\pm\\sqrt{a^2 + b^2}";
+        }
+        else {
+            this.input.value = this.node.textContent;
+        }
         this.input.focus();
     }
 
     deselectNode() {
         this.dom.classList.remove("ProseMirror-selectednode")
-        this.input.style.display = 'none';
-        this.display.style.display = 'inline-block';
+        this.input.classList.remove("limpid-equation-input-edit-mode");
+        this.display.classList.remove("limpid-equation-display-edit-mode");
+        this.idElm.classList.remove('limpid-equation-counter-edit-mode');
+        this.input.blur();
+        let nn = textSchema.text(this.input.value);
+        let tr = this.outerView.state.tr.replaceWith(this.getPos() + 1, this.getPos() + 1 + this.node.nodeSize - 2, [nn]);
+        this.outerView.dispatch(tr);
+        katex.render(this.input.value, this.display, {
+            displayMode: true,
+            throwOnError: false
+        });
     }
 
     stopEvent() {
@@ -119,6 +117,5 @@ export default class EquationView {
 
     destroy() {
         this.manager.remove(this.key);
-        console.log('equation destroyed ')
     }
 }
