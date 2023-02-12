@@ -127,5 +127,10 @@ window.editorView = new EditorView(document.querySelector("#editor"), {
     gallery(node, view, getPos) { return new GalleryView(node, view, getPos) },
     equation(node, view, getPos) { return new EquationView(node, view, getPos, equationManager) },
     inline_equation(node, view, getPos) { return new InlineEquationView(node, view, getPos) }
-  }
+  },
+  /*dispatchTransaction: (tr) => {    
+    const state = window.editorView.state.apply(tr);
+    window.editorView.updateState(state);
+   
+  }*/
 })

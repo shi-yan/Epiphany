@@ -31,6 +31,7 @@ export default class InlineEquationView {
 
     update(node) {
         console.log('node update', node)
+        this.node = node;
         return true;
     }
 

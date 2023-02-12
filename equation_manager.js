@@ -11,8 +11,6 @@ export default class EquationManager {
         if (oldCount != this.equations.size) {
             this.recount();
         }
-        console.log('register equation view', key, view, oldCount, this.equations.size);
-
     }
 
     remove(key) {
@@ -38,9 +36,8 @@ export default class EquationManager {
                 let key = listOfEquations[i].getAttribute('data-key');
                 
                 let view = this.equations.get(key);
-                view.id = i+1;
+                view.displayId = i+1;
             }
-
         }, 1000);
     }
 
@@ -49,7 +46,7 @@ export default class EquationManager {
 
         this.equations.forEach((value, key , map) => {
             exisitingEquations.push({
-                id: value.id,
+                id: value.displayId,
                 dom: value.display.cloneNode(true)
             })
         })

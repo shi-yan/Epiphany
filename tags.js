@@ -10,8 +10,6 @@ export default class TagsView {
     this.outerView = view
     this.getPos = getPos
 
-    console.log('debug node', node);
-
     // The node's representation in the editor (empty, for now)
     this.dom = document.createElement("div");
     this.input = document.createElement("input");
@@ -29,7 +27,7 @@ export default class TagsView {
     let inputElm = this.input;
     let self = this;
 
-    this.input.addEventListener('keydown',  (e) => {
+    this.input.addEventListener('keydown', (e) => {
 
       var str = 'fake';
 
@@ -61,25 +59,26 @@ export default class TagsView {
         let targetPos = getPos()
         let selection = Selection.near(self.outerView.state.doc.resolve(targetPos), -1)
         let tr = self.outerView.state.tr.setSelection(selection).scrollIntoView()
-        self.outerView.dispatch(tr)
-        self.outerView.focus()
+        setTimeout(() => {
+          self.outerView.dispatch(tr)
+          self.outerView.focus()
+        }, 100);
       }
       else if (e.code === 'ArrowDown') {
-    
+
         inputElm.blur();
         let targetPos = getPos() + self.node.nodeSize
         let selection = Selection.near(self.outerView.state.doc.resolve(targetPos), 1)
         let tr = self.outerView.state.tr.setSelection(selection).scrollIntoView()
-        self.outerView.dispatch(tr)
-        self.outerView.focus()
+        setTimeout(() => {
+          self.outerView.dispatch(tr)
+          self.outerView.focus()
+        }, 100);
       }
 
       e.stopImmediatePropagation();
       e.stopPropagation();
-
     });
-
-
   }
 
   update(node) {

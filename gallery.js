@@ -50,7 +50,7 @@ export default class GalleryView {
 
     update(node) {
         console.log("image node updated", node)
-
+        this.node = node;
         if (node.childCount > 0) {
             console.log('img set')
             let imgElem = document.createElement("img");
