@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Pragati+Narrow&family=Roboto:wght@300&family=Source+Code+Pro&display=swap');
+
+
 #editor {
   max-width: 800px;
   margin-left: auto;
@@ -16,4 +19,9 @@ label {
   border-radius: 0.3rem;
   cursor: pointer;
   margin-top: 1rem;
+}
+
+.ProseMirror h1 {
+  font-family: 'Pragati Narrow', sans-serif;
+
 }

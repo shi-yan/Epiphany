@@ -1,7 +1,7 @@
 import textSchema from "./textschema";
 import { Transform, StepMap } from "prosemirror-transform"
 
-export default class Gallery {
+export default class GalleryView {
     constructor(node, view, getPos) {
         this.node = node;
         this.outerView = view
@@ -51,9 +51,9 @@ export default class Gallery {
     update(node) {
         console.log("image node updated", node)
 
-        if (node.childCount > 0 ){
+        if (node.childCount > 0) {
             console.log('img set')
-            let imgElem=document.createElement("img");
+            let imgElem = document.createElement("img");
             imgElem.src = "https://www.cam.ac.uk/sites/www.cam.ac.uk/files/styles/content-885x432/public/news/research/news/crop_178.jpg";
             this.dom.appendChild(imgElem)
             let inputElem = document.createElement("input");
@@ -61,19 +61,19 @@ export default class Gallery {
             let button = document.createElement("button");
             button.innerText = "set"
             this.dom.appendChild(button);
-            console.log(node.child(0))
-            let tr = new Transform(node);
-       
-            tr.setNodeAttribute( 0, 'file',  'changed_file');
-            console.log(tr);
-/*
+            console.log(node.child(0).resolve(0))
+
+           // let tr = this.outerView.state.tr.setNodeAttribute(this.getPos()+1, 'file', 'changed_file');
+           // console.log(tr);
+            /*
             let offsetMap = StepMap.offset(this.getPos() + 1);
             let outerTr = this.outerView.state.tr;
             let steps = tr.steps
             for (let j = 0; j < steps.length; j++) {
                 outerTr.step(steps[j].map(offsetMap))
             }
-            if (outerTr.docChanged)*/ this.outerView.dispatch(tr);
+            if (outerTr.docChanged)*/
+            // this.outerView.dispatch(tr);
 
             console.log('trigger', this.getPos(), node)
 
@@ -84,4 +84,8 @@ export default class Gallery {
 
     selectNode() { }
     deselectNode() { }
+
+    stopEvent() {
+        return true;
+      }
 }
