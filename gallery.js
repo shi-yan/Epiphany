@@ -62,21 +62,7 @@ export default class GalleryView {
             button.innerText = "set"
             this.dom.appendChild(button);
             console.log(node.child(0).resolve(0))
-
-           // let tr = this.outerView.state.tr.setNodeAttribute(this.getPos()+1, 'file', 'changed_file');
-           // console.log(tr);
-            /*
-            let offsetMap = StepMap.offset(this.getPos() + 1);
-            let outerTr = this.outerView.state.tr;
-            let steps = tr.steps
-            for (let j = 0; j < steps.length; j++) {
-                outerTr.step(steps[j].map(offsetMap))
-            }
-            if (outerTr.docChanged)*/
-            // this.outerView.dispatch(tr);
-
             console.log('trigger', this.getPos(), node)
-
         }
 
         return true;

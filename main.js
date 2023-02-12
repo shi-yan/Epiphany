@@ -16,10 +16,26 @@ import textSchema from "./textschema"
 import EquationManager from "./equation_manager"
 import InlineEquationView from "./inline_equation"
 
-function menuPlugin(items) {
+let equationManager = new EquationManager();
+
+
+function popup(content) {
+  let exisiting = document.getElementById('limpid-popup-backdrop');
+
+  if (exisiting) {
+    exisiting.parentNode.removeChild(exisiting);
+  }
+
+  let backdrop = document.createElement('div');
+  backdrop.id = 'limpid-popup-backdrop';
+  document.body.appendChild(backdrop);
+}
+
+
+function menuPlugin() {
   return new Plugin({
     filterTransaction(tr, state) {
-
+      console.log(tr)
       return true;
     },
     view(editorView) {
@@ -63,13 +79,38 @@ function menuPlugin(items) {
       menuView.appendChild(imageButton);
       menuView.appendChild(equationButton);
       menuView.appendChild(inlineEquationButton);
+
+      let showSelector = document.createElement('button');
+
+      showSelector.id = 'show';
+      showSelector.innerText = "SE";
+
+      showSelector.onclick = (e) => {
+        e.preventDefault();
+
+        let exisiting = document.getElementById('limpid-equation-ref-selector');
+
+        if (exisiting) {
+          exisiting.parentNode.removeChild(exisiting);
+        }
+
+        let container = document.createElement('div');
+        container.classList.add('limpid-equation-ref-selector');
+
+        equationManager.assembleSelector(container);
+
+        popup(container);
+      }
+
+      menuView.appendChild(showSelector);
+
+
       editorView.dom.parentNode.insertBefore(menuView, editorView.dom);
       return menuView;
     }
   })
 }
 
-let equationManager = new EquationManager();
 
 window.editorView = new EditorView(document.querySelector("#editor"), {
   state: EditorState.create({
@@ -85,6 +126,6 @@ window.editorView = new EditorView(document.querySelector("#editor"), {
     tags(node, view, getPos) { return new TagsView(node, view, getPos) },
     gallery(node, view, getPos) { return new GalleryView(node, view, getPos) },
     equation(node, view, getPos) { return new EquationView(node, view, getPos, equationManager) },
-    inline_equation(node, view, getPos) {return new InlineEquationView(node, view, getPos)}
+    inline_equation(node, view, getPos) { return new InlineEquationView(node, view, getPos) }
   }
 })

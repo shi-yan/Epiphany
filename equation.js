@@ -1,5 +1,7 @@
 import textSchema from "./textschema";
 import { Transform, StepMap } from "prosemirror-transform"
+import { TextSelection, Selection } from "prosemirror-state"
+
 import "./katex.min";
 import "./katex.min.css";
 
@@ -25,6 +27,7 @@ export default class EquationView {
         this.input.style.width = "100%";
         this.input.style.border = "none";
         this.input.style.outline = "none";
+        this.input.style.minHeight = "100px";
         this.dom.appendChild(this.input);
         this.dom.style.padding = "10px";
         this.dom.style.textAlign = "center";
@@ -47,15 +50,40 @@ export default class EquationView {
             throwOnError: false
         });
 
+        let self =this;
+        this.input.addEventListener('keydown',  (e) => {
+
+            var str = 'fake';
+      
+            console.log("keydown", e.code)
+      
+            if (!!(~['Enter', 'Tab', 'Comma'].indexOf(e.code))) {
+             
+            }
+            else if (e.code === 'ArrowUp') {
+              self.input.blur();
+              let targetPos = getPos()
+              let selection = Selection.near(self.outerView.state.doc.resolve(targetPos), -1)
+              let tr = self.outerView.state.tr.setSelection(selection).scrollIntoView()
+              self.outerView.dispatch(tr)
+              self.outerView.focus()
+              let line = self.input.value.substr(0, self.input.selectionStart).split("\n").length;
+             console.log('area', self.input.selectionStart, line)
+            }
+       
+      
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+      
+          });
 
 
-        console.log('test ====')
         this.manager.register(this.key, this);
     }
 
     update(node) {
         console.log('node update', node)
-
+        this.node = node;
         return true;
     }
 

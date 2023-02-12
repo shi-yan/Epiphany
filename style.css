@@ -25,3 +25,22 @@ label {
   font-family: 'Pragati Narrow', sans-serif;
 
 }
+
+.limpid-equation-ref-selector {
+  max-width: 400px;
+  max-height: 500px;
+  position: absolute;
+}
+
+#limpid-popup-backdrop {
+  position: fixed;
+  backdrop-filter: blur(6px);
+  background-color: rgba(38, 38, 38, 80);
+  opacity: 0.5;
+  left: 0px;
+  top: 0px;
+
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+}

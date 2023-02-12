@@ -1,6 +1,6 @@
 import textSchema from "./textschema";
 import { Transform, StepMap } from "prosemirror-transform"
-import {TextSelection} from "prosemirror-state"
+import { TextSelection, Selection } from "prosemirror-state"
 
 
 export default class TagsView {
@@ -27,7 +27,9 @@ export default class TagsView {
       e.stopPropagation();
     })
     let inputElm = this.input;
-    this.input.addEventListener('keydown', function (e) {
+    let self = this;
+
+    this.input.addEventListener('keydown',  (e) => {
 
       var str = 'fake';
 
@@ -38,7 +40,7 @@ export default class TagsView {
         let nn = textSchema.nodes.tag.createAndFill(null, textSchema.text("fake"));
         //let tr = new Transform(node);
 
-        let tr = view.state.tr.replaceWith(getPos() + 1, getPos() + 1 + node.nodeSize - 2, [nn]);
+        let tr = self.outerView.state.tr.replaceWith(getPos() + 1, getPos() + 1 + self.node.nodeSize - 2, [nn]);
         /*console.log(tr);
         let offsetMap = StepMap.offset(getPos() + 1);
         let outerTr = view.state.tr;
@@ -47,34 +49,41 @@ export default class TagsView {
           outerTr.step(steps[j].map(offsetMap))
         }
         if (outerTr.docChanged)*/
-        view.dispatch(tr);
+        self.outerView.dispatch(tr);
 
-        console.log('trigger', getPos(), node)
+        console.log('trigger', getPos(), self.node)
         //  input.value = "";
         // if(str != "")
         //   tags.addTag(str);
       }
       else if (e.code === 'ArrowUp') {
-        //inputElm.blur();
-        //const pos = getPos() - 1;
-        //const pos = 0;
-        //console.log("set selection", pos)
-        //console.log("pos", getPos())
-        //let pos = node.resolve(0).parent.resolve(0);
-        //console.log(pos)
-        //view.dispatch(view.state.tr.setSelection(TextSelection.create(view.state.doc, pos)));
+        inputElm.blur();
+        let targetPos = getPos()
+        let selection = Selection.near(self.outerView.state.doc.resolve(targetPos), -1)
+        let tr = self.outerView.state.tr.setSelection(selection).scrollIntoView()
+        self.outerView.dispatch(tr)
+        self.outerView.focus()
+      }
+      else if (e.code === 'ArrowDown') {
+    
+        inputElm.blur();
+        let targetPos = getPos() + self.node.nodeSize
+        let selection = Selection.near(self.outerView.state.doc.resolve(targetPos), 1)
+        let tr = self.outerView.state.tr.setSelection(selection).scrollIntoView()
+        self.outerView.dispatch(tr)
+        self.outerView.focus()
       }
 
       e.stopImmediatePropagation();
       e.stopPropagation();
 
     });
-    // These are used when the footnote is selected
-    this.innerView = null
+
 
   }
 
   update(node) {
+    this.node = node
     console.log('node update', node)
 
     node.forEach(
