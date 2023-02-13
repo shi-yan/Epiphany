@@ -30,7 +30,14 @@ const textSchema = new Schema({
           source: node.attrs.source
         }]
       },
-      parseDOM: [{ tag: "img" }]
+      parseDOM: [{
+        tag: "img", getAttrs(dom) {
+          return {
+            file: dom.file,
+            description: dom.description, source: dom.source
+          }
+        }
+      }]
     },
     gallery: {
       group: "block",
@@ -40,7 +47,7 @@ const textSchema = new Schema({
       parseDOM: [{ tag: "gallery" }]
     },
     tag: {
-      content: "inline*",
+      content: "text*",
       marks: "",
       toDOM(node) {
         return ["tag", 0]
@@ -59,7 +66,7 @@ const textSchema = new Schema({
     },
     equation: {
       group: "block",
-      content: "inline*",
+      content: "text*",
       atom: true,
       marks: "",
       toDOM(node) {
@@ -70,13 +77,24 @@ const textSchema = new Schema({
     inline_equation: {
       atom: true,
       group: "inline",
-      content: "inline*",
+      content: "text*",
       inline: true,
       marks: "",
       toDOM(node) {
         return ["inline_equation", 0]
       },
       parseDOM: [{ tag: "inline_equation" }]
+    },
+    equation_ref: {
+      attrs: { id: {} },
+      group: "inline",
+      inline: true,
+      atom: true,
+      marks: "",
+      toDOM(node) {
+        return ["equation_ref", { "id": node.attrs.id }]
+      },
+      parseDOM: [{ tag: "equation_ref", getAttrs(dom) { return { id: dom.id } } }]
     },
     doc: {
       content: "title tags block+",

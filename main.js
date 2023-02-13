@@ -15,6 +15,7 @@ import { gapCursor } from "prosemirror-gapcursor"
 import textSchema from "./textschema"
 import EquationManager from "./equation_manager"
 import InlineEquationView from "./inline_equation"
+import EquationRefView from "./equation_ref"
 
 let equationManager = new EquationManager();
 
@@ -29,6 +30,20 @@ function popup(content) {
   let backdrop = document.createElement('div');
   backdrop.id = 'limpid-popup-backdrop';
   document.body.appendChild(backdrop);
+
+  let dialog = document.createElement('div');
+  dialog.className = 'limpid-popup-dialog';
+  backdrop.appendChild(dialog);
+
+  let closeButton = document.createElement('button');
+  closeButton.innerText = "Close";
+  dialog.appendChild(closeButton);
+
+  closeButton.onclick = (e) => {
+    backdrop.parentNode.removeChild(backdrop);
+  }
+
+  dialog.appendChild(content);
 }
 
 
@@ -97,7 +112,20 @@ function menuPlugin() {
         let container = document.createElement('div');
         container.classList.add('limpid-equation-ref-selector');
 
-        equationManager.assembleSelector(container);
+        equationManager.assembleSelector(container, (equationKey) => {
+          console.log("insert equation ref", equationKey)
+
+          let exisiting = document.getElementById('limpid-popup-backdrop');
+          if (exisiting) {
+            exisiting.parentNode.removeChild(exisiting);
+          }
+
+          e.preventDefault();
+          window.editorView.dispatch(window.editorView.state.tr.replaceSelectionWith(textSchema.nodes.equation_ref.create({
+            id:
+              equationKey
+          })));
+        });
 
         popup(container);
       }
@@ -127,7 +155,10 @@ window.editorView = new EditorView(editorElm, {
     tags(node, view, getPos) { return new TagsView(node, view, getPos) },
     gallery(node, view, getPos) { return new GalleryView(node, view, getPos) },
     equation(node, view, getPos) { return new EquationView(node, view, getPos, equationManager) },
-    inline_equation(node, view, getPos) { return new InlineEquationView(node, view, getPos) }
+    inline_equation(node, view, getPos) { return new InlineEquationView(node, view, getPos) },
+    equation_ref(node, view, getPos) {
+      return new EquationRefView(node, view, getPos, equationManager)
+    }
   },
   /*dispatchTransaction: (tr) => {    
     const state = window.editorView.state.apply(tr);

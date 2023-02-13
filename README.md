@@ -9,6 +9,7 @@ A customized editor
 7. realtime-markdown
 8. emoji
 11. embed code
+12. drop image
 
 9. reference
 10. colaboration?

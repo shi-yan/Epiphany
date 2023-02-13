@@ -1,10 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Pragati+Narrow&family=Roboto:wght@300&family=Source+Code+Pro&display=swap');
 
+html {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  height: 100%;
+}
 
 #editor {
-  max-width: 800px;
+  flex-grow: 1;
+  width: 800px;
   margin-left: auto;
   margin-right: auto;
+  cursor: text;
 }
 
 [contenteditable]:focus {
@@ -27,20 +40,90 @@ label {
 }
 
 .limpid-equation-ref-selector {
-  max-width: 400px;
-  max-height: 500px;
-  position: absolute;
+  display: flex;
+  flex-direction: column;
 }
 
 #limpid-popup-backdrop {
   position: fixed;
   backdrop-filter: blur(6px);
-  background-color: rgba(38, 38, 38, 80);
-  opacity: 0.5;
+  background-color: transparent;
+  opacity: 0.8;
   left: 0px;
   top: 0px;
-
   width: 100vw;
   height: 100vh;
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.limpid-popup-dialog {
+  width: 500px;
+  height: 480px;
+  border-radius: 24px;
+  border-width: 1px;
+  background-color: rgb(28, 28, 28);
+  opacity: 0.9;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.limpid-equation-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  min-height: 100px;
+  display: none;
+}
+
+.limpid-equation-input-edit-mode {
+  display: block;
+}
+
+.limpid-equation-display {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 600px;
+}
+
+.limpid-equation-display-edit-mode {
+  display: none;
+}
+
+.limpid-equation-counter {
+  display: inline-block;
+  position: relative;
+  top: 50%;
+}
+
+.limpid-equation-counter-edit-mode {
+  display: none;
+}
+
+.limpid-equation-ref-selector-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: antiquewhite;
+  border-radius: 12px;
+  border-width: 1px;
+  padding: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  cursor: pointer;
+}
+
+.limpid-equation-ref-selector-display {
+  flex-grow: 1;
+}
+
+.limpid-equation-ref {
+  margin-left: 8px;
+  margin-right: 8px;
+  font-style: italic;
+  font-weight: bold;
 }

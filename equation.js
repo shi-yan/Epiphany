@@ -7,6 +7,8 @@ import "./katex.min.css";
 
 export default class EquationView {
     constructor(node, view, getPos, manager) {
+
+        console.log("====================== create equation");
         // We'll need these later
         this.node = node
         this.outerView = view
@@ -78,6 +80,10 @@ export default class EquationView {
 
     update(node) {
         this.node = node;
+        katex.render(this.node.textContent, this.display, {
+            displayMode: true,
+            throwOnError: false
+        });
         return true;
     }
 
@@ -103,12 +109,11 @@ export default class EquationView {
         this.idElm.classList.remove('limpid-equation-counter-edit-mode');
         this.input.blur();
         let nn = textSchema.text(this.input.value);
-        let tr = this.outerView.state.tr.replaceWith(this.getPos() + 1, this.getPos() + 1 + this.node.nodeSize - 2, [nn]);
-        this.outerView.dispatch(tr);
-        katex.render(this.input.value, this.display, {
-            displayMode: true,
-            throwOnError: false
-        });
+        setTimeout(() => {
+            let tr = this.outerView.state.tr.replaceWith(this.getPos() + 1, this.getPos()+1 + this.node.nodeSize - 2, [nn]);
+            this.outerView.dispatch(tr);
+        }, 100);
+
     }
 
     stopEvent() {
