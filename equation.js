@@ -2,9 +2,6 @@ import textSchema from "./textschema";
 import { Transform, StepMap } from "prosemirror-transform"
 import { TextSelection, Selection, NodeSelection } from "prosemirror-state"
 
-import "./katex.min";
-import "./katex.min.css";
-
 export default class EquationView {
     constructor(node, view, getPos, manager) {
 
