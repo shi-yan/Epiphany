@@ -52,23 +52,35 @@ export default class EquationView {
 
         this.input.addEventListener('keydown', (e) => {
             if (e.code === 'ArrowUp') {
-                self.input.blur();
-                let targetPos = getPos()
-                let selection = Selection.near(self.outerView.state.doc.resolve(targetPos), -1)
-                let tr = self.outerView.state.tr.setSelection(selection).scrollIntoView()
-                setTimeout(() => {
-                    self.outerView.dispatch(tr)
-                    self.outerView.focus()
-                }, 100);
+
+                let curLine = this.input.value.substring(0, this.input.selectionStart).split("\n").length - 1;
+
+                if (curLine == 0) {
+                    self.input.blur();
+                    let targetPos = getPos()
+                    let pos = self.outerView.state.doc.resolve(targetPos)
+                    let selection = Selection.near(pos, -1)
+                    let tr = self.outerView.state.tr.setSelection(selection).scrollIntoView()
+                    setTimeout(() => {
+                        self.outerView.dispatch(tr)
+                        self.outerView.focus()
+                    }, 100);
+                }
             } else if (e.code === 'ArrowDown') {
-                self.input.blur();
-                let targetPos = getPos() + self.node.nodeSize
-                let selection = Selection.near(self.outerView.state.doc.resolve(targetPos), 1)
-                let tr = self.outerView.state.tr.setSelection(selection).scrollIntoView()
-                setTimeout(() => {
-                    self.outerView.dispatch(tr)
-                    self.outerView.focus()
-                });
+
+                let curLine = this.input.value.substring(0, this.input.selectionStart).split("\n").length - 1;
+                let allLines = this.input.value.split("\n").length - 1;
+
+                if (curLine == allLines) {
+                    self.input.blur();
+                    let targetPos = getPos() + self.node.nodeSize
+                    let selection = Selection.near(self.outerView.state.doc.resolve(targetPos), 1)
+                    let tr = self.outerView.state.tr.setSelection(selection).scrollIntoView()
+                    setTimeout(() => {
+                        self.outerView.dispatch(tr)
+                        self.outerView.focus()
+                    });
+                }
             }
 
             e.stopImmediatePropagation();
@@ -80,10 +92,12 @@ export default class EquationView {
 
     update(node) {
         this.node = node;
+
         katex.render(this.node.textContent, this.display, {
             displayMode: true,
             throwOnError: false
         });
+
         return true;
     }
 
@@ -110,8 +124,12 @@ export default class EquationView {
         this.input.blur();
         let nn = textSchema.text(this.input.value);
         setTimeout(() => {
-            let tr = this.outerView.state.tr.replaceWith(this.getPos() + 1, this.getPos()+1 + this.node.nodeSize - 2, [nn]);
-            this.outerView.dispatch(tr);
+             let tr = this.outerView.state.tr.replaceWith(this.getPos() + 1, this.getPos()+1 + this.node.nodeSize - 2, nn);
+             this.outerView.dispatch(tr);
+
+           // let tr = this.outerView.state.tr.setNodeAttribute(this.getPos(), 'latex', this.input.value);
+           // this.outerView.dispatch(tr);
+
         }, 100);
 
     }

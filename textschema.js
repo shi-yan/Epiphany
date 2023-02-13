@@ -67,12 +67,12 @@ const textSchema = new Schema({
     equation: {
       group: "block",
       content: "text*",
+      defining:true,
       atom: true,
-      marks: "",
       toDOM(node) {
-        return ["equation", 0]
+        return [{tag:"equation"},0]
       },
-      parseDOM: [{ tag: "equation" }]
+      parseDOM: [{ tag: "equation"  }]
     },
     inline_equation: {
       atom: true,

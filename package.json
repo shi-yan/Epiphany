@@ -17,7 +17,8 @@
     "prosemirror-keymap": "^1.2.0",
     "prosemirror-menu": "^1.2.1",
     "prosemirror-model": "^1.19.0",
+    "prosemirror-schema-basic": "^1.2.1",
     "prosemirror-state": "^1.4.2",
-    "prosemirror-view": "^1.30.0"
+    "prosemirror-view": "file:../prosemirror-view"
   }
 }
