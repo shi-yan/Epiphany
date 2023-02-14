@@ -47,6 +47,47 @@ function popup(content) {
 }
 
 
+
+function trailingSpacePlugin() {
+  const plugin = new Plugin({
+    key: 'trailing',
+    appendTransaction: (_, __, state) => {
+      console.log("append transaction called")
+      const { doc, tr, schema } = state;
+      const shouldInsertNodeAtEnd = plugin.getState(state);
+      const endPosition = doc.content.size - 1;
+      if (!shouldInsertNodeAtEnd) {
+        return;
+
+      }
+      return tr.insert(
+        endPosition,
+        textSchema.nodes.paragraph.create()
+      );
+    },
+    state: {
+      init: (_, _state) => {
+        return false;
+      },
+      apply: (tr, value) => {
+        if (!tr.docChanged) {
+          return value;
+        }
+        let lastNode = tr.doc.lastChild;
+        if (!lastNode) {
+          throw new Error("Expected node");
+        }
+        if (lastNode.type.name === "paragraph") {
+          return false;
+        }
+        return true; 
+      },
+    },
+  });
+
+  return plugin;
+}
+
 function menuPlugin() {
   return new Plugin({
     filterTransaction(tr, state) {
@@ -148,7 +189,8 @@ window.editorView = new EditorView(editorElm, {
 
       keymap(baseKeymap),
       gapCursor(),
-      menuPlugin()
+      menuPlugin(),
+      trailingSpacePlugin()
     ]
   }),
   nodeViews: {
