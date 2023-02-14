@@ -10,6 +10,8 @@ A customized editor
 8. emoji
 11. embed code
 12. drop image
+trailing node https://github.com/YousefED/BlockNote/blob/main/packages/core/src/extensions/TrailingNode/TrailingNodeExtension.ts
+
 
 9. reference
 10. colaboration?
