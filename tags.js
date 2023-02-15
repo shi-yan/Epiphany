@@ -82,6 +82,7 @@ export default class TagsView {
   }
 
   update(node) {
+    if (node.type != this.node.type) return false
     this.node = node
     console.log('node update', node)
 

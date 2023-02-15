@@ -88,7 +88,14 @@ export default class EquationView {
     }
 
     update(node) {
+        if (node.type != this.node.type) return false
         this.node = node;
+
+        let content = this.node.textContent;
+
+        if (content.length == 0) {
+            content = this.input.value;
+        }
 
         katex.render(this.node.textContent, this.display, {
             displayMode: true,
@@ -103,7 +110,7 @@ export default class EquationView {
         this.input.classList.add("limpid-equation-input-edit-mode");
         this.display.classList.add("limpid-equation-display-edit-mode");
         this.idElm.classList.add('limpid-equation-counter-edit-mode');
-        console.log("node", this.node);
+
         if (this.node.content.size == 0) {
             this.input.value = "c = \\pm\\sqrt{a^2 + b^2}";
         }
@@ -120,15 +127,22 @@ export default class EquationView {
         this.idElm.classList.remove('limpid-equation-counter-edit-mode');
         this.input.blur();
         let nn = textSchema.text(this.input.value);
-        setTimeout(() => {
-             let tr = this.outerView.state.tr.replaceWith(this.getPos() + 1, this.getPos()+1 + this.node.nodeSize - 2, nn);
-             this.outerView.dispatch(tr);
 
-           // let tr = this.outerView.state.tr.setNodeAttribute(this.getPos(), 'latex', this.input.value);
-           // this.outerView.dispatch(tr);
+        if (this.input.value == this.node.textContent) {
+            katex.render(this.node.textContent, this.display, {
+                displayMode: true,
+                throwOnError: false
+            });
+        } else {
+            setTimeout(() => {
+                let tr = this.outerView.state.tr.replaceWith(this.getPos() + 1, this.getPos() + 1 + this.node.nodeSize - 2, nn);
+                this.outerView.dispatch(tr);
 
-        }, 100);
+                // let tr = this.outerView.state.tr.setNodeAttribute(this.getPos(), 'latex', this.input.value);
+                // this.outerView.dispatch(tr);
 
+            }, 100);
+        }
     }
 
     stopEvent() {

@@ -30,6 +30,7 @@ export default class InlineEquationView {
     }
 
     update(node) {
+        if (node.type != this.node.type) return false
         console.log('node update', node)
         this.node = node;
         return true;

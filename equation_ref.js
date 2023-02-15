@@ -19,6 +19,7 @@ export default class EquationRefView {
     }
 
     update(node) {
+        if (node.type != this.node.type) return false
         this.node = node;
         return true;
     }

@@ -49,6 +49,7 @@ export default class GalleryView {
     }
 
     update(node) {
+        if (node.type != this.node.type) return false
         console.log("image node updated", node)
         this.node = node;
         if (node.childCount > 0) {

@@ -7,7 +7,7 @@ import 'prosemirror-view/style/prosemirror.css'
 import 'prosemirror-menu/style/menu.css'
 import 'prosemirror-gapcursor/style/gapcursor.css'
 import './style.css'
-import { baseKeymap } from "prosemirror-commands"
+import { baseKeymap, setBlockType } from "prosemirror-commands"
 import TagsView from "./tags"
 import GalleryView from "./gallery"
 import EquationView from "./equation"
@@ -80,7 +80,7 @@ function trailingSpacePlugin() {
         if (lastNode.type.name === "paragraph") {
           return false;
         }
-        return true; 
+        return true;
       },
     },
   });
@@ -174,6 +174,17 @@ function menuPlugin() {
       menuView.appendChild(showSelector);
 
 
+      let h2Button = document.createElement('button');
+
+      h2Button.id = 'h2button';
+      h2Button.innerText = "H2";
+      let h2Command = setBlockType(textSchema.nodes.heading, { level: 2 });
+      h2Button.onclick = (e) => {
+        h2Command(window.editorView.state, window.editorView.dispatch, window.editorView);
+      }
+
+      menuView.appendChild(h2Button);
+
       editorView.dom.parentNode.insertBefore(menuView, editorView.dom);
       return menuView;
     }
@@ -181,6 +192,18 @@ function menuPlugin() {
 }
 
 let editorElm = document.querySelector("#editor");
+let updateContentTimer = null;
+function updateContent() {
+  updateContentTimer = null;
+  console.log("inside update content", window.editorView.state.doc);
+
+  for(let i =0;i<window.editorView.state.doc.content.content.length;++i){
+    let node = window.editorView.state.doc.content.content[i];
+    if (node.type.name === 'heading'){
+      console.log(node.textContent)
+    }
+  }
+}
 
 window.editorView = new EditorView(editorElm, {
   state: EditorState.create({
@@ -202,11 +225,38 @@ window.editorView = new EditorView(editorElm, {
       return new EquationRefView(node, view, getPos, equationManager)
     }
   },
-  /*dispatchTransaction: (tr) => {    
+  dispatchTransaction: (tr) => {
     const state = window.editorView.state.apply(tr);
     window.editorView.updateState(state);
-   
-  }*/
+
+    function rebuildContentTable() {
+      if (updateContentTimer) {
+        clearTimeout(updateContentTimer);
+        updateContentTimer = null;
+      }
+      updateContentTimer = setTimeout(() => {
+        updateContent();
+      }, 3000);
+    }
+
+    for (let i = 0; i < tr.steps.length; ++i) {
+      console.log(tr.steps[i].slice)
+      if (tr.steps[i].slice.content.size == 0) {
+        rebuildContentTable();
+        return;
+      }
+
+      for (let e = 0; e < tr.steps[i].slice.content.content.length; ++e) {
+        let node = tr.steps[i].slice.content.content[e];
+
+        if (node.type.name === 'heading') {
+          rebuildContentTable();
+          return;
+        }
+      }
+    }
+
+  }
 })
 
 editorElm.onclick = (e) => {
