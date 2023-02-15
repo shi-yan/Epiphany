@@ -108,6 +108,26 @@ const textSchema = new Schema({
                  {tag: "h6", attrs: {level: 6}}],
       toDOM(node) { return ["h" + node.attrs.level, 0] }
     },
+    video: {
+      attrs: {src: {}},
+      group: "block",
+      defining: true,
+      atom:true,
+      toDOM(node) {
+        return ["video", { "src": node.attrs.src }]
+      },
+      parseDOM: [{ tag: "video", getAttrs(dom) { return { src: dom.src } } }]
+    },
+    twitter: {
+      attrs: {src: {}},
+      group: "block",
+      defining: true,
+      atom:true,
+      toDOM(node) {
+        return ["twitter", { "src": node.attrs.src }]
+      },
+      parseDOM: [{ tag: "twitter", getAttrs(dom) { return { src: dom.src } } }]
+    },
     doc: {
       content: "title tags block+",
       allowGapCursor: true

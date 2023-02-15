@@ -16,6 +16,8 @@ import textSchema from "./textschema"
 import EquationManager from "./equation_manager"
 import InlineEquationView from "./inline_equation"
 import EquationRefView from "./equation_ref"
+import VideoView from "./video"
+import TwitterView from "./twitter"
 
 let equationManager = new EquationManager();
 
@@ -55,7 +57,7 @@ function trailingSpacePlugin() {
       console.log("append transaction called")
       const { doc, tr, schema } = state;
       const shouldInsertNodeAtEnd = plugin.getState(state);
-      const endPosition = doc.content.size - 1;
+      const endPosition = doc.content.size;
       if (!shouldInsertNodeAtEnd) {
         return;
 
@@ -90,6 +92,12 @@ function trailingSpacePlugin() {
 
 function menuPlugin() {
   return new Plugin({
+    props: {
+      transformPasted(slice, view) {
+        console.log('handle paste', slice)
+        return slice
+      }
+    },
     filterTransaction(tr, state) {
       console.log(tr)
       return true;
@@ -180,10 +188,41 @@ function menuPlugin() {
       h2Button.innerText = "H2";
       let h2Command = setBlockType(textSchema.nodes.heading, { level: 2 });
       h2Button.onclick = (e) => {
+        e.preventDefault();
         h2Command(window.editorView.state, window.editorView.dispatch, window.editorView);
       }
 
       menuView.appendChild(h2Button);
+
+      let videoButton = document.createElement('button');
+
+      videoButton.id = 'videobutton';
+      videoButton.innerText = "Vi";
+
+      videoButton.onclick = (e) => {
+        e.preventDefault();
+        window.editorView.dispatch(window.editorView.state.tr.replaceSelectionWith(textSchema.nodes.video.create({
+          src:
+            'ttt'
+        })));
+      }
+
+      menuView.appendChild(videoButton);
+
+      let twitterButton = document.createElement('button');
+
+      twitterButton.id = 'twitterbutton';
+      twitterButton.innerText = "Tw";
+
+      twitterButton.onclick = (e) => {
+        e.preventDefault();
+        window.editorView.dispatch(window.editorView.state.tr.replaceSelectionWith(textSchema.nodes.twitter.create({
+          src:
+            'ttt'
+        })));
+      }
+
+      menuView.appendChild(twitterButton);
 
       editorView.dom.parentNode.insertBefore(menuView, editorView.dom);
       return menuView;
@@ -197,9 +236,9 @@ function updateContent() {
   updateContentTimer = null;
   console.log("inside update content", window.editorView.state.doc);
 
-  for(let i =0;i<window.editorView.state.doc.content.content.length;++i){
+  for (let i = 0; i < window.editorView.state.doc.content.content.length; ++i) {
     let node = window.editorView.state.doc.content.content[i];
-    if (node.type.name === 'heading'){
+    if (node.type.name === 'heading') {
       console.log(node.textContent)
     }
   }
@@ -223,7 +262,13 @@ window.editorView = new EditorView(editorElm, {
     inline_equation(node, view, getPos) { return new InlineEquationView(node, view, getPos) },
     equation_ref(node, view, getPos) {
       return new EquationRefView(node, view, getPos, equationManager)
-    }
+    },
+    video(node, view, getPos) {
+      return new VideoView(node, view, getPos)
+    },
+    twitter(node, view, getPos) {
+      return new TwitterView(node, view, getPos)
+    },
   },
   dispatchTransaction: (tr) => {
     const state = window.editorView.state.apply(tr);
