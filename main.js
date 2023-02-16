@@ -20,6 +20,7 @@ import VideoView from "./video"
 import TwitterView from "./twitter"
 import { undo, redo, history } from "prosemirror-history"
 import { buildKeymap } from "./keymap"
+import {dropCursor} from "prosemirror-dropcursor"
 
 let equationManager = new EquationManager();
 
@@ -254,6 +255,7 @@ window.editorView = new EditorView(editorElm, {
       keymap(buildKeymap(textSchema)),
       keymap(baseKeymap),
       gapCursor(),
+      dropCursor(),
       menuPlugin(),
       trailingSpacePlugin(),
       history()
