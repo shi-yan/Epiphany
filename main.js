@@ -18,6 +18,8 @@ import InlineEquationView from "./inline_equation"
 import EquationRefView from "./equation_ref"
 import VideoView from "./video"
 import TwitterView from "./twitter"
+import { undo, redo, history } from "prosemirror-history"
+import { buildKeymap } from "./keymap"
 
 let equationManager = new EquationManager();
 
@@ -249,11 +251,12 @@ window.editorView = new EditorView(editorElm, {
   state: EditorState.create({
     doc: DOMParser.fromSchema(textSchema).parse('<h1>test</h1><tags></tags>'),
     plugins: [
-
+      keymap(buildKeymap(textSchema)),
       keymap(baseKeymap),
       gapCursor(),
       menuPlugin(),
-      trailingSpacePlugin()
+      trailingSpacePlugin(),
+      history()
     ]
   }),
   nodeViews: {
