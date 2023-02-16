@@ -107,6 +107,7 @@ function menuPlugin() {
       menuView.style.zIndex = 100;
       menuView.style.position = 'fixed';
       menuView.style.left = 'calc(50% - 480px)';
+      menuView.style.top = 'calc(50% - 80px)';
       menuView.style.display = 'flex';
       menuView.style.flexDirection = 'column';
 
