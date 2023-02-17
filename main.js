@@ -21,8 +21,25 @@ import TwitterView from "./twitter"
 import { undo, redo, history } from "prosemirror-history"
 import { buildKeymap } from "./keymap"
 import {dropCursor} from "prosemirror-dropcursor"
+import CodeBlockView from "./code"
 
 let equationManager = new EquationManager();
+
+function arrowHandler(dir) {
+  return (state, dispatch, view) => {
+    if (state.selection.empty && view.endOfTextblock(dir)) {
+      let side = dir == "left" || dir == "up" ? -1 : 1
+      let $head = state.selection.$head
+      let nextPos = Selection.near(
+        state.doc.resolve(side > 0 ? $head.after() : $head.before()), side)
+      if (nextPos.$head && nextPos.$head.parent.type.name == "code_block") {
+        dispatch(state.tr.setSelection(nextPos))
+        return true
+      }
+    }
+    return false
+  }
+}
 
 
 function popup(content) {
@@ -228,6 +245,18 @@ function menuPlugin() {
 
       menuView.appendChild(twitterButton);
 
+      let codeButton = document.createElement('button');
+
+      codeButton.id = 'codeButton';
+      codeButton.innerText = "Co";
+
+      codeButton.onclick = (e) => {
+        e.preventDefault();
+        window.editorView.dispatch(window.editorView.state.tr.replaceSelectionWith(textSchema.nodes.code_block.create()));
+      }
+
+      menuView.appendChild(codeButton);
+
       editorView.dom.parentNode.insertBefore(menuView, editorView.dom);
       return menuView;
     }
@@ -248,12 +277,21 @@ function updateContent() {
   }
 }
 
+const arrowHandlers = keymap({
+  ArrowLeft: arrowHandler("left"),
+  ArrowRight: arrowHandler("right"),
+  ArrowUp: arrowHandler("up"),
+  ArrowDown: arrowHandler("down")
+})
+
+
 window.editorView = new EditorView(editorElm, {
   state: EditorState.create({
     doc: DOMParser.fromSchema(textSchema).parse('<h1>test</h1><tags></tags>'),
     plugins: [
       keymap(buildKeymap(textSchema)),
       keymap(baseKeymap),
+      arrowHandlers,
       gapCursor(),
       dropCursor(),
       menuPlugin(),
@@ -262,19 +300,20 @@ window.editorView = new EditorView(editorElm, {
     ]
   }),
   nodeViews: {
-    tags(node, view, getPos) { return new TagsView(node, view, getPos) },
-    gallery(node, view, getPos) { return new GalleryView(node, view, getPos) },
-    equation(node, view, getPos) { return new EquationView(node, view, getPos, equationManager) },
-    inline_equation(node, view, getPos) { return new InlineEquationView(node, view, getPos) },
+    tags(node, view, getPos) { return new TagsView(node, view, getPos); },
+    gallery(node, view, getPos) { return new GalleryView(node, view, getPos); },
+    equation(node, view, getPos) { return new EquationView(node, view, getPos, equationManager); },
+    inline_equation(node, view, getPos) { return new InlineEquationView(node, view, getPos); },
     equation_ref(node, view, getPos) {
-      return new EquationRefView(node, view, getPos, equationManager)
+      return new EquationRefView(node, view, getPos, equationManager);
     },
     video(node, view, getPos) {
-      return new VideoView(node, view, getPos)
+      return new VideoView(node, view, getPos);
     },
     twitter(node, view, getPos) {
-      return new TwitterView(node, view, getPos)
+      return new TwitterView(node, view, getPos);
     },
+    code_block (node, view, getPos) { return new CodeBlockView(node, view, getPos);}
   },
   dispatchTransaction: (tr) => {
     const state = window.editorView.state.apply(tr);

@@ -6,7 +6,7 @@ let nodes = {
     group: "inline",
   },
   title: {
-    content: "inline*",
+    content: "text*",
     toDOM() { return ["h1", 0] },
     parseDOM: [{ tag: "h1" }]
   },
@@ -141,6 +141,7 @@ let nodes = {
     group: "block",
     code: true,
     defining: true,
+    isolating: true,
     parseDOM: [{ tag: "pre", preserveWhitespace: "full" }],
     toDOM() { return ["pre", ["code", 0]]; }
   },

@@ -127,3 +127,9 @@ label {
   font-style: italic;
   font-weight: bold;
 }
+
+.CodeMirror {
+  border: 1px solid #eee;
+  height: auto;
+}
+.CodeMirror pre { white-space: pre !important }

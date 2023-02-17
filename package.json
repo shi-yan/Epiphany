@@ -12,6 +12,16 @@
     "vite": "^4.1.0"
   },
   "dependencies": {
+    "@codemirror/commands": "^6.2.1",
+    "@codemirror/lang-cpp": "^6.0.2",
+    "@codemirror/lang-css": "^6.0.2",
+    "@codemirror/lang-html": "^6.4.2",
+    "@codemirror/lang-javascript": "^6.1.4",
+    "@codemirror/lang-json": "^6.0.1",
+    "@codemirror/lang-python": "^6.1.1",
+    "@codemirror/lang-rust": "^6.0.1",
+    "@codemirror/language": "^6.6.0",
+    "@codemirror/view": "^6.9.0",
     "prosemirror-commands": "^1.5.0",
     "prosemirror-dropcursor": "^1.7.0",
     "prosemirror-example-setup": "^1.2.1",
