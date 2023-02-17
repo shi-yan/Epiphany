@@ -12,7 +12,9 @@ export default class TagsView {
 
     // The node's representation in the editor (empty, for now)
     this.dom = document.createElement("div");
+    this.dom.classList.add('limpid-tag-area');
     this.input = document.createElement("input");
+    this.input.classList.add('limpid-custom-input');
     this.dom.appendChild(this.input);
     this.dom.onclick = (e) => {
       e.preventDefault();
@@ -34,7 +36,6 @@ export default class TagsView {
       console.log("keydown", e.code)
 
       if (!!(~['Enter', 'Tab', 'Comma'].indexOf(e.code))) {
-        console.log("should update", e.code)
         let nn = textSchema.nodes.tag.createAndFill(null, textSchema.text("fake"));
         //let tr = new Transform(node);
 

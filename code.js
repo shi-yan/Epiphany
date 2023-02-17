@@ -11,9 +11,9 @@ import textSchema from "./textschema"
 import { TextSelection, Selection, NodeSelection } from "prosemirror-state"
 
 
-const module = await import('@codemirror/lang-css')
+//const module = await import('@codemirror/lang-css')
 
-console.log("lang-css module", module);
+//console.log("lang-css module", module);
 
 export default class CodeBlockView {
     constructor(node, view, getPos) {

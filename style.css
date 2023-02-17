@@ -48,8 +48,9 @@ label {
 .ProseMirror h1::before {
   content: 'Title ...';
   position: absolute;
-  color: #578ec2;
+  color: #9fb1a3;
   z-index: 2;
+  font-style: italic;
 }
 
 .limpid-equation-ref-selector {
@@ -139,6 +140,17 @@ label {
   margin-right: 8px;
   font-style: italic;
   font-weight: bold;
+}
+
+.limpid-tag-area {
+  background-color: #c6d3c2;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.limpid-custom-input {
+  background-color: transparent;
+  border: none;
 }
 
 .CodeMirror {
