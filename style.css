@@ -17,6 +17,46 @@ body {
   position: relative;
 }
 
+.limpid-tag-item {
+  display: inline-block;
+  flex-direction: column;
+  align-items: center;
+  padding: 2px 8px;
+  font-family: 'Phudu', sans-serif;
+  border-radius: 6px;
+  color: #738281;
+  background: #d6ded4;
+  border: none;
+  box-shadow: 0px 1.5px 2px rgba(0, 0, 0, 0.1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #738281;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #738281;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: #738281;
+}
+
+.limpid-tag-item:focus {
+  box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1), 0px 0px 0px 3.5px rgba(58, 108, 217, 0.5);
+  outline: 0;
+}
+
+.limpid-no-outline textarea:focus, input:focus{
+  outline: none;
+  opacity: 1;
+}
+
 .editor-container {
   flex-grow: 1;
   background: #d6ded4;
@@ -41,7 +81,6 @@ body {
   width: 720px;
   margin-left: auto;
   margin-right: auto;
-  cursor: text;
 }
 
 [contenteditable]:focus {
@@ -72,18 +111,23 @@ label {
   position: relative;
 }
 
+.ProseMirror h2 {
+  font-family: 'Pragati Narrow', sans-serif;
+
+}
+
 .ProseMirror p {
   line-height: 1.4;
   color: #233231;
 }
-
+/*
 .ProseMirror h1::before {
   content: 'Title ...';
   position: absolute;
   color: #9fb1a3;
   z-index: 2;
   font-style: italic;
-}
+}*/
 
 .limpid-equation-ref-selector {
   display: flex;
@@ -173,7 +217,7 @@ label {
   font-style: italic;
   font-weight: bold;
   color: #3e8eb7;
-  font-family: 'Phudu', cursive;
+  font-family: 'Pragati Narrow', sans-serif;
 
 }
 
@@ -181,11 +225,15 @@ label {
   background-color: #c6d3c2;
   border-radius: 8px;
   padding: 8px;
+  font-size: 10px;
 }
 
-.limpid-custom-input {
+.limpid-tag-input {
   background-color: transparent;
   border: none;
+  margin-left: 4px;
+  opacity: 0;
+  min-width: 400px;
 }
 
 .CodeMirror {
