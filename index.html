@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="katex.min.css">
-    <script src="katex.min.js"></script>
-    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-    <title>Vite App</title>
-  </head>
-  <body>
-    <div id="main">
-      <div id="sidebar"></div>
-    <div id="editor"></div>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="katex.min.css">
+  <script src="katex.min.js"></script>
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <title>Vite App</title>
+</head>
+
+<body>
+  <div id="main">
+    <div id="sidebar"></div>
+    <div class="editor-container">
+      <div id="editor"></div>
     </div>
-    <script type="module" src="/main.js"></script>
+  </div>
+  <script type="module" src="/main.js"></script>
   <!--  <div class="paperOverlay"></div>-->
-  </body>
+</body>
+
 </html>
