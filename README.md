@@ -13,5 +13,14 @@ A customized editor
 13. trailing node https://github.com/YousefED/BlockNote/blob/main/packages/core/src/extensions/TrailingNode/TrailingNodeExtension.ts
 14. list
 
+hide title placeholder
+implement placeholder for paragraph
+stylize code block
+stylize equation block
+sidebar tree
 
+slash menu
+image uploader
+video 
+twitter
 

@@ -29,39 +29,54 @@ export default class TagsView {
       e.stopImmediatePropagation();
       e.stopPropagation();
     })
-    let inputElm = this.input;
-    let self = this;
 
     this.input.addEventListener('keydown', (e) => {
 
       if (!!(~['Enter', 'Tab', 'Comma'].indexOf(e.code))) {
-        let nn = textSchema.nodes.tag.createAndFill(null, textSchema.text(inputElm.value));
-        inputElm.value = '';
+
         e.preventDefault();
 
-        let tr = self.outerView.state.tr.replaceWith(getPos() + 1, getPos() + 1 + self.node.nodeSize - 2, [nn]);
-        
-        self.outerView.dispatch(tr);
+        let existingSet = new Set();
+
+        this.node.forEach(
+          (node, offset, index) => {
+            existingSet.add(node.textContent.toLowerCase());
+          });
+
+        existingSet.add(this.input.value.toLowerCase());
+        existingSet = Array.from(existingSet);
+        existingSet.sort();
+        existingSet.reverse();
+
+        this.input.value = '';
+        let tagNodes = []
+        existingSet.forEach((v) => {
+          let nn = textSchema.nodes.tag.createAndFill(null, textSchema.text(v));
+          tagNodes.push(nn);
+        })
+
+        let tr = this.outerView.state.tr.replaceWith(getPos() + 1, getPos() + 1 + this.node.nodeSize - 2, tagNodes);
+        this.outerView.dispatch(tr);
       }
       else if (e.code === 'ArrowUp') {
-        inputElm.blur();
+        this.input.blur();
         let targetPos = getPos()
-        let selection = Selection.near(self.outerView.state.doc.resolve(targetPos), -1)
-        let tr = self.outerView.state.tr.setSelection(selection).scrollIntoView()
+        let selection = Selection.near(this.outerView.state.doc.resolve(targetPos), -1)
+        let tr = this.outerView.state.tr.setSelection(selection).scrollIntoView()
         setTimeout(() => {
-          self.outerView.dispatch(tr)
-          self.outerView.focus()
+          this.outerView.dispatch(tr)
+          this.outerView.focus()
         }, 100);
       }
       else if (e.code === 'ArrowDown') {
 
-        inputElm.blur();
-        let targetPos = getPos() + self.node.nodeSize
-        let selection = Selection.near(self.outerView.state.doc.resolve(targetPos), 1)
-        let tr = self.outerView.state.tr.setSelection(selection).scrollIntoView()
+        this.input.blur();
+        let targetPos = getPos() + this.node.nodeSize
+        let selection = Selection.near(this.outerView.state.doc.resolve(targetPos), 1)
+        let tr = this.outerView.state.tr.setSelection(selection).scrollIntoView()
         setTimeout(() => {
-          self.outerView.dispatch(tr)
-          self.outerView.focus()
+          this.outerView.dispatch(tr)
+          this.outerView.focus()
         }, 100);
       }
 
@@ -73,31 +88,36 @@ export default class TagsView {
   update(node) {
     if (node.type != this.node.type) return false
     this.node = node
-    node.forEach(
-      (node, offset, index) => {
-        console.log(node.textContent)
-        let tags = this.dom.getElementsByTagName("span");
-        for (let i = 0; i < tags.length; ++i) {
-          this.dom.removeChild(tags[i]);
-        }
+    let tags = this.dom.getElementsByTagName("span");
+
+    while (tags.length > 0) {
+      this.dom.removeChild(tags[0]);
+      tags = this.dom.getElementsByTagName("span");
+    }
+
+    this.node.forEach(
+      (subNode, offset, index) => {
 
         let tag = document.createElement("span");
         tag.classList.add('limpid-tag-item');
-        tag.innerText = '#'+node.textContent ;
+        tag.innerText = '#' + subNode.textContent;
         this.dom.insertBefore(tag, this.dom.firstChild);
+
+        if (this.input.placeholder.length > 0) {
+          this.input.placeholder = '';
+          this.input.style.minWidth = '100px';
+        }
       }
     )
+
     return true;
   }
 
   selectNode() {
-    console.log('node selected')
-    //this.dom.classList.add("ProseMirror-selectednode")
     this.input.focus();
   }
 
   deselectNode() {
-    //this.dom.classList.remove("ProseMirror-selectednode")
     this.input.blur();
   }
 
