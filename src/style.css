@@ -298,9 +298,15 @@ label {
 .limpid-tag-input {
   background-color: transparent;
   border: none;
+  margin: 0px;
   margin-left: 4px;
   opacity: 0;
   min-width: 400px;
+  color:#2a3737;
+  padding: 2px;
+  font-family: 'Quicksand', sans-serif;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
 }
 
 .CodeMirror {

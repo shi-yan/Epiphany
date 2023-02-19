@@ -15,6 +15,7 @@ A customized editor
 
 sidebar tree
 stylize code block
+add timer how long ago
 
 slash menu
 image uploader
