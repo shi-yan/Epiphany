@@ -17,12 +17,39 @@ export default function limpidPlugin() {
         },
         decorations(state) {
           const { doc, selection } = state;
-          if (doc.firstChild.type.name === 'title' && doc.firstChild.textContent.length == 0) {
-            let rpos=doc.resolve(0);
-            const decoration = Decoration.node(rpos.posAtIndex(0,0), rpos.posAtIndex(0,0) + doc.firstChild.nodeSize, {
-              class: 'h1-placeholder',
-            });
-            return DecorationSet.create(doc, [decoration]);
+
+          const { anchor } = selection;
+
+          let decorations = [];
+
+          for(let i =0;i<doc.childCount;++i)
+          {
+            let rpos=doc.resolve(i);
+            const pos =  rpos.posAtIndex(i,0);
+            if (i == 0 && doc.firstChild.type.name === 'title' && doc.firstChild.textContent.length == 0) {
+              const decoration = Decoration.node(pos, pos + doc.firstChild.nodeSize, {
+                class: 'h1-placeholder',
+              });
+              decorations.push(decoration);
+            }
+            else {
+              let node = doc.child(i);
+
+              if (node.type.name === 'paragraph' && node.textContent.length == 0){
+            
+                const hasAnchor = anchor >= pos && anchor <= pos + node.nodeSize;
+                if (hasAnchor) {
+                  const decoration = Decoration.node(pos, pos +  node.nodeSize, {
+                    class: 'p-placeholder',
+                  });
+                  decorations.push(decoration);
+                }
+              }
+            }
+          }
+
+          if (decorations.length > 0) {
+            return DecorationSet.create(doc, decorations);
           }
           return;
         }

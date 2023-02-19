@@ -177,6 +177,100 @@ editorElm.onclick = (e) => {
   e.stopPropagation();
 }
 
+function getDraggableBlockFromCoords(
+  coords,
+  view
+) {
+  let pos = view.posAtCoords(coords);
+  if (!pos) {
+    return undefined;
+  }
+  let node = view.domAtPos(pos.pos).node;
+
+  if (node === view.dom) {
+    // mouse over root
+    return undefined;
+  }
+
+  while (
+    node &&
+    node.parentNode &&
+    node.parentNode !== view.dom &&
+    !node.hasAttribute("data-id")
+  ) {
+    node = node.parentNode;
+  }
+  if (!node) {
+    return undefined;
+  }
+  return { node, id: node.getAttribute("data-id") };
+}
+
+document.body.addEventListener(
+  "mousemove",
+  (event) => {
+    return;
+    /*if (this.menuFrozen) {
+      return;
+    }*/
+
+    // Editor itself may have padding or other styling which affects size/position, so we get the boundingRect of
+    // the first child (i.e. the blockGroup that wraps all blocks in the editor) for a more accurate bounding box.
+    const editorBoundingBox = window.editorView.dom.firstChild.getBoundingClientRect();
+
+    let horizontalPosAnchor = editorBoundingBox.x;
+
+    // Gets block at mouse cursor's vertical position.
+    const coords = {
+      left: editorBoundingBox.left + editorBoundingBox.width / 2, // take middle of editor
+      top: event.clientY,
+    };
+    const block = getDraggableBlockFromCoords(coords, window.editorView);
+
+    // Closes the menu if the mouse cursor is beyond the editor vertically.
+    if (!block) {
+      /*if (this.menuOpen) {
+        this.menuOpen = false;
+        this.blockMenu.hide();
+      }
+*/
+      return;
+    }
+
+    // Doesn't update if the menu is already open and the mouse cursor is still hovering the same block.
+    /*if (
+      this.menuOpen &&
+      this.hoveredBlockContent?.hasAttribute("data-id") &&
+      this.hoveredBlockContent?.getAttribute("data-id") === block.id
+    ) {
+      return;
+    }*/
+
+    // Gets the block's content node, which lets to ignore child blocks when determining the block menu's position.
+    
+    
+    const blockContent = block.node.firstChild;
+    let hoveredBlockContent = blockContent;
+   
+    
+    console.log("mouse hover block", window.editorView.posAtDOM(blockContent, 0));
+    console.log("maybe child", window.editorView.state.doc.nodeAt(window.editorView.posAtDOM(blockContent, 0)-1))
+    if (!blockContent) {
+      return;
+    }
+
+    // Shows or updates elements.
+    /*if (!this.menuOpen) {
+      this.menuOpen = true;
+      this.blockMenu.render(this.getDynamicParams(), true);
+    } else {
+      this.blockMenu.render(this.getDynamicParams(), false);
+    }*/
+
+  },
+  true
+);
+
 /*const { invoke } = window.__TAURI__.tauri;
 
 let greetInputEl;

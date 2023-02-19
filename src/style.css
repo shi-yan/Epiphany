@@ -167,6 +167,15 @@ label {
   cursor: text;
 }
 
+.ProseMirror .p-placeholder::before {
+  content: 'Enter text or type \'\\\' for commands ...';
+  position: absolute;
+  color: #9fb1a3;
+  z-index: 2;
+  font-style: italic;
+  cursor: text;
+}
+
 .limpid-equation-ref-selector {
   display: flex;
   flex-direction: column;
