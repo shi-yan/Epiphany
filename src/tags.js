@@ -36,6 +36,23 @@ export default class TagsView {
 
         e.preventDefault();
 
+        if (this.input.value.length == 0) {
+          if (e.code === 'Tab') {
+            this.input.blur();
+            let targetPos = getPos() + this.node.nodeSize
+            let selection = Selection.near(this.outerView.state.doc.resolve(targetPos), 1)
+            let tr = this.outerView.state.tr.setSelection(selection).scrollIntoView()
+            setTimeout(() => {
+              this.outerView.dispatch(tr)
+              this.outerView.focus()
+            }, 100);
+            return;
+          }
+          else {
+            return;
+          }
+        }
+
         let existingSet = new Set();
 
         this.node.forEach(

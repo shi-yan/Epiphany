@@ -13,7 +13,6 @@ A customized editor
 13. trailing node https://github.com/YousefED/BlockNote/blob/main/packages/core/src/extensions/TrailingNode/TrailingNodeExtension.ts
 14. list
 
-
 stylize equation block
 sidebar tree
 stylize code block
@@ -23,7 +22,6 @@ slash menu
 image uploader
 video 
 twitter
-tags input bar should handle tab key (when no input, jump to the next line)
 handle pasted in links/video/twitter/image
 
 handle copy
