@@ -6,6 +6,8 @@ import 'prosemirror-gapcursor/style/gapcursor.css'
 import './style.css'
 import { baseKeymap, setBlockType } from "prosemirror-commands"
 
+import textSchema from "./textschema"
+
 export default function trailingSpacePlugin() {
     const plugin = new Plugin({
       key: 'trailing',

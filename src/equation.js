@@ -4,8 +4,6 @@ import { TextSelection, Selection, NodeSelection } from "prosemirror-state"
 
 export default class EquationView {
     constructor(node, view, getPos, manager) {
-
-        console.log("====================== create equation");
         // We'll need these later
         this.node = node
         this.outerView = view

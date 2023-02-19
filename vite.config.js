@@ -3,7 +3,7 @@ import { defineConfig } from 'vite'
 // vite.config.js
 export default defineConfig({
     build: {
-        outDir: '../Epiphany/src'
+        outDir: '../../Epiphany/src'
     },
     root: 'src'
 })

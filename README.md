@@ -22,6 +22,7 @@ slash menu
 image uploader
 video 
 twitter
+tags input bar should handle tab key (when no input, jump to the next line)
 handle pasted in links/video/twitter/image
 
 handle copy
