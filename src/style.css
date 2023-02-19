@@ -331,6 +331,31 @@ label {
   padding-top: 45px;
   width: 240px;
   background-color: #4d625d;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+#bottom-area {
+  flex-grow: 0;
+  flex-shrink: 0;
+  border-width: 0px;
+  border-top-width: 1px;
+  border-style: solid;
+  border-color: #697a78;
+  font-weight: 800;
+  font-size: 20px;
+  font-family: 'Roboto', sans-serif;
+  white-space: nowrap;
+  overflow-x:hidden;
+  cursor: pointer;
+  padding: 8px;
+  color:#b7c3bb;
+
+}
+
+#tree-container {
+  flex-grow: 1;
 }
 /*
 .paperOverlay {

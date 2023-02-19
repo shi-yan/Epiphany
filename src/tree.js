@@ -161,7 +161,7 @@ export class Tree extends Events {
         leaf.isLeaf = true
         leaf.data = data
         leaf.content = utils.html({ parent: leaf, className: `${this.prefixClassName}-content` })
-        leaf.style.marginLeft = this.indentation + 'px'
+        leaf.content.style.paddingLeft = (8+this.indentation * level) + 'px'
         leaf.icon = utils.html({
             parent: leaf.content,
             html: data.expanded ? icons.open : icons.closed,

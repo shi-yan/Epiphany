@@ -19,10 +19,10 @@ export class Input {
             alreadySelected = true
         } else {
             if (this._tree._selection) {
-                this._tree._selection.name.classList.remove(`${this._tree.prefixClassName}-select`)
+                this._tree._selection.content.classList.remove(`${this._tree.prefixClassName}-select`)
             }
             this._tree._selection = this._target
-            this._tree._selection.name.classList.add(`${this._tree.prefixClassName}-select`)
+            this._tree._selection.content.classList.add(`${this._tree.prefixClassName}-select`)
         }
         this._isDown = { x: e.pageX, y: e.pageY, alreadySelected }
         const pos = utils.toGlobal(this._target)

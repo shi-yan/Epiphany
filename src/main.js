@@ -167,7 +167,6 @@ editorElm.onclick = (e) => {
   let lastNode = window.editorView.state.doc.lastChild;
   let rpos = window.editorView.state.doc.resolve(window.editorView.state.doc.nodeSize - 2);
   let selection = Selection.near(rpos, 1)
-  console.log("last sel", lastNode, rpos, selection)
   let tr = window.editorView.state.tr.setSelection(selection).scrollIntoView()
   setTimeout(() => {
     window.editorView.dispatch(tr)
@@ -299,5 +298,5 @@ const data = {
   ]
 }
 
-const tree = new Tree(data, { parent: document.getElementById('sidebar') })
+const tree = new Tree(data, { parent: document.getElementById('tree-container') })
 console.log('tree', tree)
