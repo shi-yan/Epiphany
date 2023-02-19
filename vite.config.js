@@ -4,5 +4,6 @@ import { defineConfig } from 'vite'
 export default defineConfig({
     build: {
         outDir: '../Epiphany/src'
-      }
-  })
+    },
+    root: 'src'
+})

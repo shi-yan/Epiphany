@@ -79,7 +79,7 @@ export default class TagsView {
           this.outerView.focus()
         }, 100);
       }
-
+      this.input.style.opacity = 1.0;
       e.stopImmediatePropagation();
       e.stopPropagation();
     });
