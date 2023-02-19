@@ -328,8 +328,8 @@ label {
 }
 
 #sidebar {
+  padding-top: 45px;
   width: 240px;
-  height: 100%;
   background-color: #4d625d;
 }
 /*

@@ -22,6 +22,8 @@
     "@codemirror/lang-rust": "^6.0.1",
     "@codemirror/language": "^6.6.0",
     "@codemirror/view": "^6.9.0",
+    "clicked": "^4.0.3",
+    "eventemitter3": "^5.0.0",
     "prosemirror-commands": "^1.5.0",
     "prosemirror-dropcursor": "^1.7.0",
     "prosemirror-example-setup": "^1.2.1",

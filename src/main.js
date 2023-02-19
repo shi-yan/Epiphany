@@ -24,6 +24,7 @@ import { dropCursor } from "prosemirror-dropcursor"
 import CodeBlockView from "./code"
 import limpidPlugin from "./limpid_plugin"
 import trailingSpacePlugin from "./trailing_space_plugin"
+import { Tree } from "./tree"
 
 let equationManager = new EquationManager();
 
@@ -280,3 +281,23 @@ async function greet() {
   // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
   greetMsgEl.textContent = await invoke("greet", { name: greetInputEl.value });
 }*/
+
+const data = {
+  children: [
+      { name: 'fruits', children: [
+          { name: 'apples', children: [] },
+          { name: 'oranges', children: [
+              { name: 'tangerines', children: [] },
+              { name: 'mandarins', children: [] },
+              { name: 'pomelo', children: [] },
+              { name: 'blood orange', children: [] },
+          ] }
+      ]},
+      { name: 'vegetables', children: [
+          { name: 'brocolli', children: [] },
+      ] },
+  ]
+}
+
+const tree = new Tree(data, { parent: document.getElementById('sidebar') })
+console.log('tree', tree)
