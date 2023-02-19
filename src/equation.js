@@ -16,8 +16,6 @@ export default class EquationView {
         this.dom = document.createElement("div");
         this.dom.setAttribute('data-key', this.key);
         this.dom.classList.add('limpid-equation');
-        this.dom.style.padding = "10px";
-        this.dom.style.textAlign = "center";
 
         this.input = document.createElement("textarea");
         this.input.className = "limpid-equation-input"
@@ -104,7 +102,7 @@ export default class EquationView {
     }
 
     selectNode() {
-        this.dom.classList.add("ProseMirror-selectednode")
+        //this.dom.classList.add("ProseMirror-selectednode")
         this.input.classList.add("limpid-equation-input-edit-mode");
         this.display.classList.add("limpid-equation-display-edit-mode");
         this.idElm.classList.add('limpid-equation-counter-edit-mode');
@@ -119,7 +117,7 @@ export default class EquationView {
     }
 
     deselectNode() {
-        this.dom.classList.remove("ProseMirror-selectednode")
+        //this.dom.classList.remove("ProseMirror-selectednode")
         this.input.classList.remove("limpid-equation-input-edit-mode");
         this.display.classList.remove("limpid-equation-display-edit-mode");
         this.idElm.classList.remove('limpid-equation-counter-edit-mode');

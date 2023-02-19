@@ -208,8 +208,28 @@ label {
   flex-direction: column;
 }
 
+.limpid-equation {
+  padding : "0px";
+  text-align : "center";
+}
+
+.limpid-equation textarea, input {
+  background-color: #2a3737;
+  color: #b7c3bb;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.limpid-equation textarea:focus, input:focus{
+  outline: 0;
+}
+
+
 .limpid-equation-input {
-  width: 100%;
+  width: calc(100% - 16px);
   border: none;
   outline: none;
   min-height: 100px;

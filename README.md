@@ -13,10 +13,8 @@ A customized editor
 13. trailing node https://github.com/YousefED/BlockNote/blob/main/packages/core/src/extensions/TrailingNode/TrailingNodeExtension.ts
 14. list
 
-stylize equation block
 sidebar tree
 stylize code block
-
 
 slash menu
 image uploader
