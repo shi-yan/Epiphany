@@ -6,11 +6,9 @@ A customized editor
 12. drop image
 
 
-sidebar tree
 stylize code block
-add timer how long ago
-
 slash menu
+
 image uploader
 video 
 twitter

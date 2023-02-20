@@ -26,6 +26,10 @@ import limpidPlugin from "./limpid_plugin"
 import trailingSpacePlugin from "./trailing_space_plugin"
 import { Tree } from "./tree"
 
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
+dayjs.extend(relativeTime)
+
 let equationManager = new EquationManager();
 
 function arrowHandler(dir) {
@@ -299,4 +303,5 @@ const data = {
 }
 
 const tree = new Tree(data, { parent: document.getElementById('tree-container') })
-console.log('tree', tree)
+console.log(dayjs())
+document.getElementById('editor-top-doc-time').innerText = dayjs('1999-01-01').fromNow();

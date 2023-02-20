@@ -13,7 +13,8 @@ export class Input {
     }
 
     _down(e) {
-        this._target = e.currentTarget.parentNode.parentNode
+        this._target = e.currentTarget.parentNode
+
         let alreadySelected = false
         if (this._tree._selection === this._target) {
             alreadySelected = true
@@ -211,6 +212,17 @@ export class Input {
         this._target.data.parent.children.splice(this._target.data.parent.children.indexOf(this._target.data), 1)
         this._target.parentNode.data.children.splice(utils.getChildIndex(this._target.parentNode, this._target), 0, this._target.data)
         this._target.data.parent = this._target.parentNode.data
+
+        let level = 0;
+
+        let d = this._target.data;
+
+        while(d.parent) {
+            d = d.parent;
+            level++;
+        }
+
+        this._target.content.style.paddingLeft = (8+this._tree.indentation * level) + 'px'
     }
 
     _indicatorMarginLeft(value) {

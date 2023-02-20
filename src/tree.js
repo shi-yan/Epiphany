@@ -2,9 +2,21 @@ import Events from 'eventemitter3'
 import {clicked } from 'clicked'
 
 import { Input } from './tree_input'
-import { defaults, styleDefaults } from './tree_defaults'
 import * as utils from './tree_utils'
 import { icons } from './tree_icons'
+
+export const defaults = {
+    move: true,
+    select: true,
+    indentation: 8,
+    threshold: 10,
+    holdTime: 1000,
+    expandOnClick: true,
+    dragOpacity: 0.75,
+    prefixClassName: 'yy-tree',
+    cursorName: 'grab -webkit-grab pointer',
+    cursorExpand: 'pointer'
+}
 
 export class Tree extends Events {
     /**
@@ -54,9 +66,6 @@ export class Tree extends Events {
         }
         this.element.classList.add(this.prefixClassName)
         this.element.data = tree
-        if (this._options.addStyles !== false) {
-            this._addStyles(styles)
-        }
         this.update()
     }
 
@@ -168,8 +177,18 @@ export class Tree extends Events {
             className: `${this.prefixClassName}-expand`
         })
         leaf.name = utils.html({ parent: leaf.content, html: data.name, className: `${this.prefixClassName}-name` })
-        leaf.name.addEventListener('mousedown', e => this._input._down(e))
-        leaf.name.addEventListener('touchstart', e => this._input._down(e))
+        leaf.controls = utils.html({parent: leaf.content, html: '<button>f</button><button>e</button>', className: `${this.prefixClassName}-control`});
+        leaf.content.addEventListener('mousedown', e => this._input._down(e))
+        leaf.content.addEventListener('touchstart', e => this._input._down(e))
+
+        leaf.content.addEventListener('mouseenter', e=> {
+            leaf.controls.style.display = 'flex';
+        })
+
+        leaf.content.addEventListener('mouseleave', e=> {
+            leaf.controls.style.display = 'none';
+        })
+
         for (let child of data.children) {
             const add = this._leaf(child, level + 1)
             add.data.parent = data
@@ -411,33 +430,6 @@ export class Tree extends Events {
         return element
     }
 
-    _addStyles(userStyles) {
-        const styles = utils.options(userStyles, styleDefaults)
-        let s = `.${this.prefixClassName}-name{`
-        for (const key in styles.nameStyles) {
-            s += `${key}:${styles.nameStyles[key]};`
-        }
-        s += `}.${this.prefixClassName}-content{`
-        for (const key in styles.contentStyles) {
-            s += `${key}:${styles.contentStyles[key]};`
-        }
-        s += `}.${this.prefixClassName}-indicator{`
-        for (const key in styles.indicatorStyles) {
-            s += `${key}:${styles.indicatorStyles[key]};`
-        }
-        s += `}.${this.prefixClassName}-expand{`
-        for (const key in styles.expandStyles) {
-            s += `${key}:${styles.expandStyles[key]};`
-        }
-        s += `}.${this.prefixClassName}-select{`
-        for (const key in styles.selectStyles) {
-            s += `${key}:${styles.selectStyles[key]};`
-        }
-        s + '}'
-        const style = document.createElement('style')
-        style.innerHTML = s
-        document.head.appendChild(style)
-    }
 }
 
 /**

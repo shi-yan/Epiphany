@@ -1,9 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Phudu&family=Pragati+Narrow&family=Quicksand:wght@300&family=Roboto:wght@300&family=Source+Code+Pro&display=swap');
 
+@font-face {
+  font-family: "icon";
+  src: url("/icomoon.ttf");
+}
+
 html {
   margin: 0;
   height: 100%;
-  position:relative;
+  position: relative;
   padding: 0;
 }
 
@@ -35,17 +40,21 @@ body {
   cursor: pointer;
 }
 
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: #738281;
-  opacity: 1; /* Firefox */
+  opacity: 1;
+  /* Firefox */
   font-style: italic;
 }
 
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
   color: #738281;
 }
 
-::-ms-input-placeholder { /* Microsoft Edge */
+::-ms-input-placeholder {
+  /* Microsoft Edge */
   color: #738281;
 }
 
@@ -54,7 +63,8 @@ body {
   outline: 0;
 }
 
-.limpid-no-outline textarea:focus, input:focus{
+.limpid-no-outline textarea:focus,
+input:focus {
   outline: none;
   opacity: 1;
 }
@@ -74,7 +84,7 @@ body {
   box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
   box-sizing: border-box;
   color: #233231;
-  font-family: nunito,roboto,proxima-nova,"proxima nova",sans-serif;
+  font-family: nunito, roboto, proxima-nova, "proxima nova", sans-serif;
   font-size: 16px;
   font-weight: 800;
   line-height: 16px;
@@ -83,6 +93,46 @@ body {
   text-rendering: geometricprecision;
   touch-action: manipulation;
   overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#editor-top {
+  height: 20px;
+  display: flex;
+  flex-direction: row;
+}
+
+#editor-top-space {
+  flex-grow: 1;
+
+}
+
+#editor-top-doc-time {
+  color:#9fb1a3;
+  margin: 8px;
+  max-width: 720px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: right;
+}
+
+#editor-top-button {
+  color:#627369;
+  font-family: icon;
+  font-size: 18px;
+  border: none;
+  background-color: transparent;
+  margin: 6px;
+  cursor: pointer;
+  flex-shrink: 1;
+  height: 18px;
+  width: 18px;
+  padding: 0px;
+}
+
+#editor-top-button:hover {
+  color:#3e8eb7;
 }
 
 ::-webkit-scrollbar {
@@ -209,11 +259,12 @@ label {
 }
 
 .limpid-equation {
-  padding : "0px";
-  text-align : "center";
+  padding: "0px";
+  text-align: "center";
 }
 
-.limpid-equation textarea, input {
+.limpid-equation textarea,
+input {
   background-color: #2a3737;
   color: #b7c3bb;
   font-family: 'Source Code Pro', monospace;
@@ -223,7 +274,8 @@ label {
   border-radius: 8px;
 }
 
-.limpid-equation textarea:focus, input:focus{
+.limpid-equation textarea:focus,
+input:focus {
   outline: 0;
 }
 
@@ -302,7 +354,7 @@ label {
   margin-left: 4px;
   opacity: 0;
   min-width: 400px;
-  color:#2a3737;
+  color: #2a3737;
   padding: 2px;
   font-family: 'Quicksand', sans-serif;
   font-family: 'Roboto', sans-serif;
@@ -344,19 +396,33 @@ label {
   border-style: solid;
   border-color: #697a78;
   font-weight: 800;
-  font-size: 20px;
+
   font-family: 'Roboto', sans-serif;
   white-space: nowrap;
-  overflow-x:hidden;
+  overflow-x: hidden;
   cursor: pointer;
   padding: 8px;
-  color:#b7c3bb;
+  color: #87947c;
+}
 
+#bottom-area button {
+  background-color: transparent;
+  border: none;
+  color: #87947c;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+#bottom-area button:hover {
+
+  color: #b7c3bb;
 }
 
 #tree-container {
   flex-grow: 1;
 }
+
+
 /*
 .paperOverlay {
   position: absolute;
@@ -369,3 +435,87 @@ label {
   mix-blend-mode: multiply;
   pointer-events: none;
 }*/
+
+.yy-tree-name {
+  padding: 0.1em 0.5em;
+  margin: 0.1em;
+  user-select: none;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 18px;
+  font-family: 'Roboto', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  min-width: 0;
+  display: inline-block;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.yy-tree-content {
+  display: flex;
+  align-items: center;
+  margin-right: 6px;
+  padding-left: 8px;
+  cursor: pointer;
+  color: #87947c;
+  flex-direction: row;
+}
+
+.yy-tree-content:hover {
+  display: flex;
+  align-items: center;
+  margin-right: 6px;
+  padding-left: 8px;
+  cursor: pointer;
+  color: #b7c3bb;
+  background-color: #364241;
+  border-radius: 8px;
+}
+
+.yy-tree-indicator {
+  background: #f7811f;
+  height: 3px;
+  width: 100px;
+  padding: 0 1em;
+  flex-grow: 0;
+  flex-shrink: 1;
+}
+
+.yy-tree-expand {
+  width: 15px;
+  height: 15px;
+  /* cursor: pointer;*/
+}
+
+.icon {
+  font-family: icon;
+  font-size: medium;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+.yy-tree-select {
+  background: #364241;
+  color: #b7c3bb;
+  border-radius: 8px;
+}
+
+.yy-tree-control {
+  flex-grow: 0;
+  flex-shrink: 1;
+  right: 0px;
+  margin-right: 10px;
+  display: none;
+  flex-direction: row;
+}
+
+.yy-tree-control button {
+  font-family: icon;
+  font-size: medium;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #87947c;
+}
