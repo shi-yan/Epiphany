@@ -251,14 +251,14 @@ document.body.addEventListener(
     }*/
 
     // Gets the block's content node, which lets to ignore child blocks when determining the block menu's position.
-    
-    
+
+
     const blockContent = block.node.firstChild;
     let hoveredBlockContent = blockContent;
-   
-    
+
+
     console.log("mouse hover block", window.editorView.posAtDOM(blockContent, 0));
-    console.log("maybe child", window.editorView.state.doc.nodeAt(window.editorView.posAtDOM(blockContent, 0)-1))
+    console.log("maybe child", window.editorView.state.doc.nodeAt(window.editorView.posAtDOM(blockContent, 0) - 1))
     if (!blockContent) {
       return;
     }
@@ -287,21 +287,42 @@ async function greet() {
 
 const data = {
   children: [
-      { name: 'fruits', children: [
-          { name: 'apples', children: [] },
-          { name: 'oranges', children: [
-              { name: 'tangerines', children: [] },
-              { name: 'mandarins', children: [] },
-              { name: 'pomelo', children: [] },
-              { name: 'blood orange', children: [] },
-          ] }
-      ]},
-      { name: 'vegetables', children: [
-          { name: 'brocolli', children: [] },
-      ] },
+    {
+      name: 'fruits', children: [
+        { name: 'apples', children: [] },
+        {
+          name: 'oranges', children: [
+            { name: 'tangerines', children: [] },
+            { name: 'mandarins', children: [] },
+            { name: 'pomelo', children: [] },
+            { name: 'blood orange', children: [] },
+          ]
+        }
+      ]
+    },
+    {
+      name: 'vegetables', children: [
+        { name: 'brocolli', children: [] },
+      ]
+    },
   ]
 }
 
 const tree = new Tree(data, { parent: document.getElementById('tree-container') })
 console.log(dayjs())
-document.getElementById('editor-top-doc-time').innerText = dayjs('1999-01-01').fromNow();
+document.getElementById('editor-top-doc-time').innerText = dayjs('2023-02-10').fromNow();
+
+let menuFolded = false;
+
+document.getElementById('fold-menu-button').onclick = (e) => {
+  if (!menuFolded) {
+    document.getElementById('sidebar').style.display = 'none';
+    document.getElementById('fold-menu-button').innerText = 'g';
+    menuFolded = true;
+  }
+  else {
+    document.getElementById('sidebar').style.display = 'flex';
+    document.getElementById('fold-menu-button').innerText = 'h';
+    menuFolded = false;
+  }
+}

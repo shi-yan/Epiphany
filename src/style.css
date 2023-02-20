@@ -117,7 +117,7 @@ input:focus {
   text-align: right;
 }
 
-#editor-top-button {
+.editor-top-button {
   color:#627369;
   font-family: icon;
   font-size: 18px;
@@ -131,8 +131,18 @@ input:focus {
   padding: 0px;
 }
 
-#editor-top-button:hover {
+.editor-top-button:hover {
   color:#3e8eb7;
+}
+
+.temp-button {
+  border-color: #627369;
+  background-color: transparent;
+  color:#627369;
+  border-style: dashed;
+  border-width: 1px;
+  cursor: pointer;
+  margin-top: 4px;
 }
 
 ::-webkit-scrollbar {

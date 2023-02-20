@@ -68,7 +68,7 @@ export default function limpidPlugin() {
         menuView.style.flexDirection = 'column';
   
         let imageButton = document.createElement('button');
-  
+        imageButton.classList.add('temp-button');
         imageButton.id = 'image';
         imageButton.innerText = "Im"
   
@@ -78,7 +78,7 @@ export default function limpidPlugin() {
         }
   
         let equationButton = document.createElement('button');
-  
+        equationButton.classList.add('temp-button');
         equationButton.id = 'equation';
         equationButton.innerText = "Eq"
   
@@ -88,7 +88,7 @@ export default function limpidPlugin() {
         }
   
         let inlineEquationButton = document.createElement('button');
-  
+        inlineEquationButton.classList.add('temp-button');
         inlineEquationButton.id = 'equation';
         inlineEquationButton.innerText = "IEq"
   
@@ -102,7 +102,7 @@ export default function limpidPlugin() {
         menuView.appendChild(inlineEquationButton);
   
         let showSelector = document.createElement('button');
-  
+        showSelector.classList.add('temp-button');
         showSelector.id = 'show';
         showSelector.innerText = "SE";
   
@@ -140,7 +140,7 @@ export default function limpidPlugin() {
   
   
         let h2Button = document.createElement('button');
-  
+        h2Button.classList.add('temp-button');
         h2Button.id = 'h2button';
         h2Button.innerText = "H2";
         let h2Command = setBlockType(textSchema.nodes.heading, { level: 2 });
@@ -152,7 +152,7 @@ export default function limpidPlugin() {
         menuView.appendChild(h2Button);
   
         let videoButton = document.createElement('button');
-  
+        videoButton.classList.add('temp-button');
         videoButton.id = 'videobutton';
         videoButton.innerText = "Vi";
   
@@ -167,7 +167,7 @@ export default function limpidPlugin() {
         menuView.appendChild(videoButton);
   
         let twitterButton = document.createElement('button');
-  
+        twitterButton.classList.add('temp-button');
         twitterButton.id = 'twitterbutton';
         twitterButton.innerText = "Tw";
   
@@ -182,7 +182,7 @@ export default function limpidPlugin() {
         menuView.appendChild(twitterButton);
   
         let codeButton = document.createElement('button');
-  
+        codeButton.classList.add('temp-button');
         codeButton.id = 'codeButton';
         codeButton.innerText = "Co";
   
