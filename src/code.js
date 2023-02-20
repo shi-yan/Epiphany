@@ -9,8 +9,8 @@ import { exitCode } from "prosemirror-commands"
 import { undo, redo } from "prosemirror-history"
 import textSchema from "./textschema"
 import { TextSelection, Selection, NodeSelection } from "prosemirror-state"
-
-
+import { solarizedDark } from 'cm6-theme-solarized-dark'
+import { gruvboxDark } from 'cm6-theme-gruvbox-dark'
 //const module = await import('@codemirror/lang-css')
 
 //console.log("lang-css module", module);
@@ -22,6 +22,8 @@ export default class CodeBlockView {
         this.view = view
         this.getPos = getPos
 
+      
+
         // Create a CodeMirror instance
         this.cm = new CodeMirror({
             doc: this.node.textContent,
@@ -31,14 +33,15 @@ export default class CodeBlockView {
                     ...defaultKeymap
                 ]),
                 drawSelection(),
-                syntaxHighlighting(defaultHighlightStyle),
                 javascript(),
+                gruvboxDark,
                 CodeMirror.updateListener.of(update => this.forwardUpdate(update))
             ]
         })
 
         // The editor's outer node is our DOM representation
         this.dom = this.cm.dom
+        this.cm.dom.style.borderRadius = '8px';
 
         // This flag is used to avoid an update loop between the outer and
         // inner editor

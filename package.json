@@ -23,6 +23,8 @@
     "@codemirror/language": "^6.6.0",
     "@codemirror/view": "^6.9.0",
     "clicked": "^4.0.3",
+    "cm6-theme-gruvbox-dark": "^0.2.0",
+    "cm6-theme-solarized-dark": "^0.2.0",
     "dayjs": "^1.11.7",
     "eventemitter3": "^5.0.0",
     "prosemirror-commands": "^1.5.0",

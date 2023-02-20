@@ -6,13 +6,14 @@ A customized editor
 12. drop image
 
 
-stylize code block
 slash menu
 
 image uploader
 video 
 twitter
 drop image
+
+zebra stripe for code editor
 
 handle pasted in links/video/twitter/image
 handle copy
