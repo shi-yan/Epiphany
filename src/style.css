@@ -135,6 +135,11 @@ input:focus {
   color:#3e8eb7;
 }
 
+#editor-top-padding {
+  width: 60px;
+  display: none;
+}
+
 .temp-button {
   border-color: #627369;
   background-color: transparent;

@@ -319,10 +319,12 @@ document.getElementById('fold-menu-button').onclick = (e) => {
     document.getElementById('sidebar').style.display = 'none';
     document.getElementById('fold-menu-button').innerText = 'g';
     menuFolded = true;
+    document.getElementById('editor-top-padding').style.display = 'inline-block';
   }
   else {
     document.getElementById('sidebar').style.display = 'flex';
     document.getElementById('fold-menu-button').innerText = 'h';
     menuFolded = false;
+    document.getElementById('editor-top-padding').style.display = 'none';
   }
 }
