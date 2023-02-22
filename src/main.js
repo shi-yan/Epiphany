@@ -25,7 +25,7 @@ import CodeBlockView from "./code"
 import limpidPlugin from "./limpid_plugin"
 import trailingSpacePlugin from "./trailing_space_plugin"
 import { Tree } from "./tree"
-
+import menuPlugin from "./slashmenu"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 dayjs.extend(relativeTime)
@@ -108,7 +108,8 @@ window.editorView = new EditorView(editorElm, {
       dropCursor(),
       limpidPlugin(),
       trailingSpacePlugin(),
-      history()
+      history(),
+      menuPlugin()
     ]
   }),
   nodeViews: {
