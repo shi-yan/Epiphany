@@ -13,6 +13,12 @@ export default function menuPlugin() {
 
     const pluginKey = { key: 'menuplugin' }
     const defaultTriggerCharacter = '\\'
+    const defaults = {
+        active: false,
+        triggerCharacter: null,
+        decorationId: 0,
+        keyboardHoveredItemIndex: 0
+    };
 
     // Plugin key is passed in as a parameter, so it can be exported and used in the DraggableBlocksPlugin.
     return new Plugin({
@@ -24,12 +30,7 @@ export default function menuPlugin() {
         state: {
             // Initialize the plugin's internal state.
             init() {
-                return {
-                    active: false,
-                    triggerCharacter: null,
-                    decorationId: 0,
-                    keyboardHoveredItemIndex: 0
-                };
+                return defaults;
             },
 
             // Apply changes to the plugin state from an editor transaction.
@@ -56,7 +57,28 @@ export default function menuPlugin() {
                     return prev;
                 }
 
-                if (transaction.getMeta(pluginKey).selectedItemIndexChanged !== undefined) {
+                if (
+                    // Highlighting text should hide the menu.
+                    newState.selection.from !== newState.selection.to ||
+                    // Transactions with plugin metadata {deactivate: true} should hide the menu.
+                   ( transaction.getMeta(pluginKey)&& transaction.getMeta(pluginKey).deactivate) ||
+                    // Certain mouse events should hide the menu.
+                    // TODO: Change to global mousedown listener.
+                    transaction.getMeta("focus") ||
+                    transaction.getMeta("blur") ||
+                    transaction.getMeta("pointer") ||
+                    // Moving the caret before the character which triggered the menu should hide it.
+                    (prev.active && newState.selection.from < prev.queryStartPos)
+                    /*||
+                    // Entering more than 3 characters, after the last query that matched with at least 1 menu item, should hide
+                    // the menu.
+                    next.notFoundCount > 3*/
+                ) {
+                    console.log("deactive ==")
+                    return defaults;
+                }
+
+                if (transaction.getMeta(pluginKey) &&transaction.getMeta(pluginKey).selectedItemIndexChanged !== undefined) {
                     let newIndex =
                         transaction.getMeta(pluginKey).selectedItemIndexChanged;
 
@@ -92,6 +114,7 @@ export default function menuPlugin() {
 
                     return true;
                 }
+
                 // Doesn't handle other keystrokes if the menu isn't active.
                 if (!menuIsActive) {
                     return false;
@@ -124,8 +147,7 @@ export default function menuPlugin() {
                     );
                     return true;
                 }
-                return false;
-                // Selects an item and closes the menu.
+               
                 if (event.key === "Enter") {
                     deactivate(view);
                     selectItemCallback({
@@ -138,10 +160,9 @@ export default function menuPlugin() {
                     });
                     return true;
                 }
-
                 // Closes the menu.
                 if (event.key === "Escape") {
-                    deactivate(view);
+                    view.dispatch(view.state.tr.setMeta(pluginKey, { deactivate: true }));
                     return true;
                 }
 

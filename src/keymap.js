@@ -28,7 +28,7 @@ export function buildKeymap(schema, mapKeys) {
     bind("Alt-ArrowUp", joinUp)
     bind("Alt-ArrowDown", joinDown)
     bind("Mod-BracketLeft", lift)
-    bind("Escape", selectParentNode)
+   // bind("Escape", selectParentNode)
   
     if (type = schema.marks.strong) {
       bind("Mod-b", toggleMark(type))
