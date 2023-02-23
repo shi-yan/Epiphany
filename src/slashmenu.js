@@ -11,32 +11,30 @@ import SlashMenuView from "./slashmenuview"
 
 export default function menuPlugin() {
 
-    const pluginKey = { key: 'menu-plugin' }
+    const pluginKey = { key: 'menuplugin' }
     const defaultTriggerCharacter = '\\'
 
     // Plugin key is passed in as a parameter, so it can be exported and used in the DraggableBlocksPlugin.
     return new Plugin({
-        key: { key: 'menuplugin' },
+        key: pluginKey,
 
         view: (view) => {
-            return new SlashMenuView(view);
+            return new SlashMenuView(pluginKey.key, view);
         },
-
         state: {
             // Initialize the plugin's internal state.
             init() {
-                console.log("plugin get state ====== ")
                 return {
                     active: false,
                     triggerCharacter: null,
-                    decorationId:0
+                    decorationId: 0,
+                    keyboardHoveredItemIndex: 0
                 };
             },
 
             // Apply changes to the plugin state from an editor transaction.
             apply(transaction, prev, oldState, newState) {
-                console.log("apply called", oldState, newState);
-
+                //step 2
                 // Checks if the menu should be shown.
                 if (transaction.getMeta(pluginKey) && transaction.getMeta(pluginKey).activate) {
                     return {
@@ -44,8 +42,8 @@ export default function menuPlugin() {
                         triggerCharacter:
                             transaction.getMeta(pluginKey).triggerCharacter || "",
                         queryStartPos: newState.selection.from,
-                        /* items: items(""),
-                         keyboardHoveredItemIndex: 0,*/
+                        /* items: items(""),*/
+                        keyboardHoveredItemIndex: 0,
                         // TODO: Maybe should be 1 if the menu has no possible items? Probably redundant since a menu with no items
                         //  is useless in practice.
                         //  notFoundCount: 0,
@@ -58,14 +56,28 @@ export default function menuPlugin() {
                     return prev;
                 }
 
+                if (transaction.getMeta(pluginKey).selectedItemIndexChanged !== undefined) {
+                    let newIndex =
+                        transaction.getMeta(pluginKey).selectedItemIndexChanged;
+
+                    // Allows selection to jump between first and last items.
+                    if (newIndex < 0) {
+                        newIndex = 9;
+                    } else if (newIndex >= 10) {
+                        newIndex = 0;
+                    }
+
+                    prev.keyboardHoveredItemIndex = newIndex;
+                }
+
                 return prev;
             },
         },
 
         props: {
             handleKeyDown(view, event) {
-                console.log('handlekey', view.state)
                 const menuIsActive = this.getState(view.state).active;
+                // step 1.
                 // Shows the menu if the default trigger character was pressed and the menu isn't active.
                 if (event.key === defaultTriggerCharacter && !menuIsActive) {
                     view.dispatch(
@@ -84,18 +96,17 @@ export default function menuPlugin() {
                 if (!menuIsActive) {
                     return false;
                 }
-                return false;
 
                 // Handles keystrokes for navigating the menu.
                 const {
                     triggerCharacter,
                     queryStartPos,
-                    items,
-                    keyboardHoveredItemIndex,
-                } = pluginKey.getState(view.state);
+                    keyboardHoveredItemIndex
+                } = this.getState(view.state);
 
                 // Moves the keyboard selection to the previous item.
                 if (event.key === "ArrowUp") {
+
                     view.dispatch(
                         view.state.tr.setMeta(pluginKey, {
                             selectedItemIndexChanged: keyboardHoveredItemIndex - 1,
@@ -113,7 +124,7 @@ export default function menuPlugin() {
                     );
                     return true;
                 }
-
+                return false;
                 // Selects an item and closes the menu.
                 if (event.key === "Enter") {
                     deactivate(view);
@@ -145,12 +156,13 @@ export default function menuPlugin() {
             // Setup decorator on the currently active suggestion.
             decorations(state) {
                 console.log(this.getState(state))
-                const { active , decorationId, queryStartPos, triggerCharacter } = this.getState(state);
+                // step3
+                const { active, decorationId, queryStartPos, triggerCharacter } = this.getState(state);
 
                 if (!active) {
                     return null;
                 }
-
+                //setup
                 // If the menu was opened programmatically by another extension, it may not use a trigger character. In this
                 // case, the decoration is set on the whole block instead, as the decoration range would otherwise be empty.
                 if (triggerCharacter === "") {
