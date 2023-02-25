@@ -8,8 +8,9 @@ import { baseKeymap, setBlockType } from "prosemirror-commands"
 
 import textSchema from "./textschema"
 import SlashMenuView from "./slashmenuview"
+import createMenu from "./slashmenu_factory"
 
-export default function menuPlugin() {
+export default function menuPlugin(equationManager) {
 
     const pluginKey = { key: 'menuplugin' }
     const defaultTriggerCharacter = '\\'
@@ -25,7 +26,7 @@ export default function menuPlugin() {
         key: pluginKey,
 
         view: (view) => {
-            return new SlashMenuView(pluginKey.key, view);
+            return new SlashMenuView(pluginKey.key, createMenu(equationManager));
         },
         state: {
             // Initialize the plugin's internal state.
@@ -74,7 +75,6 @@ export default function menuPlugin() {
                     // the menu.
                     next.notFoundCount > 3*/
                 ) {
-                    console.log("deactive ==")
                     return defaults;
                 }
 

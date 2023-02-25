@@ -109,7 +109,7 @@ window.editorView = new EditorView(editorElm, {
       limpidPlugin(),
       trailingSpacePlugin(),
       history(),
-      menuPlugin()
+      menuPlugin(equationManager)
     ]
   }),
   nodeViews: {

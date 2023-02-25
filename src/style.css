@@ -332,13 +332,14 @@ input:focus {
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: antiquewhite;
   border-radius: 12px;
   border-width: 1px;
   padding: 5px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
   cursor: pointer;
+  font-size: 16px;
+  color:#337293;
 }
 
 .limpid-equation-ref-selector-display {
@@ -535,36 +536,157 @@ input:focus {
   color: #87947c;
 }
 
+.slash-menu-container {
+  margin-bottom: 4px;
+  margin-top: 4px;
+  padding-right: 10px;
+  margin-left: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.slash-menu-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.slash-menu-container::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.slash-menu-container::-webkit-scrollbar-thumb {
+  background-color: #c6d3c2;
+  border-radius: 3px;
+}
 
 .slash-menu {
-  align-items: center;
-  appearance: none;
   background-color: #ccd7cc;
   border-radius: 4px;
   border-width: 0;
   box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#9fb1a3 0 -3px 0 inset;
   box-sizing: border-box;
   color: #36395A;
-  cursor: pointer;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   font-family: "JetBrains Mono",monospace;
   height: 48px;
-  justify-content: center;
   line-height: 1;
   list-style: none;
-  overflow: hidden;
-  padding-left: 16px;
-  padding-right: 16px;
-  position: relative;
+  padding-left: 4px;
+  padding-right: 4px;
   text-align: left;
   text-decoration: none;
-  transition: box-shadow .15s,transform .15s;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
   white-space: nowrap;
-  will-change: box-shadow,transform;
   font-size: 18px;
   z-index: 1000;
+  overflow: hidden;
 }
+
+.slash-menu-section {
+  display: flex;
+  flex-direction: column;
+}
+.slash-menu-section-title {
+  display: block;
+  margin: 4px;
+  font-weight: bold;
+  color:#9fb1a3;
+  font-size: small;
+}
+
+
+.slash-menu-item {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+}
+
+.slash-menu-item-title-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding-left: 14px;
+  padding-top: 2px;
+  font-family: 'Roboto', sans-serif;
+
+}
+
+.slash-menu-item-title {
+  display: inline-block;
+  line-height: 26px;
+  text-align: left;
+  color:#337293;
+  font-weight: bold;
+}
+
+.slash-menu-item-subtitle {
+  display: inline-block;
+  line-height: 18px;
+  text-align: left;
+  color:#337293;
+  font-size: 12px;
+  font-style: italic;
+}
+
+/* CSS */
+.slash-menu-item-icon {
+  background-color: #b9c9bb;
+  border: 1px solid #d5d9d9;
+  border-radius: 8px;
+  box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+  box-sizing: border-box;
+  color: #3b5a4a;
+  display: inline-block;
+  font-family: "Amazon Ember",sans-serif;
+  font-size: 13px;
+  line-height: 29px;
+  padding: 0 10px 0 11px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.slash-menu-item-shortcut-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slash-menu-item-shortcut {
+  background-color: #b9c9bb;
+  border: 1px solid #d5d9d9;
+  border-radius: 16px;
+  box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+  box-sizing: border-box;
+  color: #337287;
+  display: inline-block;
+  font-family: "Amazon Ember",sans-serif;
+  font-size: 13px;
+  line-height: 18px;
+  padding: 0 10px 0 11px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  min-width: 80px;
+}
+
+
 
