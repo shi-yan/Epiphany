@@ -64,9 +64,9 @@ export default function menuPlugin() {
                    ( transaction.getMeta(pluginKey)&& transaction.getMeta(pluginKey).deactivate) ||
                     // Certain mouse events should hide the menu.
                     // TODO: Change to global mousedown listener.
-                    transaction.getMeta("focus") ||
+                  /*  transaction.getMeta("focus") ||
                     transaction.getMeta("blur") ||
-                    transaction.getMeta("pointer") ||
+                    transaction.getMeta("pointer") ||*/
                     // Moving the caret before the character which triggered the menu should hide it.
                     (prev.active && newState.selection.from < prev.queryStartPos)
                     /*||
@@ -171,7 +171,8 @@ export default function menuPlugin() {
 
             // Hides menu in cases where mouse click does not cause an editor state change.
             handleClick(view) {
-                // deactivate(view);
+                view.dispatch(view.state.tr.setMeta(pluginKey, { deactivate: true }));
+                    return true;
             },
 
             // Setup decorator on the currently active suggestion.
