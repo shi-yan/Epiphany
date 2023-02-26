@@ -18,7 +18,8 @@ export default function menuPlugin(equationManager) {
         active: false,
         triggerCharacter: null,
         decorationId: 0,
-        menuBrowseDirection: 0
+        menuBrowseDirection: 0,
+        command: null
     };
 
     // Plugin key is passed in as a parameter, so it can be exported and used in the DraggableBlocksPlugin.
@@ -50,6 +51,7 @@ export default function menuPlugin(equationManager) {
                         //  is useless in practice.
                         //  notFoundCount: 0,
                         decorationId: `id_${Math.floor(Math.random() * 0xffffffff)}`,
+                        command: ''
                     };
                 }
 
@@ -57,6 +59,9 @@ export default function menuPlugin(equationManager) {
                 if (!prev.active) {
                     return prev;
                 }
+
+                const textBetween  = newState.doc.textBetween(prev.queryStartPos, newState.selection.from);
+                prev.command = textBetween;
 
                 if (
                     // Highlighting text should hide the menu.
@@ -119,7 +124,6 @@ export default function menuPlugin(equationManager) {
 
                 // Moves the keyboard selection to the previous item.
                 if (event.key === "ArrowUp") {
-
                     view.dispatch(
                         view.state.tr.setMeta(pluginKey, {
                             menuBrowseDirection:  - 1,
@@ -130,6 +134,8 @@ export default function menuPlugin(equationManager) {
 
                 // Moves the keyboard selection to the next item.
                 if (event.key === "ArrowDown") {
+
+                    console.log('arrow down')
                     view.dispatch(
                         view.state.tr.setMeta(pluginKey, {
                             menuBrowseDirection:  + 1,

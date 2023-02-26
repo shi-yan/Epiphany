@@ -32,6 +32,7 @@ export default class SlashMenuView {
 
         document.body.appendChild(this.dom);
         this.currentActive = null;
+        this.oldCommand = ''
     }
 
     renderFirstLevelItems() {
@@ -63,6 +64,7 @@ export default class SlashMenuView {
                 prevItem = this.menuItems[i].items[e];
             }
             this.levelOneItems.appendChild(section);
+            this.menuItems[i].sectionElem = section;
         }
 
         if (prevItem && firstItem) {
@@ -113,23 +115,59 @@ export default class SlashMenuView {
             }
         }
         else if (newState.active) {
-          
+            if (this.oldCommand !== newState.command) {
+                if (this.oldCommand.length < newState.command.length) {
+                    for (let i = 0; i < this.menuItems.length; ++i) {
+                        for (let e = 0; e < this.menuItems[i].items.length; ++e) {
+                            if (!this.menuItems[i].items[e].isFiltered) {
+                                this.menuItems[i].items[e].toggleAvailabilityByQuery(newState.command);
+                            }
+                        }
+                    }
+                } else {
+                    for (let i = 0; i < this.menuItems.length; ++i) {
+                        for (let e = 0; e < this.menuItems[i].items.length; ++e) {
+                            this.menuItems[i].items[e].toggleAvailabilityByQuery(newState.command);
+                        }
+                    }
+                }
+                this.oldCommand = newState.command;
+
+                for (let i = 0; i < this.menuItems.length; ++i) {
+                    let hasVisibleItem = false;
+                    for (let e = 0; e < this.menuItems[i].items.length; ++e) {
+                        if (!this.menuItems[i].items[e].isAvailable()) {
+                            this.menuItems[i].items[e].elem.style.display = 'none';
+                        } else {
+                            this.menuItems[i].items[e].elem.style.display = 'flex';
+
+                            hasVisibleItem = true;
+                        }
+                    }
+                    if (!hasVisibleItem) {
+                        this.menuItems[i].sectionElem.style.display = 'none';
+                    } else {
+                        this.menuItems[i].sectionElem.style.display = 'block';
+                    }
+                }
+            }
+
             if (newState.menuBrowseDirection == 1) {
                 let next = this.currentActive.nextItem;
 
-                while(!next.isAvailable() && next !== this.currentActive) {
-                    next = this.currentActive.nextItem;
+                while (!next.isAvailable() && next !== this.currentActive) {
+                    next = next.nextItem;
                 }
 
                 this.currentActive.deactive();
                 this.currentActive = next;
                 this.currentActive.setActive();
             }
-            else if (newState.menuBrowseDirection == -1){
+            else if (newState.menuBrowseDirection == -1) {
                 let prev = this.currentActive.prevItem;
 
-                while(!prev.isAvailable() && prev !== this.currentActive) {
-                    prev = this.currentActive.prevItem;
+                while (!prev.isAvailable() && prev !== this.currentActive) {
+                    prev = prev.prevItem;
                 }
 
                 this.currentActive.deactive();

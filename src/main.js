@@ -99,7 +99,7 @@ const arrowHandlers = keymap({
 
 window.editorView = new EditorView(editorElm, {
   state: EditorState.create({
-    doc: DOMParser.fromSchema(textSchema).parse('<h1>test</h1><tags></tags>'),
+    doc: DOMParser.fromSchema(textSchema).parse('<h1>test</h1><tags></tags><p>test</p>'),
     plugins: [
       keymap(buildKeymap(textSchema)),
       keymap(baseKeymap),
