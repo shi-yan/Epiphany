@@ -31,13 +31,15 @@ export default class SlashMenuView {
         this.dom.appendChild(this.levelTwoItems);
 
         document.body.appendChild(this.dom);
+        this.currentActive = null;
     }
 
     renderFirstLevelItems() {
         while (this.levelOneItems.firstChild) {
             this.levelOneItems.removeChild(this.levelOneItems.firstChild);
         }
-
+        let firstItem = null;
+        let prevItem = null;
         for (let i = 0; i < this.menuItems.length; ++i) {
             let section = document.createElement('div');
             section.classList.add('slash-menu-section');
@@ -50,14 +52,34 @@ export default class SlashMenuView {
 
             for (let e = 0; e < this.menuItems[i].items.length; ++e) {
                 section.appendChild(this.menuItems[i].items[e].elem);
+                this.menuItems[i].items[e].section = i;
+                if (!firstItem) {
+                    firstItem = this.menuItems[i].items[e];
+                }
+                if (prevItem) {
+                    prevItem.nextItem = this.menuItems[i].items[e];
+                }
+                this.menuItems[i].items[e].prevItem = prevItem;
+                prevItem = this.menuItems[i].items[e];
             }
             this.levelOneItems.appendChild(section);
         }
+
+        if (prevItem && firstItem) {
+            prevItem.nextItem = firstItem;
+            firstItem.prevItem = prevItem;
+        }
+
+        this.currentActive = firstItem;
+        firstItem.setActive();
     }
 
     update(view, state) {
         const newState = view.state[this.pluginkey];
         const prevState = state[this.pluginkey];
+
+        console.log("prev state", prevState)
+        console.log("new state", newState)
 
         if (newState.active && !prevState.active) {
             this.dom.style.display = 'flex';
@@ -87,14 +109,35 @@ export default class SlashMenuView {
                 else {
                     this.dom.style.top = (anchorRect.top - menuRect.height) + 'px';
                 }
-                //this.div.innerText = newState.keyboardHoveredItemIndex;
                 this.renderFirstLevelItems();
             }
         }
         else if (newState.active) {
-            //this.div.innerText = newState.keyboardHoveredItemIndex;
+          
+            if (newState.menuBrowseDirection == 1) {
+                let next = this.currentActive.nextItem;
 
-            if (newState.keyboardHoveredItemIndex > 3) {
+                while(!next.isAvailable() && next !== this.currentActive) {
+                    next = this.currentActive.nextItem;
+                }
+
+                this.currentActive.deactive();
+                this.currentActive = next;
+                this.currentActive.setActive();
+            }
+            else if (newState.menuBrowseDirection == -1){
+                let prev = this.currentActive.prevItem;
+
+                while(!prev.isAvailable() && prev !== this.currentActive) {
+                    prev = this.currentActive.prevItem;
+                }
+
+                this.currentActive.deactive();
+                this.currentActive = prev;
+                this.currentActive.setActive();
+            }
+
+            /*if (newState.menuBrowseDirection > 3) {
                 console.log("open submenu!");
                 this.levelOneItems.style.display = 'none';
                 this.levelTwoItems.style.display = 'flex';
@@ -129,7 +172,7 @@ export default class SlashMenuView {
                 container.appendChild(element);
 
                 section.appendChild(container);
-            }
+            }*/
         }
         else if (!newState.active && prevState.active) {
             this.dom.style.display = 'none';

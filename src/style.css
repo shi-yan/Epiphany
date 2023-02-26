@@ -189,16 +189,6 @@ input:focus {
   outline: 0px solid transparent;
 }
 
-label {
-  background-color: indigo;
-  color: white;
-  padding: 0.5rem;
-  font-family: sans-serif;
-  border-radius: 0.3rem;
-  cursor: pointer;
-  margin-top: 1rem;
-}
-
 .ProseMirror {
   color: #233231;
   font-family: 'Quicksand', sans-serif;
@@ -557,7 +547,8 @@ input:focus {
 }
 
 .slash-menu-container::-webkit-scrollbar-thumb {
-  background-color: #c6d3c2;
+  /*background-color: #c6d3c2;*/
+  background-color: #b9c9bb;
   border-radius: 3px;
 }
 
@@ -604,6 +595,14 @@ input:focus {
   display: flex;
   flex-direction: row;
   cursor: pointer;
+  padding: 3px;
+  border-radius: 6px;
+  color:#337293;
+}
+
+.slash-menu-item-active {
+  color:#f2f2f2;
+  background-color: #337293;
 }
 
 .slash-menu-item-title-container {
@@ -620,7 +619,6 @@ input:focus {
   display: inline-block;
   line-height: 26px;
   text-align: left;
-  color:#337293;
   font-weight: bold;
 }
 
@@ -628,7 +626,6 @@ input:focus {
   display: inline-block;
   line-height: 18px;
   text-align: left;
-  color:#337293;
   font-size: 12px;
   font-style: italic;
 }
@@ -660,6 +657,10 @@ input:focus {
   display: flex;
 }
 
+.slash-menu-item-icon-active {
+  background-color: #f2f2f2;
+}
+
 .slash-menu-item-shortcut-container {
   display: flex;
   justify-content: center;
@@ -688,5 +689,8 @@ input:focus {
   min-width: 80px;
 }
 
+.slash-menu-item-shortcut-active {
+  background-color: #f2f2f2;
+}
 
 

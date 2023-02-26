@@ -4,14 +4,18 @@ export default class SlashMenuItem {
         this.title = title;
         this.subtitle = subtitle;
         this.shortcut = shortcut;
+        this.prevItem = null;
+        this.nextItem = null;
+        this.section = null;
+        this.isActive = false;
 
         let item = document.createElement('div');
         item.classList.add('slash-menu-item');
-        let iconElem = document.createElement('div');
-        iconElem.innerHTML = this.icon;
-        iconElem.classList.add('slash-menu-item-icon');
+        this. iconElem = document.createElement('div');
+        this.iconElem.innerHTML = this.icon;
+        this.iconElem.classList.add('slash-menu-item-icon');
         
-        item.appendChild(iconElem);
+        item.appendChild(this.iconElem);
 
         let itemTitleContainer = document.createElement('div');
         itemTitleContainer.classList.add('slash-menu-item-title-container');
@@ -29,14 +33,29 @@ export default class SlashMenuItem {
         item.appendChild(itemTitleContainer);
         let itemShortcutDiv = document.createElement('div');
         itemShortcutDiv.classList.add('slash-menu-item-shortcut-container');
-        let itemShortcut = document.createElement('span');
-        itemShortcut.classList.add('slash-menu-item-shortcut');
+        this.itemShortcut = document.createElement('span');
+        this.itemShortcut.classList.add('slash-menu-item-shortcut');
         
-        itemShortcut.textContent = this.shortcut;
-        itemShortcutDiv.appendChild(itemShortcut);
+        this.itemShortcut.textContent = this.shortcut;
+        itemShortcutDiv.appendChild(this.itemShortcut);
         item.appendChild(itemShortcutDiv);
 
         this.elem = item;
+    }
+
+    setActive() {
+        this.isActive = true;
+        this.elem.classList.add('slash-menu-item-active');
+        this.itemShortcut.classList.add('slash-menu-item-shortcut-active');
+        this.iconElem.classList.add('slash-menu-item-icon-active');
+        this.elem.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+    }
+
+    deactive() {
+        this.isActive = false;
+        this.elem.classList.remove('slash-menu-item-active');
+        this.itemShortcut.classList.remove('slash-menu-item-shortcut-active');
+        this.iconElem.classList.remove('slash-menu-item-icon-active');
     }
 
     hasSecondaryMenu() {
@@ -47,7 +66,7 @@ export default class SlashMenuItem {
         return null;
     }
 
-    available(query) {
-
+    isAvailable(query) {
+        return true;
     }
 }

@@ -18,7 +18,7 @@ export default function menuPlugin(equationManager) {
         active: false,
         triggerCharacter: null,
         decorationId: 0,
-        keyboardHoveredItemIndex: 0
+        menuBrowseDirection: 0
     };
 
     // Plugin key is passed in as a parameter, so it can be exported and used in the DraggableBlocksPlugin.
@@ -45,7 +45,7 @@ export default function menuPlugin(equationManager) {
                             transaction.getMeta(pluginKey).triggerCharacter || "",
                         queryStartPos: newState.selection.from,
                         /* items: items(""),*/
-                        keyboardHoveredItemIndex: 0,
+                        menuBrowseDirection: 0,
                         // TODO: Maybe should be 1 if the menu has no possible items? Probably redundant since a menu with no items
                         //  is useless in practice.
                         //  notFoundCount: 0,
@@ -77,19 +77,9 @@ export default function menuPlugin(equationManager) {
                 ) {
                     return defaults;
                 }
-
-                if (transaction.getMeta(pluginKey) &&transaction.getMeta(pluginKey).selectedItemIndexChanged !== undefined) {
-                    let newIndex =
-                        transaction.getMeta(pluginKey).selectedItemIndexChanged;
-
-                    // Allows selection to jump between first and last items.
-                    if (newIndex < 0) {
-                        newIndex = 9;
-                    } else if (newIndex >= 10) {
-                        newIndex = 0;
-                    }
-
-                    prev.keyboardHoveredItemIndex = newIndex;
+                prev.menuBrowseDirection = 0;
+                if (transaction.getMeta(pluginKey) &&transaction.getMeta(pluginKey).menuBrowseDirection !== undefined) {
+                    prev.menuBrowseDirection = transaction.getMeta(pluginKey).menuBrowseDirection;
                 }
 
                 return prev;
@@ -124,7 +114,7 @@ export default function menuPlugin(equationManager) {
                 const {
                     triggerCharacter,
                     queryStartPos,
-                    keyboardHoveredItemIndex
+                    menuBrowseDirection
                 } = this.getState(view.state);
 
                 // Moves the keyboard selection to the previous item.
@@ -132,7 +122,7 @@ export default function menuPlugin(equationManager) {
 
                     view.dispatch(
                         view.state.tr.setMeta(pluginKey, {
-                            selectedItemIndexChanged: keyboardHoveredItemIndex - 1,
+                            menuBrowseDirection:  - 1,
                         })
                     );
                     return true;
@@ -142,7 +132,7 @@ export default function menuPlugin(equationManager) {
                 if (event.key === "ArrowDown") {
                     view.dispatch(
                         view.state.tr.setMeta(pluginKey, {
-                            selectedItemIndexChanged: keyboardHoveredItemIndex + 1,
+                            menuBrowseDirection:  + 1,
                         })
                     );
                     return true;
@@ -151,7 +141,7 @@ export default function menuPlugin(equationManager) {
                 if (event.key === "Enter") {
                     deactivate(view);
                     selectItemCallback({
-                        item: items[keyboardHoveredItemIndex],
+                        item: items[menuBrowseDirection],
                         editor: editor,
                         range: {
                             from: queryStartPos - triggerCharacter.length,
