@@ -49,31 +49,7 @@ function arrowHandler(dir) {
 }
 
 
-function popup(content) {
-  let exisiting = document.getElementById('limpid-popup-backdrop');
 
-  if (exisiting) {
-    exisiting.parentNode.removeChild(exisiting);
-  }
-
-  let backdrop = document.createElement('div');
-  backdrop.id = 'limpid-popup-backdrop';
-  document.body.appendChild(backdrop);
-
-  let dialog = document.createElement('div');
-  dialog.className = 'limpid-popup-dialog';
-  backdrop.appendChild(dialog);
-
-  let closeButton = document.createElement('button');
-  closeButton.innerText = "Close";
-  dialog.appendChild(closeButton);
-
-  closeButton.onclick = (e) => {
-    backdrop.parentNode.removeChild(backdrop);
-  }
-
-  dialog.appendChild(content);
-}
 
 let editorElm = document.querySelector("#editor");
 let updateContentTimer = null;
@@ -101,15 +77,15 @@ window.editorView = new EditorView(editorElm, {
   state: EditorState.create({
     doc: DOMParser.fromSchema(textSchema).parse('<h1>test</h1><tags></tags><p>test</p>'),
     plugins: [
+      menuPlugin(equationManager),
       keymap(buildKeymap(textSchema)),
       keymap(baseKeymap),
       arrowHandlers,
       gapCursor(),
       dropCursor(),
-      limpidPlugin(),
+      limpidPlugin(equationManager),
       trailingSpacePlugin(),
-      history(),
-      menuPlugin(equationManager)
+      history()
     ]
   }),
   nodeViews: {

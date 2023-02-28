@@ -19,7 +19,8 @@ export default function menuPlugin(equationManager) {
         triggerCharacter: null,
         decorationId: 0,
         menuBrowseDirection: 0,
-        command: null
+        command: null,
+        firstLevelSelected: false
     };
 
     // Plugin key is passed in as a parameter, so it can be exported and used in the DraggableBlocksPlugin.
@@ -51,7 +52,8 @@ export default function menuPlugin(equationManager) {
                         //  is useless in practice.
                         //  notFoundCount: 0,
                         decorationId: `id_${Math.floor(Math.random() * 0xffffffff)}`,
-                        command: ''
+                        command: '',
+                        firstLevelSelected: false
                     };
                 }
 
@@ -60,19 +62,19 @@ export default function menuPlugin(equationManager) {
                     return prev;
                 }
 
-                const textBetween  = newState.doc.textBetween(prev.queryStartPos, newState.selection.from);
+                const textBetween = newState.doc.textBetween(prev.queryStartPos, newState.selection.from);
                 prev.command = textBetween;
 
                 if (
                     // Highlighting text should hide the menu.
                     newState.selection.from !== newState.selection.to ||
                     // Transactions with plugin metadata {deactivate: true} should hide the menu.
-                   ( transaction.getMeta(pluginKey)&& transaction.getMeta(pluginKey).deactivate) ||
+                    (transaction.getMeta(pluginKey) && transaction.getMeta(pluginKey).deactivate) ||
                     // Certain mouse events should hide the menu.
                     // TODO: Change to global mousedown listener.
-                  /*  transaction.getMeta("focus") ||
-                    transaction.getMeta("blur") ||
-                    transaction.getMeta("pointer") ||*/
+                    /*  transaction.getMeta("focus") ||
+                      transaction.getMeta("blur") ||
+                      transaction.getMeta("pointer") ||*/
                     // Moving the caret before the character which triggered the menu should hide it.
                     (prev.active && newState.selection.from < prev.queryStartPos)
                     /*||
@@ -83,8 +85,13 @@ export default function menuPlugin(equationManager) {
                     return defaults;
                 }
                 prev.menuBrowseDirection = 0;
-                if (transaction.getMeta(pluginKey) &&transaction.getMeta(pluginKey).menuBrowseDirection !== undefined) {
-                    prev.menuBrowseDirection = transaction.getMeta(pluginKey).menuBrowseDirection;
+                if (transaction.getMeta(pluginKey)) {
+                    if (transaction.getMeta(pluginKey).menuBrowseDirection !== undefined) {
+                        prev.menuBrowseDirection = transaction.getMeta(pluginKey).menuBrowseDirection;
+                    }
+                    if (transaction.getMeta(pluginKey).select !== undefined) {
+                        prev.firstLevelSelected = true;
+                    }
                 }
 
                 return prev;
@@ -126,7 +133,7 @@ export default function menuPlugin(equationManager) {
                 if (event.key === "ArrowUp") {
                     view.dispatch(
                         view.state.tr.setMeta(pluginKey, {
-                            menuBrowseDirection:  - 1,
+                            menuBrowseDirection: - 1,
                         })
                     );
                     return true;
@@ -134,26 +141,21 @@ export default function menuPlugin(equationManager) {
 
                 // Moves the keyboard selection to the next item.
                 if (event.key === "ArrowDown") {
-
-                    console.log('arrow down')
                     view.dispatch(
                         view.state.tr.setMeta(pluginKey, {
-                            menuBrowseDirection:  + 1,
+                            menuBrowseDirection: + 1,
                         })
                     );
                     return true;
                 }
-               
+
                 if (event.key === "Enter") {
-                    deactivate(view);
-                    selectItemCallback({
-                        item: items[menuBrowseDirection],
-                        editor: editor,
-                        range: {
-                            from: queryStartPos - triggerCharacter.length,
-                            to: view.state.selection.from,
-                        },
-                    });
+                    view.dispatch(
+                        view.state.tr.setMeta(pluginKey, {
+                            select: true,
+                        })
+                    );
+                  
                     return true;
                 }
                 // Closes the menu.
@@ -168,7 +170,7 @@ export default function menuPlugin(equationManager) {
             // Hides menu in cases where mouse click does not cause an editor state change.
             handleClick(view) {
                 view.dispatch(view.state.tr.setMeta(pluginKey, { deactivate: true }));
-                    return true;
+                return true;
             },
 
             // Setup decorator on the currently active suggestion.
