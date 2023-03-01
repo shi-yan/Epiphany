@@ -36,6 +36,7 @@ export default class SlashMenuView {
         this.oldCommand = ''
 
         this.secondaryMenu = null;
+        this.renderFirstLevelItems();
     }
 
     renderFirstLevelItems() {
@@ -114,10 +115,10 @@ export default class SlashMenuView {
                 else {
                     this.dom.style.top = (anchorRect.top - menuRect.height) + 'px';
                 }
-                this.renderFirstLevelItems();
+                this.currentActive.setActive(true);
             }
         }
-        else if (newState.active) {
+        else if (newState.active && prevState.active) {
             if (newState.firstLevelSelected) {
                 if (this.secondaryMenu == null) {
                     let elm = this.currentActive.getSecondaryMenu();
@@ -146,11 +147,11 @@ export default class SlashMenuView {
                     }
 
                     if (newState.execute) {
+                        const e = this.currentActive.execute.bind(this.currentActive);
                         setTimeout(() => {
                             view.dispatch(view.state.tr.setMeta({ key: this.pluginkey }, { deactivate: true }));
-                            this.currentActive.execute(view);
-
-                        }, 1000);
+                            e(view);
+                        }, 100);
                     }
                 }
             } else {
@@ -254,6 +255,27 @@ export default class SlashMenuView {
         }
         else if (!newState.active && prevState.active) {
             this.dom.style.display = 'none';
+            this.levelOneItems.style.display = 'flex';
+            this.levelTwoItems.style.display = 'none';
+            this.secondaryMenu = null;
+            let firstItem = null;
+            for (let i = 0; i < this.menuItems.length; ++i) {
+                for (let e = 0; e < this.menuItems[i].items.length; ++e) {
+                    this.menuItems[i].items[e].restoreAvailability();
+                    if (!firstItem) {
+                        firstItem = this.menuItems[i].items[e];
+                    }
+                }
+            }
+
+            for (let i = 0; i < this.menuItems.length; ++i) {
+                for (let e = 0; e < this.menuItems[i].items.length; ++e) {
+                    this.menuItems[i].items[e].elem.style.display = 'flex';
+                }
+                this.menuItems[i].sectionElem.style.display = 'block';
+            }
+            this.currentActive.deactive();
+            this.currentActive = firstItem;
         }
         return true;
     }

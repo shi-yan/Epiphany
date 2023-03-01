@@ -48,12 +48,16 @@ class SlashMenuItem {
         this.isApplicable = true;
     }
 
-    setActive() {
+    setActive(noSmooth) {
         this.isActive = true;
         this.elem.classList.add('slash-menu-item-active');
         this.itemShortcut.classList.add('slash-menu-item-shortcut-active');
         this.iconElem.classList.add('slash-menu-item-icon-active');
-        this.elem.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+        if (!noSmooth) {
+        this.elem.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });}
+        else{
+            this.elem.scrollIntoView({ block: "center", inline: "nearest" });
+        }
     }
 
     deactive() {
@@ -75,6 +79,10 @@ class SlashMenuItem {
         } else {
             this.isFiltered = false;
         }
+    }
+
+    restoreAvailability() {
+        this.isFiltered = false;
     }
 
     isAvailable() {
