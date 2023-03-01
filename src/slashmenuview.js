@@ -138,7 +138,12 @@ export default class SlashMenuView {
                     }
                 }
                 else {
-
+                    if (newState.menuBrowseDirection == 1) {
+                        this.currentActive.probeNext();
+                    }
+                    else if (newState.menuBrowseDirection == -1) {
+                        this.currentActive.probePrev();
+                    }    
                 }
             } else {
                 if (this.oldCommand !== newState.command) {
