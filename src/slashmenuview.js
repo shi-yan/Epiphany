@@ -131,9 +131,9 @@ export default class SlashMenuView {
                     }
                     else {
                         setTimeout(() => {
+                            view.dispatch(view.state.tr.setMeta({ key: this.pluginkey }, { deactivate: true }));
                             let h2Command = setBlockType(textSchema.nodes.heading, { level: 2 });
                             h2Command(view.state, view.dispatch, view);
-                            view.dispatch(view.state.tr.setMeta({ key: this.pluginkey }, { deactivate: true }));
                         }, 100);
                     }
                 }
@@ -143,7 +143,15 @@ export default class SlashMenuView {
                     }
                     else if (newState.menuBrowseDirection == -1) {
                         this.currentActive.probePrev();
-                    }    
+                    }
+
+                    if (newState.execute) {
+                        setTimeout(() => {
+                            view.dispatch(view.state.tr.setMeta({ key: this.pluginkey }, { deactivate: true }));
+                            this.currentActive.execute(view);
+
+                        }, 1000);
+                    }
                 }
             } else {
                 if (this.oldCommand !== newState.command) {

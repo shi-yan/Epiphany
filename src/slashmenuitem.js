@@ -1,3 +1,6 @@
+import textSchema from "./textschema"
+
+
 class SlashMenuItem {
     constructor(icon, title, subtitle, shortcut) {
         this.icon = icon;
@@ -146,9 +149,10 @@ class CodeEditorItem extends SlashMenuItem {
             itemTitleContainer.classList.add('slash-menu-item-title-container');
 
             let itemTitle = document.createElement('div');
-            itemTitle.classList.add('slash-menu-item-secondary-title');
 
             itemTitle.classList.add('slash-menu-item-title');
+            itemTitle.classList.add('slash-menu-item-secondary-title');
+
             itemTitle.textContent = submenuItem[i].title;
             itemTitleContainer.appendChild(itemTitle);
             item.appendChild(itemTitleContainer);
@@ -185,6 +189,12 @@ class CodeEditorItem extends SlashMenuItem {
         this.deactiveSubitem(this.currentItem);
         this.currentItem = this.currentItem.prevItem;
         this.activeSubitem(this.currentItem);
+    }
+
+    execute(view) {
+        view.dispatch(view.state.tr.replaceSelectionWith(textSchema.nodes.code_block.create()));
+        console.log("execute time ==================== ")
+
     }
 
     getSecondaryMenu() {

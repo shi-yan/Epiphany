@@ -20,7 +20,8 @@ export default function menuPlugin(equationManager) {
         decorationId: 0,
         menuBrowseDirection: 0,
         command: null,
-        firstLevelSelected: false
+        firstLevelSelected: false,
+        execute: false
     };
 
     // Plugin key is passed in as a parameter, so it can be exported and used in the DraggableBlocksPlugin.
@@ -53,7 +54,8 @@ export default function menuPlugin(equationManager) {
                         //  notFoundCount: 0,
                         decorationId: `id_${Math.floor(Math.random() * 0xffffffff)}`,
                         command: '',
-                        firstLevelSelected: false
+                        firstLevelSelected: false,
+                        execute: false
                     };
                 }
 
@@ -90,8 +92,12 @@ export default function menuPlugin(equationManager) {
                         prev.menuBrowseDirection = transaction.getMeta(pluginKey).menuBrowseDirection;
                     }
                     if (transaction.getMeta(pluginKey).select !== undefined) {
+                        if (prev.firstLevelSelected) {
+                            prev.execute = true;
+                        }
                         prev.firstLevelSelected = true;
                     }
+                    
                 }
 
                 return prev;
