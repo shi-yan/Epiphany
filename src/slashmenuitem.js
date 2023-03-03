@@ -54,8 +54,9 @@ class SlashMenuItem {
         this.itemShortcut.classList.add('slash-menu-item-shortcut-active');
         this.iconElem.classList.add('slash-menu-item-icon-active');
         if (!noSmooth) {
-        this.elem.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });}
-        else{
+            this.elem.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+        }
+        else {
             this.elem.scrollIntoView({ block: "center", inline: "nearest" });
         }
     }
@@ -186,8 +187,7 @@ class CodeEditorItem extends SlashMenuItem {
         item.iconElem.classList.remove('slash-menu-item-icon-active');
     }
 
-    probeNext()
-    {
+    probeNext() {
         this.deactiveSubitem(this.currentItem);
         this.currentItem = this.currentItem.nextItem;
         this.activeSubitem(this.currentItem);
@@ -201,8 +201,6 @@ class CodeEditorItem extends SlashMenuItem {
 
     execute(view) {
         view.dispatch(view.state.tr.replaceSelectionWith(textSchema.nodes.code_block.create()));
-        console.log("execute time ==================== ")
-
     }
 
     getSecondaryMenu() {
@@ -210,4 +208,117 @@ class CodeEditorItem extends SlashMenuItem {
     }
 }
 
-export { SlashMenuItem, CodeEditorItem };
+class EquationRefItem extends SlashMenuItem {
+    constructor(icon, title, subtitle, shortcut, equationManager) {
+        super(icon, title, subtitle, shortcut);
+
+
+        this.secondaryElm = document.createElement('div');
+        this.secondaryElm.style.display = 'flex';
+        this.secondaryElm.style.flexDirection = 'column';
+        this.equationManager = equationManager;
+
+    }
+
+    activeSubitem(item) {
+        item.elem.classList.add('slash-menu-item-active');
+        item.elem.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+    }
+
+    deactiveSubitem(item) {
+        item.elem.classList.remove('slash-menu-item-active');
+    }
+
+    probeNext() {
+        this.deactiveSubitem(this.currentItem);
+        this.currentItem = this.currentItem.nextItem;
+        this.activeSubitem(this.currentItem);
+    }
+
+    probePrev() {
+        this.deactiveSubitem(this.currentItem);
+        this.currentItem = this.currentItem.prevItem;
+        this.activeSubitem(this.currentItem);
+    }
+
+    execute(view) {
+        view.dispatch(view.state.tr.replaceSelectionWith(textSchema.nodes.equation_ref.create({
+            id:
+                this.currentItem.key
+        })));
+    }
+
+    getSecondaryMenu() {
+        const exisitingEquations = this.equationManager.getOrderedExistingEquations();
+
+        let firstItem = null;
+        let prevItem = null;
+
+        while (this.secondaryElm.firstChild) {
+            this.secondaryElm.removeChild(this.secondaryElm.firstChild);
+        }
+
+        exisitingEquations.forEach((value, index, array) => {
+            let container = document.createElement('div');
+            container.className = 'limpid-equation-ref-selector-item';
+
+            let count = document.createElement('span');
+            count.innerText = '(' + value.id + ')';
+            container.appendChild(count);
+
+            container.appendChild(value.dom);
+
+            value.dom.className = 'limpid-equation-ref-selector-display';
+
+            this.secondaryElm.appendChild(container);
+
+            let elem = { id: value.id, key: value.key, elem: container, prevItem: prevItem, nextItem: null };
+
+            if (prevItem) {
+                prevItem.nextItem = elem;
+            }
+            if (!firstItem) {
+                firstItem = elem
+            }
+
+            prevItem = elem;
+        })
+
+        prevItem.nextItem = firstItem;
+
+        this.currentItem = firstItem;
+
+        this.activeSubitem(firstItem);
+
+
+        return this.secondaryElm;
+    }
+
+    toggleAvailabilityByQuery(query) {
+        if (this.equationManager.count() == 0) {
+            this.isFiltered = false;
+        } else if (this.title.toLowerCase().indexOf(query) == -1) {
+            this.isFiltered = true;
+        } else {
+            this.isFiltered = false;
+        }
+    }
+
+    restoreAvailability() {
+        this.isFiltered = false;
+    }
+
+    isAvailable() {
+        if (this.equationManager.count() == 0) {
+            return false;
+        }
+
+        if (this.isFiltered) {
+            return false;
+        }
+
+        return true;
+    }
+}
+
+export { SlashMenuItem, CodeEditorItem, EquationRefItem };

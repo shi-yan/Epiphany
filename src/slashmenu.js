@@ -97,9 +97,7 @@ export default function menuPlugin(equationManager) {
                         }
                         prev.firstLevelSelected = true;
                     }
-                    
                 }
-
                 return prev;
             },
         },
@@ -161,7 +159,7 @@ export default function menuPlugin(equationManager) {
                             select: true,
                         })
                     );
-                  
+
                     return true;
                 }
                 // Closes the menu.
@@ -175,8 +173,12 @@ export default function menuPlugin(equationManager) {
 
             // Hides menu in cases where mouse click does not cause an editor state change.
             handleClick(view) {
-                view.dispatch(view.state.tr.setMeta(pluginKey, { deactivate: true }));
-                return true;
+                const menuIsActive = this.getState(view.state).active;
+                if (menuIsActive) {
+                    view.dispatch(view.state.tr.setMeta(pluginKey, { deactivate: true }));
+                    return true;
+                }
+                return false;
             },
 
             // Setup decorator on the currently active suggestion.
@@ -188,6 +190,8 @@ export default function menuPlugin(equationManager) {
                 if (!active) {
                     return null;
                 }
+
+                // https://developer.chrome.com/blog/tether-elements-to-each-other-with-css-anchor-positioning/
                 //setup
                 // If the menu was opened programmatically by another extension, it may not use a trigger character. In this
                 // case, the decoration is set on the whole block instead, as the decoration range would otherwise be empty.

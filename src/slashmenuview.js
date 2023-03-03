@@ -76,6 +76,24 @@ export default class SlashMenuView {
             firstItem.prevItem = prevItem;
         }
 
+        for (let i = 0; i < this.menuItems.length; ++i) {
+            let hasVisibleItem = false;
+            for (let e = 0; e < this.menuItems[i].items.length; ++e) {
+                if (!this.menuItems[i].items[e].isAvailable()) {
+                    this.menuItems[i].items[e].elem.style.display = 'none';
+                } else {
+                    this.menuItems[i].items[e].elem.style.display = 'flex';
+
+                    hasVisibleItem = true;
+                }
+            }
+            if (!hasVisibleItem) {
+                this.menuItems[i].sectionElem.style.display = 'none';
+            } else {
+                this.menuItems[i].sectionElem.style.display = 'block';
+            }
+        }
+
         this.currentActive = firstItem;
         firstItem.setActive();
     }
@@ -89,7 +107,23 @@ export default class SlashMenuView {
 
         if (newState.active && !prevState.active) {
             this.dom.style.display = 'flex';
+            for (let i = 0; i < this.menuItems.length; ++i) {
+                let hasVisibleItem = false;
+                for (let e = 0; e < this.menuItems[i].items.length; ++e) {
+                    if (!this.menuItems[i].items[e].isAvailable()) {
+                        this.menuItems[i].items[e].elem.style.display = 'none';
+                    } else {
+                        this.menuItems[i].items[e].elem.style.display = 'flex';
 
+                        hasVisibleItem = true;
+                    }
+                }
+                if (!hasVisibleItem) {
+                    this.menuItems[i].sectionElem.style.display = 'none';
+                } else {
+                    this.menuItems[i].sectionElem.style.display = 'block';
+                }
+            }
             //get position
             const elements = document.getElementsByClassName('suggestion-decorator')
 
@@ -124,7 +158,19 @@ export default class SlashMenuView {
                     let elm = this.currentActive.getSecondaryMenu();
 
                     if (elm) {
-                        this.levelTwoItems.appendChild(elm);
+
+                        let section = document.createElement('div');
+                        section.classList.add('slash-menu-section');
+                        let sectionTitle = document.createElement('div');
+                        sectionTitle.classList.add('slash-menu-section-title');
+                        let sectionTitleSpan = document.createElement('span');
+                        sectionTitleSpan.textContent = "Hit 'Backspace' to go back";
+                        sectionTitle.appendChild(sectionTitleSpan);
+                        section.appendChild(sectionTitle);
+                        section.appendChild(elm)
+                
+                        this.levelTwoItems.appendChild(section);
+
                         this.secondaryMenu = elm;
 
                         this.levelOneItems.style.display = 'none';
@@ -215,43 +261,6 @@ export default class SlashMenuView {
                     this.currentActive.setActive();
                 }
             }
-
-            /*if (newState.menuBrowseDirection > 3) {
-                console.log("open submenu!");
-                this.levelOneItems.style.display = 'none';
-                this.levelTwoItems.style.display = 'flex';
-
-
-                let container = document.createElement('div');
-                container.className = 'limpid-equation-ref-selector-item';
-
-                let section = document.createElement('div');
-                section.classList.add('slash-menu-section');
-                let sectionTitle = document.createElement('div');
-                sectionTitle.classList.add('slash-menu-section-title');
-                let sectionTitleSpan = document.createElement('span');
-                sectionTitleSpan.textContent = "Hit 'Backspace' to go back";
-                sectionTitle.appendChild(sectionTitleSpan);
-                section.appendChild(sectionTitle);
-    
-                this.levelTwoItems.appendChild(section);
-
-                let iconElem = document.createElement('div');
-                iconElem.innerText = '1';
-                iconElem.classList.add('slash-menu-item-icon');
-
-                container.appendChild(iconElem);
-
-                let element = document.createElement('div');
-                element.style.textAlign="center";
-                element.style.flexGrow=1;
-                katex.render("\\int_{a}^{b} x^2 \\,dx", element, {
-                    throwOnError: false
-                });
-                container.appendChild(element);
-
-                section.appendChild(container);
-            }*/
         }
         else if (!newState.active && prevState.active) {
             this.dom.style.display = 'none';
@@ -269,10 +278,21 @@ export default class SlashMenuView {
             }
 
             for (let i = 0; i < this.menuItems.length; ++i) {
+                let hasVisibleItem = false;
                 for (let e = 0; e < this.menuItems[i].items.length; ++e) {
-                    this.menuItems[i].items[e].elem.style.display = 'flex';
+                    if (!this.menuItems[i].items[e].isAvailable()) {
+                        this.menuItems[i].items[e].elem.style.display = 'none';
+                    } else {
+                        this.menuItems[i].items[e].elem.style.display = 'flex';
+
+                        hasVisibleItem = true;
+                    }
                 }
-                this.menuItems[i].sectionElem.style.display = 'block';
+                if (!hasVisibleItem) {
+                    this.menuItems[i].sectionElem.style.display = 'none';
+                } else {
+                    this.menuItems[i].sectionElem.style.display = 'block';
+                }
             }
             this.currentActive.deactive();
             this.currentActive = firstItem;

@@ -1,5 +1,6 @@
 import textSchema from "./textschema";
 import { Transform, StepMap } from "prosemirror-transform"
+import * as katex from "katex"
 
 
 

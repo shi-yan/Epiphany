@@ -26,11 +26,9 @@ export default class EquationManager {
             clearTimeout(this.recountDelay);
             this.recountDelay = null;
         }
-        console.log("recount");
         this.recountDelay = setTimeout(() => {
             this.recountDelay = null;
             let listOfEquations = document.getElementsByClassName("limpid-equation-counter");
-            console.log("actual recount", listOfEquations)
             for (let i = 0; i < listOfEquations.length; ++i) {
                 listOfEquations[i].innerText = '(' + (i + 1) + ')';
                 let key = listOfEquations[i].getAttribute('data-key');
@@ -58,7 +56,11 @@ export default class EquationManager {
         }, 1000);
     }
 
-    assembleSelector(dom, insertEquationRef) {
+    count() {
+        return this.equations.size;
+    }
+
+    getOrderedExistingEquations() {
         let exisitingEquations = [];
 
         this.equations.forEach((value, key, map) => {
@@ -81,23 +83,7 @@ export default class EquationManager {
 
         console.log("order", exisitingEquations);
 
-        exisitingEquations.forEach((value, index, array) => {
-            let container = document.createElement('button');
-            container.className = 'limpid-equation-ref-selector-item';
-
-            let count = document.createElement('span');
-            count.innerText = '(' + value.id + ')';
-            container.appendChild(count);
-
-            container.appendChild(value.dom);
-
-            container.onclick = (e) => { insertEquationRef(value.key) }
-
-            //value.dom.classList.remove('limpid-equation-display');
-            value.dom.className = 'limpid-equation-ref-selector-display';
-
-            dom.appendChild(container);
-        })
+        return exisitingEquations;
     }
 
     fetchCountByKey(key) {
