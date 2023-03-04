@@ -2,7 +2,7 @@ import textSchema from "./textschema"
 
 
 class SlashMenuItem {
-    constructor(icon, title, subtitle, shortcut) {
+    constructor(icon, title, subtitle, shortcut, execute) {
         this.icon = icon;
         this.title = title;
         this.subtitle = subtitle;
@@ -11,6 +11,7 @@ class SlashMenuItem {
         this.nextItem = null;
         this.section = null;
         this.isActive = false;
+        this.execute = execute;
 
         let item = document.createElement('div');
         item.classList.add('slash-menu-item');
@@ -101,7 +102,9 @@ class SlashMenuItem {
 
 class CodeEditorItem extends SlashMenuItem {
     constructor(icon, title, subtitle, shortcut) {
-        super(icon, title, subtitle, shortcut);
+        super(icon, title, subtitle, shortcut, (view) => {
+            view.dispatch(view.state.tr.replaceSelectionWith(textSchema.nodes.code_block.create()));
+        });
         const color = "#337287";
 
         let submenuItem = [{
@@ -199,10 +202,6 @@ class CodeEditorItem extends SlashMenuItem {
         this.activeSubitem(this.currentItem);
     }
 
-    execute(view) {
-        view.dispatch(view.state.tr.replaceSelectionWith(textSchema.nodes.code_block.create()));
-    }
-
     getSecondaryMenu() {
         return this.secondaryElm;
     }
@@ -210,7 +209,12 @@ class CodeEditorItem extends SlashMenuItem {
 
 class EquationRefItem extends SlashMenuItem {
     constructor(icon, title, subtitle, shortcut, equationManager) {
-        super(icon, title, subtitle, shortcut);
+        super(icon, title, subtitle, shortcut, (view) => {
+            view.dispatch(view.state.tr.replaceSelectionWith(textSchema.nodes.equation_ref.create({
+                id:
+                    this.currentItem.key
+            })));
+        });
 
 
         this.secondaryElm = document.createElement('div');
@@ -239,13 +243,6 @@ class EquationRefItem extends SlashMenuItem {
         this.deactiveSubitem(this.currentItem);
         this.currentItem = this.currentItem.prevItem;
         this.activeSubitem(this.currentItem);
-    }
-
-    execute(view) {
-        view.dispatch(view.state.tr.replaceSelectionWith(textSchema.nodes.equation_ref.create({
-            id:
-                this.currentItem.key
-        })));
     }
 
     getSecondaryMenu() {

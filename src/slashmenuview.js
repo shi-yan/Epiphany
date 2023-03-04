@@ -1,7 +1,6 @@
 import textSchema from "./textschema";
 import { Transform, StepMap } from "prosemirror-transform"
 import { TextSelection, Selection, NodeSelection } from "prosemirror-state"
-import { baseKeymap, setBlockType } from "prosemirror-commands"
 
 
 export default class SlashMenuView {
@@ -168,7 +167,7 @@ export default class SlashMenuView {
                         sectionTitle.appendChild(sectionTitleSpan);
                         section.appendChild(sectionTitle);
                         section.appendChild(elm)
-                
+
                         this.levelTwoItems.appendChild(section);
 
                         this.secondaryMenu = elm;
@@ -177,10 +176,12 @@ export default class SlashMenuView {
                         this.levelTwoItems.style.display = 'flex';
                     }
                     else {
+                        const e = this.currentActive.execute;
                         setTimeout(() => {
+                            view.dispatch(view.state.tr.deleteRange(newState.queryStartPos - newState.triggerCharacter.length,
+                                view.state.selection.from));
                             view.dispatch(view.state.tr.setMeta({ key: this.pluginkey }, { deactivate: true }));
-                            let h2Command = setBlockType(textSchema.nodes.heading, { level: 2 });
-                            h2Command(view.state, view.dispatch, view);
+                            e(view);
                         }, 100);
                     }
                 }
@@ -195,6 +196,8 @@ export default class SlashMenuView {
                     if (newState.execute) {
                         const e = this.currentActive.execute.bind(this.currentActive);
                         setTimeout(() => {
+                            view.dispatch(view.state.tr.deleteRange(newState.queryStartPos - newState.triggerCharacter.length,
+                                view.state.selection.from));
                             view.dispatch(view.state.tr.setMeta({ key: this.pluginkey }, { deactivate: true }));
                             e(view);
                         }, 100);

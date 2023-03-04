@@ -6,7 +6,6 @@ import 'prosemirror-gapcursor/style/gapcursor.css'
 import './style.css'
 import { baseKeymap, setBlockType } from "prosemirror-commands"
 
-import textSchema from "./textschema"
 import SlashMenuView from "./slashmenuview"
 import createMenu from "./slashmenu_factory"
 
@@ -159,7 +158,6 @@ export default function menuPlugin(equationManager) {
                             select: true,
                         })
                     );
-
                     return true;
                 }
                 // Closes the menu.
