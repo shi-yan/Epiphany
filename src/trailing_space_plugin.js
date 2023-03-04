@@ -12,13 +12,12 @@ export default function trailingSpacePlugin() {
     const plugin = new Plugin({
       key: 'trailing',
       appendTransaction: (_, __, state) => {
-        console.log("append transaction called")
         const { doc, tr, schema } = state;
         const shouldInsertNodeAtEnd = plugin.getState(state);
         const endPosition = doc.content.size;
         if (!shouldInsertNodeAtEnd) {
-          return;
-  
+          console.log("append transaction called = no trailing")
+          return null;
         }
         return tr.insert(
           endPosition,

@@ -5,9 +5,14 @@ import 'prosemirror-menu/style/menu.css'
 import 'prosemirror-gapcursor/style/gapcursor.css'
 import './style.css'
 import { baseKeymap, setBlockType } from "prosemirror-commands"
+import { findParentNode } from "@tiptap/core";
 
 import SlashMenuView from "./slashmenuview"
 import createMenu from "./slashmenu_factory"
+
+const findBlock = findParentNode(
+    (node) => node.type.name === "paragraph"
+);
 
 export default function menuPlugin(equationManager) {
 
@@ -107,17 +112,23 @@ export default function menuPlugin(equationManager) {
                 // step 1.
                 // Shows the menu if the default trigger character was pressed and the menu isn't active.
                 if (event.key === defaultTriggerCharacter && !menuIsActive) {
-                    view.dispatch(
-                        view.state.tr
-                            .insertText(defaultTriggerCharacter)
-                            .scrollIntoView()
-                            .setMeta(pluginKey, {
-                                activate: true,
-                                triggerCharacter: defaultTriggerCharacter,
-                            })
-                    );
 
-                    return true;
+                    const blockNode = findBlock(view.state.selection);
+                    if (blockNode && blockNode.node.type.name === 'paragraph') {
+
+                        view.dispatch(
+                            view.state.tr
+                                .insertText(defaultTriggerCharacter)
+                                .scrollIntoView()
+                                .setMeta(pluginKey, {
+                                    activate: true,
+                                    triggerCharacter: defaultTriggerCharacter,
+                                })
+                        );
+
+                        return true;
+                    }
+                    return false;
                 }
 
                 // Doesn't handle other keystrokes if the menu isn't active.
