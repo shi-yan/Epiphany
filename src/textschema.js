@@ -6,6 +6,7 @@ let nodes = {
     group: "inline",
   },
   title: {
+    attrs: { createdAt: { default: Math.floor(Date.now() / 1000) }, lastModifiedAt: { default: Math.floor(Date.now() / 1000) } },
     content: "text*",
     toDOM() { return ["h1", 0] },
     parseDOM: [{ tag: "h1" }]
@@ -218,6 +219,7 @@ const marks = {
   }
 };
 
+console.log('nodes', nodes)
 
 const textSchema = new Schema({
   nodes,

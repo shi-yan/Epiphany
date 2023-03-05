@@ -70,14 +70,11 @@ input:focus {
   opacity: 1;
 }
 
-
-
-
 .editor-container {
   position: relative;
   height: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-grow: 1;
   background: #d6ded4;
   border: 1px solid #ccd7cc;
@@ -95,6 +92,7 @@ input:focus {
   touch-action: manipulation;
   overflow-y: auto;
   overflow-x: hidden;
+  justify-content: space-between;
 }
 
 #editor-top {
@@ -109,7 +107,7 @@ input:focus {
 }
 
 #editor-top-doc-time {
-  color:#9fb1a3;
+  color: #9fb1a3;
   margin: 8px;
   max-width: 720px;
   display: block;
@@ -119,7 +117,7 @@ input:focus {
 }
 
 .editor-top-button {
-  color:#627369;
+  color: #627369;
   font-family: icon;
   font-size: 18px;
   border: none;
@@ -133,7 +131,7 @@ input:focus {
 }
 
 .editor-top-button:hover {
-  color:#3e8eb7;
+  color: #3e8eb7;
 }
 
 #editor-top-padding {
@@ -144,7 +142,7 @@ input:focus {
 .temp-button {
   border-color: #627369;
   background-color: transparent;
-  color:#627369;
+  color: #627369;
   border-style: dashed;
   border-width: 1px;
   cursor: pointer;
@@ -330,7 +328,7 @@ input:focus {
   padding-right: 10px;
   cursor: pointer;
   font-size: 16px;
-  color:#337293;
+  color: #337293;
 }
 
 .limpid-equation-ref-selector-display {
@@ -381,15 +379,17 @@ input:focus {
   display: flex;
   flex-direction: row;
   flex-grow: 1;
-  margin: 4px;
+  padding: 4px;
   height: calc(100% - 8px);
   position: relative;
+  background-image: url('/4Kchalkboard4.png');
+  background-size: auto 100%;
 }
 
 #sidebar {
   padding-top: 45px;
   width: 240px;
-  background-color: #4d625d;
+  /*background-color: #4d625d;*/
   display: flex;
   flex-direction: column;
   position: relative;
@@ -409,13 +409,19 @@ input:focus {
   overflow-x: hidden;
   cursor: pointer;
   padding: 8px;
-  color: #87947c;
+  color: #2a3737;
+
+  background-color: #b7c3bb;
+  opacity: 0.9;
+  border-radius: 6px;
+  margin: 4px;
+  padding: 6px;
 }
 
 #bottom-area button {
   background-color: transparent;
   border: none;
-  color: #87947c;
+  color: #2a3737;
   cursor: pointer;
   font-size: 18px;
 }
@@ -429,6 +435,13 @@ input:focus {
   flex-grow: 1;
 }
 
+.yy-tree {
+  background-color: #b7c3bb;
+  opacity: 0.9;
+  border-radius: 6px;
+  margin: 4px;
+  padding: 6px;
+}
 
 /*
 .paperOverlay {
@@ -465,7 +478,8 @@ input:focus {
   margin-right: 6px;
   padding-left: 8px;
   cursor: pointer;
-  color: #87947c;
+  /*color: #87947c;*/
+  color: #364241;
   flex-direction: row;
 }
 
@@ -557,12 +571,12 @@ input:focus {
   background-color: #ccd7cc;
   border-radius: 4px;
   border-width: 0;
-  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#9fb1a3 0 -3px 0 inset;
+  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #9fb1a3 0 -3px 0 inset;
   box-sizing: border-box;
   color: #36395A;
   display: flex;
   flex-direction: column;
-  font-family: "JetBrains Mono",monospace;
+  font-family: "JetBrains Mono", monospace;
   height: 48px;
   line-height: 1;
   list-style: none;
@@ -583,11 +597,12 @@ input:focus {
   display: flex;
   flex-direction: column;
 }
+
 .slash-menu-section-title {
   display: block;
   margin: 4px;
   font-weight: bold;
-  color:#9fb1a3;
+  color: #9fb1a3;
   font-size: small;
 }
 
@@ -598,7 +613,7 @@ input:focus {
   cursor: pointer;
   padding: 3px;
   border-radius: 6px;
-  color:#337293;
+  color: #337293;
 }
 
 .slash-menu-item-secondary-title {
@@ -608,7 +623,7 @@ input:focus {
 }
 
 .slash-menu-item-active {
-  color:#f2f2f2;
+  color: #f2f2f2;
   background-color: #337293;
 }
 
@@ -646,7 +661,7 @@ input:focus {
   box-sizing: border-box;
   color: #3b5a4a;
   display: inline-block;
-  font-family: "Amazon Ember",sans-serif;
+  font-family: "Amazon Ember", sans-serif;
   font-size: 13px;
   line-height: 29px;
   padding: 0 10px 0 11px;
@@ -682,7 +697,7 @@ input:focus {
   box-sizing: border-box;
   color: #337287;
   display: inline-block;
-  font-family: "Amazon Ember",sans-serif;
+  font-family: "Amazon Ember", sans-serif;
   font-size: 13px;
   line-height: 18px;
   padding: 0 10px 0 11px;
@@ -700,4 +715,69 @@ input:focus {
   background-color: #f2f2f2;
 }
 
+.editor-area {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  flex-grow: 1;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  overflow-y: auto;
+}
 
+.toc-container {
+  width: 220px;
+  flex-grow: 0;
+  background-color: #ccd7cc;
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-left-color: #9fb1a3;
+}
+
+
+.ProseMirror blockquote {
+  border-left: 3px solid #337287;
+  color: #555a61;
+  font-family: Georgia, Times, "Times New Roman", serif;
+  font-size: 1.0em;
+  font-style: italic;
+  line-height: 1.1em;
+  margin: 0.5em 0.5em;
+  padding: 0.5em 1em;
+  position: relative;
+  transition: 0.2s border ease-in-out;
+  z-index: 0;
+}
+
+.ProseMirror blockquote:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -4px;
+  height: 2em;
+  background-color: #d5ded4;
+  width: 5px;
+  margin-top: -1em;
+}
+
+.ProseMirror blockquote:after {
+  content: "”";
+  position: absolute;
+  font-size: 32px;
+  top: 50%;
+  left: -0.5em;
+  color: #337287;
+  font-family: 'Source Code Pro', monospace;
+  font-style: normal;
+  line-height: 1em;
+  text-align: center;
+  text-indent: -2px;
+  width: 1em;
+  margin-top: -0.5em;
+  transition: 0.2s all ease-in-out, 0.4s transform ease-in-out;
+}
+
+.ProseMirror blockquote.format:before, blockquote.format:after {
+  display: none;
+}
