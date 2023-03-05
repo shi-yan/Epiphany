@@ -80,10 +80,10 @@ export default function limpidPlugin(equationManager) {
       }
     },
     filterTransaction(tr, state) {
-      console.log(tr)
+      //console.log(tr)
       return true;
     },
-    view(editorView) {
+    view2(editorView) {
       let menuView = document.createElement('div');
       menuView.style.zIndex = 100;
       menuView.style.position = 'fixed';

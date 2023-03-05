@@ -48,21 +48,46 @@ function arrowHandler(dir) {
   }
 }
 
-
-
-
 let editorElm = document.querySelector("#editor");
 let updateContentTimer = null;
 function updateContent() {
   updateContentTimer = null;
   console.log("inside update content", window.editorView.state.doc);
 
+  let containerElem = document.getElementById('toc-container-list');
+
+  while (containerElem.firstChild) {
+    containerElem.removeChild(containerElem.firstChild);
+  }
+
+  let indentation = 0;
+  let currentLevel = 2;
   for (let i = 0; i < window.editorView.state.doc.content.content.length; ++i) {
     let node = window.editorView.state.doc.content.content[i];
     if (node.type.name === 'heading') {
       console.log(node.textContent)
+
+      if (node.attrs.level > currentLevel) {
+        indentation += 10;
+        currentLevel = node.attrs.level;
+      }
+      else if (node.attrs.level < currentLevel) {
+        indentation -= 10;
+        currentLevel = node.attrs.level;
+      }
+
+      let elem = document.createElement('div');
+      elem.classList.add('toc-container-item');
+      elem.style.paddingLeft = (16 + indentation) + 'px';
+      let span = document.createElement('span');
+      span.innerText = node.textContent;
+      elem.appendChild(span);
+
+      containerElem.appendChild(elem);
+
     }
   }
+
 }
 
 const arrowHandlers = keymap({
@@ -119,7 +144,6 @@ window.editorView = new EditorView(editorElm, {
     }
 
     for (let i = 0; i < tr.steps.length; ++i) {
-      console.log(tr.steps[i].slice)
       if (tr.steps[i].slice.content.size == 0) {
         rebuildContentTable();
         return;
@@ -127,7 +151,6 @@ window.editorView = new EditorView(editorElm, {
 
       for (let e = 0; e < tr.steps[i].slice.content.content.length; ++e) {
         let node = tr.steps[i].slice.content.content[e];
-
         if (node.type.name === 'heading') {
           rebuildContentTable();
           return;
