@@ -4,8 +4,6 @@ import { TextSelection, Selection, NodeSelection } from "prosemirror-state"
 
 export default class TwitterView {
     constructor(node, view, getPos) {
-
-        console.log("====================== create video");
         // We'll need these later
         this.node = node
         this.outerView = view
@@ -14,7 +12,7 @@ export default class TwitterView {
         // The node's representation in the editor (empty, for now)
         this.dom = document.createElement("div");
         this.dom.style.textAlign = 'center';
-        this.dom.innerHTML = '<blockquote class="twitter-tweet tw-align-center"><p lang="zh" dir="ltr">白“云”苍狗几千回，<br>惟有“吆喝”长不改。<br>😆🫶🏻 <a href="https://t.co/MTJ3bFYs9F">pic.twitter.com/MTJ3bFYs9F</a></p>&mdash; Leila (@leilahushe) <a href="https://twitter.com/leilahushe/status/1625704186775060482?ref_src=twsrc%5Etfw">February 15, 2023</a></blockquote>'
+        this.dom.innerHTML = '<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">カリカリイヤイヤ期かしら <a href="https://t.co/kPrAG2dpMj">pic.twitter.com/kPrAG2dpMj</a></p>&mdash; こむぎ＠ポメ柴 (@Komugi8yoiko) <a href="https://twitter.com/Komugi8yoiko/status/1632227961771548673?ref_src=twsrc%5Etfw">March 5, 2023</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>'
         twttr.widgets.load(
             this.dom
         );

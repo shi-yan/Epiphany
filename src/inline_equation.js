@@ -1,8 +1,6 @@
 import textSchema from "./textschema";
 import { Transform, StepMap } from "prosemirror-transform"
-import * as katex from "katex"
-
-
+import katex from "katex"
 
 export default class InlineEquationView {
     constructor(node, view, getPos) {
