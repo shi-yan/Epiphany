@@ -20,8 +20,8 @@ export default class EquationView {
         this.dom.classList.add('limpid-equation');
 
         this.input = document.createElement("textarea");
-        this.input.className = "limpid-equation-input"
-        this.input.classList.add("limpid-equation-input-edit-mode");
+        this.input.className = "limpid-equation-textarea"
+        this.input.classList.add("limpid-equation-textarea-edit-mode");
         this.dom.appendChild(this.input);
 
         this.display = document.createElement("div");
@@ -105,7 +105,7 @@ export default class EquationView {
 
     selectNode() {
         //this.dom.classList.add("ProseMirror-selectednode")
-        this.input.classList.add("limpid-equation-input-edit-mode");
+        this.input.classList.add("limpid-equation-textarea-edit-mode");
         this.display.classList.add("limpid-equation-display-edit-mode");
         this.idElm.classList.add('limpid-equation-counter-edit-mode');
 
@@ -120,7 +120,7 @@ export default class EquationView {
 
     deselectNode() {
         //this.dom.classList.remove("ProseMirror-selectednode")
-        this.input.classList.remove("limpid-equation-input-edit-mode");
+        this.input.classList.remove("limpid-equation-textarea-edit-mode");
         this.display.classList.remove("limpid-equation-display-edit-mode");
         this.idElm.classList.remove('limpid-equation-counter-edit-mode');
         this.input.blur();

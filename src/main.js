@@ -28,6 +28,9 @@ import { Tree } from "./tree"
 import menuPlugin from "./slashmenu"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
+
+//https://pictogrammers.com/library/mdi/
+
 dayjs.extend(relativeTime)
 
 let equationManager = new EquationManager();
@@ -139,16 +142,18 @@ window.editorView = new EditorView(editorElm, {
     }
 
     for (let i = 0; i < tr.steps.length; ++i) {
-      if (tr.steps[i].slice.content.size == 0) {
-        rebuildContentTable();
-        return;
-      }
-
-      for (let e = 0; e < tr.steps[i].slice.content.content.length; ++e) {
-        let node = tr.steps[i].slice.content.content[e];
-        if (node.type.name === 'heading') {
+      if (tr.steps[i].slice) {
+        if (!tr.steps[i].slice.content || tr.steps[i].slice.content.size == 0) {
           rebuildContentTable();
           return;
+        }
+
+        for (let e = 0; e < tr.steps[i].slice.content.content.length; ++e) {
+          let node = tr.steps[i].slice.content.content[e];
+          if (node.type.name === 'heading') {
+            rebuildContentTable();
+            return;
+          }
         }
       }
     }

@@ -15,7 +15,6 @@ export default class EquationRefView {
         this.dom.setAttribute('data-equation-key', key);
 
         this.dom.innerText = "Eq. " + equationManager.fetchCountByKey(key);
-        console.log("create view for ref", this.node)
     }
 
     update(node) {

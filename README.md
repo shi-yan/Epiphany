@@ -5,8 +5,7 @@ A customized editor
 8. emoji
 12. drop image
 
-image uploader
-video 
+image uploader 
 twitter
 drop image
 

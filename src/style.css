@@ -109,7 +109,7 @@ input:focus {
 #editor-top-doc-time {
   color: #9fb1a3;
   margin: 8px;
-  max-width: 720px;
+  max-width: 696px;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -293,12 +293,25 @@ input:focus {
 }
 
 
-.limpid-equation-input {
+.limpid-equation-textarea {
   width: calc(100% - 16px);
   border: none;
   outline: none;
   min-height: 100px;
   display: none;
+}
+
+.limpid-equation-textarea-edit-mode {
+  display: block;
+}
+
+.limpid-equation-input {
+  width: calc(100% - 16px);
+  border: none;
+  outline: none;
+  min-height: 20px;
+  display: none;
+  padding-left: 50px;
 }
 
 .limpid-equation-input-edit-mode {
