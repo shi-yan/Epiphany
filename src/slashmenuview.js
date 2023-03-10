@@ -269,6 +269,11 @@ export default class SlashMenuView {
             this.dom.style.display = 'none';
             this.levelOneItems.style.display = 'flex';
             this.levelTwoItems.style.display = 'none';
+
+            while(this.levelTwoItems.firstChild) {
+                this.levelTwoItems.removeChild(this.levelTwoItems.firstChild);
+            }
+
             this.secondaryMenu = null;
             let firstItem = null;
             for (let i = 0; i < this.menuItems.length; ++i) {

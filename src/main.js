@@ -52,7 +52,6 @@ let editorElm = document.querySelector("#editor");
 let updateContentTimer = null;
 function updateContent() {
   updateContentTimer = null;
-  console.log("inside update content", window.editorView.state.doc);
 
   let containerElem = document.getElementById('toc-container-list');
 
@@ -65,7 +64,6 @@ function updateContent() {
   for (let i = 0; i < window.editorView.state.doc.content.content.length; ++i) {
     let node = window.editorView.state.doc.content.content[i];
     if (node.type.name === 'heading') {
-      console.log(node.textContent)
 
       if (node.attrs.level > currentLevel) {
         indentation += 10;
@@ -82,12 +80,9 @@ function updateContent() {
       let span = document.createElement('span');
       span.innerText = node.textContent;
       elem.appendChild(span);
-
       containerElem.appendChild(elem);
-
     }
   }
-
 }
 
 const arrowHandlers = keymap({
