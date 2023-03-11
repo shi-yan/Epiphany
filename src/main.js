@@ -57,15 +57,15 @@ let editorElm = document.querySelector("#editor");
 let updateContentTimer = null;
 
 function scrollHeadingIntoViewById(id) {
-  for (let i = 0; i < window.editorView.state.doc.content.content.length; ++i) {
-    let node = window.editorView.state.doc.content.content[i];
+  window.editorView.state.doc.forEach((node, offset, index) => {
     if (node.type.name === 'heading' && node.attrs.id === id) {
-      let ns = NodeSelection.create(node, 0);
+      let ns = NodeSelection.create(window.editorView.state.doc, offset);
+      window.editorView.focus();
       let tr = window.editorView.state.tr.setSelection(ns).scrollIntoView();
       window.editorView.dispatch(tr);
-      break;
+      return false;
     }
-  }
+  })
 }
 
 function updateContent() {

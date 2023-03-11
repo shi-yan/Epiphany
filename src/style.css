@@ -797,6 +797,10 @@ input:focus {
   display: none;
 }
 
+.ProseMirror-selectednode {
+  outline: 1px solid #9fb1a3;
+}
+
 #toc-title {
   color:#9fb1a3;
   font-style: italic;
