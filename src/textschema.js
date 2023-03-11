@@ -142,13 +142,14 @@ let nodes = {
     toDOM() { return ["blockquote", 0]; }
   },
   code_block: {
+    attrs: { lang: {default: 'javascript'} },
     content: "text*",
     marks: "",
     group: "block",
     code: true,
     defining: true,
     isolating: true,
-    parseDOM: [{ tag: "pre", preserveWhitespace: "full" }],
+    parseDOM: [{ tag: "pre", preserveWhitespace: "full" , getAttrs(dom) { return { lang: dom.lang } } }],
     toDOM() { return ["pre", ["code", 0]]; }
   },
   doc: {

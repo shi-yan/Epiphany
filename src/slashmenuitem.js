@@ -103,7 +103,8 @@ class SlashMenuItem {
 class CodeEditorItem extends SlashMenuItem {
     constructor(icon, title, subtitle, shortcut) {
         super(icon, title, subtitle, shortcut, (view) => {
-            view.dispatch(view.state.tr.replaceSelectionWith(textSchema.nodes.code_block.create()));
+            const lang = this.currentItem.title.toLowerCase();
+            view.dispatch(view.state.tr.replaceSelectionWith(textSchema.nodes.code_block.create({lang:lang})));
         });
         const color = "#337287";
 

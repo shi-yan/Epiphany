@@ -1,6 +1,8 @@
 import {
     EditorView as CodeMirror, keymap as cmKeymap, drawSelection
 } from "@codemirror/view"
+import { Compartment } from "@codemirror/state"
+
 import { javascript } from "@codemirror/lang-javascript"
 import { defaultKeymap } from "@codemirror/commands"
 import { syntaxHighlighting, defaultHighlightStyle } from "@codemirror/language"
@@ -18,13 +20,17 @@ import { gruvboxDark } from 'cm6-theme-gruvbox-dark'
 export default class CodeBlockView {
     constructor(node, view, getPos) {
         // Store for later
-        this.node = node
-        this.view = view
-        this.getPos = getPos
+        this.node = node;
+        this.view = view;
+        this.getPos = getPos;
 
-      
+        // let self = this;
+
+        //   const module = await import('@codemirror/lang-javascript')
 
         // Create a CodeMirror instance
+        const langHolder = new Compartment()
+
         this.cm = new CodeMirror({
             doc: this.node.textContent,
             extensions: [
@@ -33,7 +39,8 @@ export default class CodeBlockView {
                     ...defaultKeymap
                 ]),
                 drawSelection(),
-                javascript(),
+                //   javascript(),
+                langHolder.of([]),
                 gruvboxDark,
                 CodeMirror.updateListener.of(update => this.forwardUpdate(update))
             ]
@@ -45,12 +52,47 @@ export default class CodeBlockView {
 
         // This flag is used to avoid an update loop between the outer and
         // inner editor
-        this.updating = false
+        this.updating = false;
+
+        setTimeout(async () => {
+            switch (this.node.attrs.lang) {
+                case 'javascript': {
+                    const module = await import('@codemirror/lang-javascript')
+                    this.cm.dispatch({ effects: langHolder.reconfigure(module.javascript()) })
+                } break;
+                case 'python': {
+                    const module = await import('@codemirror/lang-python')
+                    this.cm.dispatch({ effects: langHolder.reconfigure(module.python()) })
+                } break;
+                case 'cpp': {
+                    const module = await import('@codemirror/lang-cpp')
+                    this.cm.dispatch({ effects: langHolder.reconfigure(module.cpp()) })
+                } break;
+                case 'rust': {
+                    const module = await import('@codemirror/lang-rust')
+                    this.cm.dispatch({ effects: langHolder.reconfigure(module.rust()) })
+                } break;
+                case 'html': {
+                    const module = await import('@codemirror/lang-html')
+                    this.cm.dispatch({ effects: langHolder.reconfigure(module.html()) })
+                } break;
+                case 'css': {
+                    const module = await import('@codemirror/lang-css')
+                    this.cm.dispatch({ effects: langHolder.reconfigure(module.css()) })
+                } break;
+                case 'json': {
+                    const module = await import('@codemirror/lang-json')
+                    this.cm.dispatch({ effects: langHolder.reconfigure(module.json()) })
+                } break;
+
+            }
+        }, 100)
+
     }
     // }
     // nodeview_forwardUpdate{
     forwardUpdate(update) {
-        if (this.updating || !this.cm.hasFocus) return
+        if (this.updating || !this.cm || !this.cm.hasFocus) return
         let offset = this.getPos() + 1, { main } = update.state.selection
         let selFrom = offset + main.from, selTo = offset + main.to
         let pmSel = this.view.state.selection
