@@ -2,11 +2,8 @@
 A customized editor
 
 7. realtime-markdown
-8. emoji
-12. drop image
 
 image uploader 
-twitter
 drop image
 
 - zebra stripe for code editor
@@ -16,9 +13,6 @@ drop image
 - emoji
 
 can't move cursor out of inline equation editor
-finish youtube block
-finish twitter block
-gallery
 navigate using toc
 
 

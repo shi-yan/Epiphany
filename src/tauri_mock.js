@@ -1,4 +1,4 @@
-let tauri =  window.__TAURI__;
+/*let tauri =  window.__TAURI__;
 
 console.log(tauri);
 
@@ -18,4 +18,18 @@ console.log('API Path', apiPath)
 let img = document.createElement('img');
 img.src = apiPath
 document.body.appendChild(img)
-})();
+})();*/
+
+import tweet_sample from './tweet_sample.json';
+
+async function invoke(cmd, payload) {
+  return new Promise((resolve, reject) => {
+    switch(cmd) {
+      case 'fetch_tweet' :
+        resolve(tweet_sample);
+        break;
+    }
+  })
+}
+
+export {invoke};
