@@ -1,6 +1,6 @@
 import { keymap } from "prosemirror-keymap"
 import { Transform, StepMap } from "prosemirror-transform"
-import { EditorState, Plugin, Selection } from "prosemirror-state"
+import { EditorState, Plugin, Selection, NodeSelection } from "prosemirror-state"
 import { EditorView, Decoration, DecorationSet } from "prosemirror-view"
 import { Schema, DOMParser } from "prosemirror-model"
 import 'prosemirror-view/style/prosemirror.css'
@@ -28,6 +28,8 @@ import { Tree } from "./tree"
 import menuPlugin from "./slashmenu"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
+import { findParentNode } from "@tiptap/core";
+import UpdateTimer from "./update_timer"
 
 //https://pictogrammers.com/library/mdi/
 
@@ -53,9 +55,20 @@ function arrowHandler(dir) {
 
 let editorElm = document.querySelector("#editor");
 let updateContentTimer = null;
-function updateContent() {
-  updateContentTimer = null;
 
+function scrollHeadingIntoViewById(id) {
+  for (let i = 0; i < window.editorView.state.doc.content.content.length; ++i) {
+    let node = window.editorView.state.doc.content.content[i];
+    if (node.type.name === 'heading' && node.attrs.id === id) {
+      let ns = NodeSelection.create(node, 0);
+      let tr = window.editorView.state.tr.setSelection(ns).scrollIntoView();
+      window.editorView.dispatch(tr);
+      break;
+    }
+  }
+}
+
+function updateContent() {
   let containerElem = document.getElementById('toc-container-list');
 
   while (containerElem.firstChild) {
@@ -79,6 +92,15 @@ function updateContent() {
 
       let elem = document.createElement('div');
       elem.classList.add('toc-container-item');
+      const id = node.attrs.id;
+      elem.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setTimeout(() => {
+          scrollHeadingIntoViewById(id);
+        }, 100);
+      }
+      console.log("update toc item", node.attrs.id)
       elem.style.paddingLeft = (16 + indentation) + 'px';
       let span = document.createElement('span');
       span.innerText = node.textContent;
@@ -95,6 +117,15 @@ const arrowHandlers = keymap({
   ArrowDown: arrowHandler("down")
 })
 
+const findHeading = findParentNode(
+  (node) => node.type.name === "heading"
+);
+
+
+const before = Math.floor(Date.now() / 1000) - 3600 * 34;
+const updateTimer = new UpdateTimer(document.getElementById('editor-top-doc-time'), before);
+
+let docUpdateDelay = null;
 
 window.editorView = new EditorView(editorElm, {
   state: EditorState.create({
@@ -131,15 +162,36 @@ window.editorView = new EditorView(editorElm, {
     const state = window.editorView.state.apply(tr);
     window.editorView.updateState(state);
 
+    if (tr.steps.length == 0) {
+      return;
+    }
+
     function rebuildContentTable() {
       if (updateContentTimer) {
         clearTimeout(updateContentTimer);
         updateContentTimer = null;
       }
+
       updateContentTimer = setTimeout(() => {
+        updateContentTimer = null;
         updateContent();
       }, 3000);
     }
+
+    function notifyTimerDocumentUpdate() {
+      if (docUpdateDelay) {
+        clearTimeout(docUpdateDelay);
+        docUpdateDelay = null;
+      }
+
+      docUpdateDelay = setTimeout(() => {
+        docUpdateDelay = null;
+        const now = Math.floor(Date.now() / 1000);
+        updateTimer.documentUpdated(now);
+      }, 3000);
+    }
+
+    notifyTimerDocumentUpdate();
 
     for (let i = 0; i < tr.steps.length; ++i) {
       if (tr.steps[i].slice) {
@@ -154,9 +206,17 @@ window.editorView = new EditorView(editorElm, {
             rebuildContentTable();
             return;
           }
+          else if (node.type.name === 'text') {
+            const headingNode = findHeading(tr.selection)
+            if (headingNode) {
+              rebuildContentTable();
+              return;
+            }
+          }
         }
       }
     }
+
 
   }
 })
@@ -309,8 +369,8 @@ const data = {
 }
 
 const tree = new Tree(data, { parent: document.getElementById('tree-container') })
-console.log(dayjs())
-document.getElementById('editor-top-doc-time').innerText = dayjs('2023-02-10').fromNow();
+
+//document.getElementById('editor-top-doc-time').innerText = dayjs('2023-02-10').fromNow();
 
 let menuFolded = false;
 

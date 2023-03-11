@@ -2,6 +2,7 @@ import EquationManager from './equation_manager'
 import { SlashMenuItem, CodeEditorItem, EquationRefItem } from './slashmenuitem';
 import textSchema from "./textschema"
 import { baseKeymap, setBlockType } from "prosemirror-commands"
+import { createId } from '@paralleldrive/cuid2';
 
 //https://pictogrammers.com/library/mdi/
 
@@ -16,7 +17,7 @@ export default function createMenu(equationManager) {
                     'Used for top-level headings',
                     'Shift+H',
                     (view) => {
-                        let h2Command = setBlockType(textSchema.nodes.heading, { level: 2 });
+                        let h2Command = setBlockType(textSchema.nodes.heading, { level: 2, id: createId() });
                         h2Command(view.state, view.dispatch, view);
                     }),
                 new SlashMenuItem('<svg style="min-width:24px; min-height:24px;"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-header-2</title><path stroke="' + color + '" fill="' + color + '"  d="M3,4H5V10H9V4H11V18H9V12H5V18H3V4M21,18H15A2,2 0 0,1 13,16C13,15.47 13.2,15 13.54,14.64L18.41,9.41C18.78,9.05 19,8.55 19,8A2,2 0 0,0 17,6A2,2 0 0,0 15,8H13A4,4 0 0,1 17,4A4,4 0 0,1 21,8C21,9.1 20.55,10.1 19.83,10.83L15,16H21V18Z" /></svg>',
@@ -24,7 +25,7 @@ export default function createMenu(equationManager) {
                     'Used for key sections',
                     'Shift+H',
                     (view) => {
-                        let h3Command = setBlockType(textSchema.nodes.heading, { level: 3 });
+                        let h3Command = setBlockType(textSchema.nodes.heading, { level: 3, id: createId() });
                         h3Command(view.state, view.dispatch, view);
                     }),
                 new SlashMenuItem('<svg style="min-width:24px; min-height:24px;"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-header-3</title><path stroke="' + color + '" fill="' + color + '" d="M3,4H5V10H9V4H11V18H9V12H5V18H3V4M15,4H19A2,2 0 0,1 21,6V16A2,2 0 0,1 19,18H15A2,2 0 0,1 13,16V15H15V16H19V12H15V10H19V6H15V7H13V6A2,2 0 0,1 15,4Z" /></svg>',
@@ -32,7 +33,7 @@ export default function createMenu(equationManager) {
                     'Used for subsections',
                     'Shift+H',
                     (view) => {
-                        let h4Command = setBlockType(textSchema.nodes.heading, { level: 4 });
+                        let h4Command = setBlockType(textSchema.nodes.heading, { level: 4, id: createId() });
                         h4Command(view.state, view.dispatch, view);
                     }),
                 new SlashMenuItem('<svg style="min-width:24px; min-height:24px;"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-paragraph</title><path stroke="' + color + '" fill="' + color + '" d="M13,4A4,4 0 0,1 17,8A4,4 0 0,1 13,12H11V18H9V4H13M13,10A2,2 0 0,0 15,8A2,2 0 0,0 13,6H11V10H13Z" /></svg>',
@@ -55,16 +56,16 @@ export default function createMenu(equationManager) {
                     (view) => {
                         view.dispatch(view.state.tr.replaceSelectionWith(textSchema.nodes.bullet_list.create(null,
                             textSchema.nodes.list_item.create(null, textSchema.nodes.paragraph.create())
-                          )));
+                        )));
                     }),
                 new SlashMenuItem('<svg style="min-width:24px; min-height:24px;"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-list-numbered</title><path stroke="' + color + '" fill="' + color + '"  d="M7,13V11H21V13H7M7,19V17H21V19H7M7,7V5H21V7H7M3,8V5H2V4H4V8H3M2,17V16H5V20H2V19H4V18.5H3V17.5H4V17H2M4.25,10A0.75,0.75 0 0,1 5,10.75C5,10.95 4.92,11.14 4.79,11.27L3.12,13H5V14H2V13.08L4,11H2V10H4.25Z" /></svg>',
                     'Ordered List',
                     'Add ordered list',
-                    'Shift+H', 
+                    'Shift+H',
                     (view) => {
                         view.dispatch(view.state.tr.replaceSelectionWith(textSchema.nodes.ordered_list.create(null,
                             textSchema.nodes.list_item.create(null, textSchema.nodes.paragraph.create())
-                          )));
+                        )));
                     }),
                 new SlashMenuItem('<svg style="min-width:24px; min-height:24px;"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-quote-open</title><path stroke="' + color + '" fill="' + color + '" d="M10,7L8,11H11V17H5V11L7,7H10M18,7L16,11H19V17H13V11L15,7H18Z" /></svg>',
                     'Blockquote',
@@ -72,8 +73,8 @@ export default function createMenu(equationManager) {
                     'Shift+H',
                     (view) => {
                         view.dispatch(view.state.tr.replaceSelectionWith(textSchema.nodes.blockquote.create(null,
-                           textSchema.nodes.paragraph.create()
-                          )));
+                            textSchema.nodes.paragraph.create()
+                        )));
                     }),
             ]
         },

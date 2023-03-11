@@ -1,15 +1,20 @@
 import { Schema, DOMParser } from "prosemirror-model"
 import { addListNodes } from "prosemirror-schema-list"
+import { createId } from '@paralleldrive/cuid2';
 
 let nodes = {
   text: {
     group: "inline",
   },
   title: {
-    attrs: { createdAt: { default: Math.floor(Date.now() / 1000) }, lastModifiedAt: { default: Math.floor(Date.now() / 1000) } },
+    attrs: {
+      createdAt: { default: Math.floor(Date.now() / 1000) },
+      lastModifiedAt: { default: Math.floor(Date.now() / 1000) },
+      id: { default: createId() }
+    },
     content: "text*",
     toDOM() { return ["h1", 0] },
-    parseDOM: [{ tag: "h1" }]
+    parseDOM: [{ tag: "h1", getAttrs(dom) { return { id: dom.id, createdAt: dom.createdAt, lastModifiedAt: dom.lastModifiedAt } } }]
   },
   paragraph: {
     group: "block",
@@ -98,7 +103,7 @@ let nodes = {
     parseDOM: [{ tag: "equation_ref", getAttrs(dom) { return { id: dom.id } } }]
   },
   heading: {
-    attrs: { level: { default: 1 } },
+    attrs: { level: { default: 1 }, id: {default: createId()} },
     content: "text*",
     group: "block",
     defining: true,
