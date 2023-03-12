@@ -1,5 +1,5 @@
 import EquationManager from './equation_manager'
-import { SlashMenuItem, CodeEditorItem, EquationRefItem } from './slashmenuitem';
+import { SlashMenuItem, CodeEditorItem, EquationRefItem } from './slashmenu_item';
 import textSchema from "./textschema"
 import { baseKeymap, setBlockType } from "prosemirror-commands"
 import { createId } from '@paralleldrive/cuid2';

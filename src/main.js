@@ -26,6 +26,7 @@ import limpidPlugin from "./limpid_plugin"
 import trailingSpacePlugin from "./trailing_space_plugin"
 import { Tree } from "./tree"
 import menuPlugin from "./slashmenu"
+import formatterPlugin from "./formatter_view"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { findParentNode } from "@tiptap/core";
@@ -132,6 +133,7 @@ window.editorView = new EditorView(editorElm, {
     doc: DOMParser.fromSchema(textSchema).parse('<h1>test</h1><tags></tags><p>test</p>'),
     plugins: [
       menuPlugin(equationManager),
+      formatterPlugin(),
       keymap(buildKeymap(textSchema)),
       keymap(baseKeymap),
       arrowHandlers,

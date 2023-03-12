@@ -618,6 +618,32 @@ input:focus {
   overflow: hidden;
 }
 
+.formatter-menu {
+  background-color: #ccd7cc;
+  border-radius: 4px;
+  border-width: 0;
+  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #9fb1a3 0 -3px 0 inset;
+  box-sizing: border-box;
+  color: #36395A;
+  display: flex;
+  flex-direction: column;
+  font-family: "JetBrains Mono", monospace;
+  height: 48px;
+  line-height: 1;
+  list-style: none;
+  padding-left: 4px;
+  padding-right: 4px;
+  text-align: left;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  font-size: 18px;
+  z-index: 1000;
+  overflow: hidden;
+}
+
 .slash-menu-section {
   display: flex;
   flex-direction: column;
@@ -855,4 +881,51 @@ input:focus {
   content: '•';
   position: absolute;
   margin-left: -6px;
+}
+
+.formatter-button {
+  margin: 0;
+  margin-right: 4px;
+  align-items: center;
+  background-color: #c6d3c2;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: .25rem;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: #337287;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  justify-content: center;
+  padding: 5px;
+  position: relative;
+  text-decoration: none;
+  transition: all 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  width: 32px;
+  height: 32px;
+}
+
+.formatter-button:hover,
+.formatter-button:focus {
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.formatter-button:hover {
+  transform: translateY(-1px);
+}
+
+.formatter-button:active {
+  background-color: #F0F0F1;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+  color: rgba(0, 0, 0, 0.65);
+  transform: translateY(0);
 }

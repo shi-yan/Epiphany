@@ -17,12 +17,21 @@ import { gruvboxDark } from 'cm6-theme-gruvbox-dark'
 
 //console.log("lang-css module", module);
 
+
 export default class CodeBlockView {
     constructor(node, view, getPos) {
         // Store for later
         this.node = node;
         this.view = view;
         this.getPos = getPos;
+
+        this.javascript_module = null;
+        this.python_module = null;
+        this.cpp_module = null;
+        this.rust_module = null;
+        this.html_module = null;
+        this.json_module = null;
+        this.css_module = null;
 
         // let self = this;
 
@@ -57,32 +66,46 @@ export default class CodeBlockView {
         setTimeout(async () => {
             switch (this.node.attrs.lang) {
                 case 'javascript': {
-                    const module = await import('@codemirror/lang-javascript')
-                    this.cm.dispatch({ effects: langHolder.reconfigure(module.javascript()) })
+                    if (!this.javascript_module) {
+                        this.javascript_module = await import('@codemirror/lang-javascript');
+                    }
+                    this.cm.dispatch({ effects: langHolder.reconfigure(this.javascript_module.javascript()) });
                 } break;
                 case 'python': {
-                    const module = await import('@codemirror/lang-python')
-                    this.cm.dispatch({ effects: langHolder.reconfigure(module.python()) })
+                    if (!this.python_module) {
+                        this.python_module = await import('@codemirror/lang-python');
+                    }
+                    this.cm.dispatch({ effects: langHolder.reconfigure(this.python_module.python()) });
                 } break;
                 case 'cpp': {
-                    const module = await import('@codemirror/lang-cpp')
-                    this.cm.dispatch({ effects: langHolder.reconfigure(module.cpp()) })
+                    if (!this.cpp_module) {
+                        this.cpp_module = await import('@codemirror/lang-cpp');
+                    }
+                    this.cm.dispatch({ effects: langHolder.reconfigure(this.cpp_module.cpp()) });
                 } break;
                 case 'rust': {
-                    const module = await import('@codemirror/lang-rust')
-                    this.cm.dispatch({ effects: langHolder.reconfigure(module.rust()) })
+                    if (!this.rust_module) {
+                        this.rust_module = await import('@codemirror/lang-rust');
+                    }
+                    this.cm.dispatch({ effects: langHolder.reconfigure(this.rust_module.rust()) })
                 } break;
                 case 'html': {
-                    const module = await import('@codemirror/lang-html')
-                    this.cm.dispatch({ effects: langHolder.reconfigure(module.html()) })
+                    if (!this.html_module) {
+                        this.html_module = await import('@codemirror/lang-html');
+                    }
+                    this.cm.dispatch({ effects: langHolder.reconfigure(this.html_module.html()) })
                 } break;
                 case 'css': {
-                    const module = await import('@codemirror/lang-css')
-                    this.cm.dispatch({ effects: langHolder.reconfigure(module.css()) })
+                    if (!this.css_module) {
+                        this.css_module = await import('@codemirror/lang-css');
+                    }
+                    this.cm.dispatch({ effects: langHolder.reconfigure(this.css_module.css()) })
                 } break;
                 case 'json': {
-                    const module = await import('@codemirror/lang-json')
-                    this.cm.dispatch({ effects: langHolder.reconfigure(module.json()) })
+                    if (!this.json_module) {
+                        this.json_module = await import('@codemirror/lang-json');
+                    }
+                    this.cm.dispatch({ effects: langHolder.reconfigure(this.json_module.json()) })
                 } break;
 
             }

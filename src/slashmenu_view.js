@@ -101,8 +101,8 @@ export default class SlashMenuView {
         const newState = view.state[this.pluginkey];
         const prevState = state[this.pluginkey];
 
-        console.log("prev state", prevState)
-        console.log("new state", newState)
+        //console.log("prev state", prevState)
+        //console.log("new state", newState)
 
         if (newState.active && !prevState.active) {
             this.dom.style.display = 'flex';

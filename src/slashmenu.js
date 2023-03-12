@@ -1,4 +1,4 @@
-import { EditorState, Plugin, Selection } from "prosemirror-state"
+import { EditorState, Plugin, Selection, PluginKey } from "prosemirror-state"
 import { EditorView, Decoration, DecorationSet } from "prosemirror-view"
 import 'prosemirror-view/style/prosemirror.css'
 import 'prosemirror-menu/style/menu.css'
@@ -7,7 +7,7 @@ import './style.css'
 import { baseKeymap, setBlockType } from "prosemirror-commands"
 import { findParentNode } from "@tiptap/core";
 
-import SlashMenuView from "./slashmenuview"
+import SlashMenuView from "./slashmenu_view"
 import createMenu from "./slashmenu_factory"
 
 const findBlock = findParentNode(
@@ -16,7 +16,7 @@ const findBlock = findParentNode(
 
 export default function menuPlugin(equationManager) {
 
-    const pluginKey = { key: 'menuplugin' }
+    const pluginKey = new PluginKey('menuplugin');
     const defaultTriggerCharacter = '\\'
     const defaults = {
         active: false,
@@ -192,7 +192,7 @@ export default function menuPlugin(equationManager) {
 
             // Setup decorator on the currently active suggestion.
             decorations(state) {
-                console.log(this.getState(state))
+               // console.log(this.getState(state))
                 // step3
                 const { active, decorationId, queryStartPos, triggerCharacter } = this.getState(state);
 

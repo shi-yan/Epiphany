@@ -1,4 +1,4 @@
-import { EditorState, Plugin, Selection } from "prosemirror-state"
+import { EditorState, Plugin, Selection, PluginKey } from "prosemirror-state"
 import { EditorView, Decoration, DecorationSet } from "prosemirror-view"
 import 'prosemirror-view/style/prosemirror.css'
 import 'prosemirror-menu/style/menu.css'
@@ -10,13 +10,13 @@ import textSchema from "./textschema"
 
 export default function trailingSpacePlugin() {
     const plugin = new Plugin({
-      key: 'trailing',
+      key: new PluginKey( 'trailing'),
       appendTransaction: (_, __, state) => {
         const { doc, tr, schema } = state;
         const shouldInsertNodeAtEnd = plugin.getState(state);
         const endPosition = doc.content.size;
         if (!shouldInsertNodeAtEnd) {
-          console.log("append transaction called = no trailing")
+       //   console.log("append transaction called = no trailing")
           return null;
         }
         return tr.insert(
