@@ -121,6 +121,12 @@ class FormatterView {
             this.secondaryLevelContainer.appendChild(cancelButton);
 
 
+            cancelButton.onclick = (e) => {
+                this.firstLevelContainer.style.display = 'flex';
+                this.secondaryLevelContainer.style.display = 'none';
+            }
+
+
             this.firstLevelContainer.style.display = 'none';
             this.secondaryLevelContainer.style.display = 'flex';
         }

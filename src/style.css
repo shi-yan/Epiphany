@@ -945,8 +945,8 @@ input:focus {
 
 .gallery-image-container {
   display: flex;
-  max-width: 400px;
-  max-height: 320px;
+  max-width: 600px;
+  max-height: 480px;
   border-radius: 8px;
   overflow: hidden;
   margin: 8px;

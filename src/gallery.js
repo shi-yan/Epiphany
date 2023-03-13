@@ -17,6 +17,8 @@ export default class GalleryView {
         inputElem.type = "file";
         inputElem.id = "actual-btn";
         inputElem.hidden = true;
+        let labelElem = document.createElement("label");
+
         inputElem.onchange = function (e) {
             e.preventDefault();
             let nn = textSchema.nodes.image.createAndFill({
@@ -31,9 +33,10 @@ export default class GalleryView {
                 outerTr.step(steps[j].map(offsetMap))
             }
             if (outerTr.docChanged) view.dispatch(outerTr);
+
+            labelElem.style.display = 'none';
         };
 
-        let labelElem = document.createElement("label");
         labelElem.for = "actual-btn";
         labelElem.className = 'gallery-upload-button';
         labelElem.innerText = "Choose Image File";
@@ -54,6 +57,7 @@ export default class GalleryView {
             let imgElem = document.createElement("img");
             imgElem.src = "https://www.cam.ac.uk/sites/www.cam.ac.uk/files/styles/content-885x432/public/news/research/news/crop_178.jpg";
             this.imageContainer.appendChild(imgElem)
+            imgElem.style.objectFit = 'cover';
         }
 
         return true;
