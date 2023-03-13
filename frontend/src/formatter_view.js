@@ -25,36 +25,36 @@ class FormatterView {
         this.dom.style.display = 'none';
         this.dom.style.padding = '4px';
         const boldButton = document.createElement('button');
-        boldButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-bold</title><path fill="#233231" stroke="#233231" d="M13.5,15.5H10V12.5H13.5A1.5,1.5 0 0,1 15,14A1.5,1.5 0 0,1 13.5,15.5M10,6.5H13A1.5,1.5 0 0,1 14.5,8A1.5,1.5 0 0,1 13,9.5H10M15.6,10.79C16.57,10.11 17.25,9 17.25,8C17.25,5.74 15.5,4 13.25,4H7V18H14.04C16.14,18 17.75,16.3 17.75,14.21C17.75,12.69 16.89,11.39 15.6,10.79Z" /></svg>';
+        boldButton.innerHTML = '<svg style="min-width:12px;min-height:12px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-bold</title><path fill="#233231" stroke="#233231" d="M13.5,15.5H10V12.5H13.5A1.5,1.5 0 0,1 15,14A1.5,1.5 0 0,1 13.5,15.5M10,6.5H13A1.5,1.5 0 0,1 14.5,8A1.5,1.5 0 0,1 13,9.5H10M15.6,10.79C16.57,10.11 17.25,9 17.25,8C17.25,5.74 15.5,4 13.25,4H7V18H14.04C16.14,18 17.75,16.3 17.75,14.21C17.75,12.69 16.89,11.39 15.6,10.79Z" /></svg>';
         boldButton.className='formatter-button';
 
         const italicButton = document.createElement('button');
-        italicButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-italic</title><path fill="#233231" stroke="#233231"  d="M10,4V7H12.21L8.79,15H6V18H14V15H11.79L15.21,7H18V4H10Z" /></svg>';
+        italicButton.innerHTML = '<svg style="min-width:12px;min-height:12px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-italic</title><path fill="#233231" stroke="#233231"  d="M10,4V7H12.21L8.79,15H6V18H14V15H11.79L15.21,7H18V4H10Z" /></svg>';
         italicButton.className='formatter-button';
 
 
         const underscoreButton = document.createElement('button');
-        underscoreButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-underline</title><path fill="#233231" stroke="#233231" d="M5,21H19V19H5V21M12,17A6,6 0 0,0 18,11V3H15.5V11A3.5,3.5 0 0,1 12,14.5A3.5,3.5 0 0,1 8.5,11V3H6V11A6,6 0 0,0 12,17Z" /></svg>';
+        underscoreButton.innerHTML = '<svg style="min-width:12px;min-height:12px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-underline</title><path fill="#233231" stroke="#233231" d="M5,21H19V19H5V21M12,17A6,6 0 0,0 18,11V3H15.5V11A3.5,3.5 0 0,1 12,14.5A3.5,3.5 0 0,1 8.5,11V3H6V11A6,6 0 0,0 12,17Z" /></svg>';
         underscoreButton.className='formatter-button';
 
         const strikeThroughButton = document.createElement('button');
-        strikeThroughButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-strikethrough</title><path fill="#233231" stroke="#233231" d="M3,14H21V12H3M5,4V7H10V10H14V7H19V4M10,19H14V16H10V19Z" /></svg>';
+        strikeThroughButton.innerHTML = '<svg style="min-width:12px;min-height:12px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-strikethrough</title><path fill="#233231" stroke="#233231" d="M3,14H21V12H3M5,4V7H10V10H14V7H19V4M10,19H14V16H10V19Z" /></svg>';
         strikeThroughButton.className='formatter-button';
 
         const increaseIndentationButton = document.createElement('button');
-        increaseIndentationButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-indent-increase</title><path  fill="#233231" stroke="#233231"  d="M11,13H21V11H11M11,9H21V7H11M3,3V5H21V3M11,17H21V15H11M3,8V16L7,12M3,21H21V19H3V21Z" /></svg>';
+        increaseIndentationButton.innerHTML = '<svg style="min-width:12px;min-height:12px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-indent-increase</title><path  fill="#233231" stroke="#233231"  d="M11,13H21V11H11M11,9H21V7H11M3,3V5H21V3M11,17H21V15H11M3,8V16L7,12M3,21H21V19H3V21Z" /></svg>';
         increaseIndentationButton.className='formatter-button';
 
         const decreaseIndentationButton = document.createElement('button');
-        decreaseIndentationButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-indent-decrease</title><path  fill="#233231" stroke="#233231"  d="M11,13H21V11H11M11,9H21V7H11M3,3V5H21V3M3,21H21V19H3M3,12L7,16V8M11,17H21V15H11V17Z" /></svg>';
+        decreaseIndentationButton.innerHTML = '<svg style="min-width:12px;min-height:12px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-indent-decrease</title><path  fill="#233231" stroke="#233231"  d="M11,13H21V11H11M11,9H21V7H11M3,3V5H21V3M3,21H21V19H3M3,12L7,16V8M11,17H21V15H11V17Z" /></svg>';
         decreaseIndentationButton.className='formatter-button';
 
         const codeButton = document.createElement('button');
-        codeButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>code-tags</title><path  fill="#233231" stroke="#233231" d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z" /></svg>';
+        codeButton.innerHTML = '<svg style="min-width:12px;min-height:12px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>code-tags</title><path  fill="#233231" stroke="#233231" d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z" /></svg>';
         codeButton.className='formatter-button';  
 
         const linkButton = document.createElement('button');
-        linkButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>link</title><path  fill="#233231" stroke="#233231" d="M3.9,12C3.9,10.29 5.29,8.9 7,8.9H11V7H7A5,5 0 0,0 2,12A5,5 0 0,0 7,17H11V15.1H7C5.29,15.1 3.9,13.71 3.9,12M8,13H16V11H8V13M17,7H13V8.9H17C18.71,8.9 20.1,10.29 20.1,12C20.1,13.71 18.71,15.1 17,15.1H13V17H17A5,5 0 0,0 22,12A5,5 0 0,0 17,7Z" /></svg>';
+        linkButton.innerHTML = '<svg style="min-width:12px;min-height:12px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>link</title><path  fill="#233231" stroke="#233231" d="M3.9,12C3.9,10.29 5.29,8.9 7,8.9H11V7H7A5,5 0 0,0 2,12A5,5 0 0,0 7,17H11V15.1H7C5.29,15.1 3.9,13.71 3.9,12M8,13H16V11H8V13M17,7H13V8.9H17C18.71,8.9 20.1,10.29 20.1,12C20.1,13.71 18.71,15.1 17,15.1H13V17H17A5,5 0 0,0 22,12A5,5 0 0,0 17,7Z" /></svg>';
         linkButton.className='formatter-button';  
 
         this. firstLevelContainer = document.createElement('div');
@@ -110,11 +110,11 @@ class FormatterView {
             this.secondaryLevelContainer.appendChild(icon);
 
             const confirmButton = document.createElement('button');
-            confirmButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>check</title><path  fill="#233231" stroke="#233231"  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" /></svg>';
+            confirmButton.innerHTML = '<svg style="min-width:12px;min-height:12px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>check</title><path  fill="#233231" stroke="#233231"  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" /></svg>';
             confirmButton.className='formatter-button';  
 
             const cancelButton = document.createElement('button');
-            cancelButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>close</title><path  fill="#233231" stroke="#233231"  d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>';
+            cancelButton.innerHTML = '<svg style="min-width:12px;min-height:12px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>close</title><path  fill="#233231" stroke="#233231"  d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>';
             cancelButton.className='formatter-button';  
             confirmButton.style.marginLeft = '4px';
             this.secondaryLevelContainer.appendChild(confirmButton);
