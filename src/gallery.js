@@ -56,7 +56,7 @@ export default class GalleryView {
         if (node.childCount > 0) {
             let imgElem = document.createElement("img");
             imgElem.src = "https://www.cam.ac.uk/sites/www.cam.ac.uk/files/styles/content-885x432/public/news/research/news/crop_178.jpg";
-            this.imageContainer.appendChild(imgElem)
+            this.imageContainer.appendChild(imgElem);
             imgElem.style.objectFit = 'cover';
         }
 
