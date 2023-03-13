@@ -138,7 +138,6 @@ export default class TwitterView {
                 }
                 (async () => {
                     const response = await invoke('fetch_tweet', url);
-                    console.log(response);
                     this.display.innerHTML = response.html;
                     twttr.widgets.load(this.display);
                 })();

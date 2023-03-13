@@ -57,15 +57,22 @@ class FormatterView {
         linkButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>link</title><path  fill="#233231" stroke="#233231" d="M3.9,12C3.9,10.29 5.29,8.9 7,8.9H11V7H7A5,5 0 0,0 2,12A5,5 0 0,0 7,17H11V15.1H7C5.29,15.1 3.9,13.71 3.9,12M8,13H16V11H8V13M17,7H13V8.9H17C18.71,8.9 20.1,10.29 20.1,12C20.1,13.71 18.71,15.1 17,15.1H13V17H17A5,5 0 0,0 22,12A5,5 0 0,0 17,7Z" /></svg>';
         linkButton.className='formatter-button';  
 
-        this.dom.appendChild(boldButton);
-        this.dom.appendChild(italicButton);
-        this.dom.appendChild(underscoreButton);
-        this.dom.appendChild(strikeThroughButton);
-        this.dom.appendChild(increaseIndentationButton);
-        this.dom.appendChild(decreaseIndentationButton);
-        this.dom.appendChild(codeButton);
-        this.dom.appendChild(linkButton);
-
+        this. firstLevelContainer = document.createElement('div');
+        this.firstLevelContainer.style.display='flex';
+        this.firstLevelContainer.style.flexDirection = 'row'
+        this.firstLevelContainer.appendChild(boldButton);
+        this.firstLevelContainer.appendChild(italicButton);
+        this. firstLevelContainer.appendChild(underscoreButton);
+        this.firstLevelContainer.appendChild(strikeThroughButton);
+        this.firstLevelContainer.appendChild(increaseIndentationButton);
+        this. firstLevelContainer.appendChild(decreaseIndentationButton);
+        this.firstLevelContainer.appendChild(codeButton);
+        this. firstLevelContainer.appendChild(linkButton);
+        this.dom.appendChild(this.firstLevelContainer);
+        this.secondaryLevelContainer = document.createElement('div');
+        this.secondaryLevelContainer.style.display = 'none';
+        this.secondaryLevelContainer.style.flexDirection = 'row';
+        this.dom.appendChild(this.secondaryLevelContainer);
         document.body.appendChild(this.dom);
 
         setTimeout(() => {
@@ -77,6 +84,45 @@ class FormatterView {
         boldButton.onclick = (e) => {
             e.preventDefault();
             this.toggleBold();
+        }
+
+        linkButton.onclick = (e) => {
+            e.preventDefault();
+
+            while(this.secondaryLevelContainer.firstChild) {
+                this.secondaryLevelContainer.removeChild(this.secondaryLevelContainer.firstChild);
+            }
+
+            let input = document.createElement('input');
+            input.type = 'input';
+            input.className = 'limpid-link-input';
+
+            let icon = document.createElement('span');
+
+            const color = '#d5ded4'
+            icon.innerHTML = '<svg style="min-width:28px; min-height:28px;"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>link</title><path stroke="'+color+'" fill="'+color+'" d="M3.9,12C3.9,10.29 5.29,8.9 7,8.9H11V7H7A5,5 0 0,0 2,12A5,5 0 0,0 7,17H11V15.1H7C5.29,15.1 3.9,13.71 3.9,12M8,13H16V11H8V13M17,7H13V8.9H17C18.71,8.9 20.1,10.29 20.1,12C20.1,13.71 18.71,15.1 17,15.1H13V17H17A5,5 0 0,0 22,12A5,5 0 0,0 17,7Z" /></svg>'
+            icon.style.position = 'absolute';
+            
+            icon.style.top = '6px';
+            icon.style.left = '8px';
+
+            this.secondaryLevelContainer.appendChild(input);
+            this.secondaryLevelContainer.appendChild(icon);
+
+            const confirmButton = document.createElement('button');
+            confirmButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>check</title><path  fill="#233231" stroke="#233231"  d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" /></svg>';
+            confirmButton.className='formatter-button';  
+
+            const cancelButton = document.createElement('button');
+            cancelButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>close</title><path  fill="#233231" stroke="#233231"  d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>';
+            cancelButton.className='formatter-button';  
+            confirmButton.style.marginLeft = '4px';
+            this.secondaryLevelContainer.appendChild(confirmButton);
+            this.secondaryLevelContainer.appendChild(cancelButton);
+
+
+            this.firstLevelContainer.style.display = 'none';
+            this.secondaryLevelContainer.style.display = 'flex';
         }
     }
 
@@ -118,7 +164,10 @@ class FormatterView {
         const isEmptyTextBlock =
             !doc.textBetween(from, to).length && isTextSelection(state.selection);
 
-        return !(!view.hasFocus() || empty || isEmptyTextBlock);
+
+        let result = !(!view.hasFocus() || empty || isEmptyTextBlock);
+
+        return result;
     }
 
     getBlockInfoFromPos(
@@ -168,10 +217,14 @@ class FormatterView {
         };
     }
 
-
     update(view, oldState) {
         const { state, composing } = view;
         const { doc, selection } = state;
+
+        if (selection.node) {
+            return;
+        }
+
         const isSame =
             oldState && oldState.doc.eq(doc) && oldState.selection.eq(selection);
 
@@ -181,6 +234,7 @@ class FormatterView {
 
         // support for CellSelections
         const { ranges } = selection;
+
         const from = Math.min(...ranges.map((range) => range.$from.pos));
         const to = Math.max(...ranges.map((range) => range.$to.pos));
         const shouldShow = this.shouldShow(
@@ -198,12 +252,14 @@ class FormatterView {
         ) {
             this.toolbarIsOpen = true;
             this.dom.style.display = 'flex';
+            this.secondaryLevelContainer.style.display = 'none';
+            this.firstLevelContainer.style.display = 'flex';
             this.positionMenu(view);
             // TODO: Is this necessary? Also for other menu plugins.
             // Listener stops focus moving to the menu on click.
-            this.dom.addEventListener("mousedown", (event) =>
-                event.preventDefault()
-            );
+           // this.dom.addEventListener("mousedown", (event) =>
+           //     event.preventDefault()
+           // );
             return;
         }
 
@@ -224,10 +280,10 @@ class FormatterView {
             this.dom.style.display = 'none';
             this.toolbarIsOpen = false;
             // Listener stops focus moving to the menu on click.
-            this.dom.removeEventListener(
-                "mousedown",
-                (event) => event.preventDefault()
-            );
+         //   this.dom.removeEventListener(
+           //     "mousedown",
+             //   (event) => event.preventDefault()
+           // );
 
             return;
         }
@@ -273,7 +329,7 @@ class FormatterView {
         const to = Math.max(...ranges.map((range) => range.$to.pos));
 
         if (isNodeSelection(selection)) {
-            const node = this.editor.view.nodeDOM(from);
+            const node = window.editorView.nodeDOM(from);
 
             if (node) {
                 return node.getBoundingClientRect();

@@ -314,6 +314,12 @@ input:focus {
   padding-left: 50px;
 }
 
+.limpid-link-input {
+  border: none;
+  outline: none;
+  padding-left: 50px;
+}
+
 .limpid-equation-input-edit-mode {
   display: block;
 }
@@ -928,4 +934,31 @@ input:focus {
   box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
   color: rgba(0, 0, 0, 0.65);
   transform: translateY(0);
+}
+
+.gallery-container {
+  display: flex;
+  min-height: 40px;
+  margin: 10px;
+  flex-direction: column;
+}
+
+.gallery-image-container {
+  display: flex;
+  max-width: 400px;
+  max-height: 320px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 8px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.gallery-upload-button {
+  background-color: #b9c9bb;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
 }
