@@ -6,6 +6,20 @@ I also considered static site generators, but I found that editing raw markdown 
 
 As someone who has started and abandoned many projects, I'm committed to keeping Epiphany alive and improving it over time. I use it as my sole note-taking app and believe that it can be a valuable tool for others as well.
 
+## Build
+
+1. Install tauri-cli
+```bash
+cargo install tauri-cli
+```
+
+2. Build
+```bash
+cd ./frontend
+npm i
+cd ../src-tauri
+cargo tauri dev
+```
 
 7. realtime-markdown
 
