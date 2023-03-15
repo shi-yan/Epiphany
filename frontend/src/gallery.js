@@ -10,8 +10,25 @@ export default class GalleryView {
         this.dom = document.createElement("div")
         this.dom.className = 'gallery-container';
 
+        this.prev = document.createElement('a');
+        this.prev.className = 'image-prev';
+        this.prev.innerText = "❮";
+        this.slideIndex = 0;
+        this.prev.onclick = (e) => {
+            this.showSlides(this.slideIndex-1);
+        } 
+   
+        this.next = document.createElement('a');
+        this.next.className = 'image-next';
+        this.next.innerText = "❯";
+        this.next.onclick = (e) => {
+            this.showSlides(this.slideIndex+1);
+        }
+
         this.imageContainer = document.createElement("div");
         this.imageContainer.className = 'gallery-image-container';
+
+        this.elems = [];
 
         let inputElem = document.createElement("input");
         inputElem.type = "file";
@@ -21,11 +38,21 @@ export default class GalleryView {
 
         inputElem.onchange = function (e) {
             e.preventDefault();
+            let nns = [];
+            node.forEach((node, offset, index) => {
+                let nn = textSchema.nodes.image.createAndFill({
+                    file: node.attrs.file
+                }, null);
+                nns.push(nn);
+            });
+
             let nn = textSchema.nodes.image.createAndFill({
-                file: 'file'
+                file: node.attrs.file
             }, null);
+
+            nns.push(nn);
             let tr = new Transform(node);
-            tr.replaceWith(0, node.nodeSize - 2, [nn]);
+            tr.replaceWith(0, node.nodeSize - 2, nns);
             let offsetMap = StepMap.offset(getPos() + 1);
             let outerTr = view.state.tr;
             let steps = tr.steps
@@ -34,7 +61,7 @@ export default class GalleryView {
             }
             if (outerTr.docChanged) view.dispatch(outerTr);
 
-            labelElem.style.display = 'none';
+            //labelElem.style.display = 'none';
         };
 
         labelElem.for = "actual-btn";
@@ -53,14 +80,42 @@ export default class GalleryView {
         if (node.type != this.node.type) return false
         this.node = node;
 
-        if (node.childCount > 0) {
-            let imgElem = document.createElement("img");
-            imgElem.src = "https://www.cam.ac.uk/sites/www.cam.ac.uk/files/styles/content-885x432/public/news/research/news/crop_178.jpg";
-            this.imageContainer.appendChild(imgElem);
-            imgElem.style.objectFit = 'cover';
+        while (this.imageContainer.firstChild) {
+            this.imageContainer.removeChild(this.imageContainer.firstChild);
         }
 
+        this.elems = [];
+
+        node.forEach((node, offset, index) => {
+            let div = document.createElement("div");
+            div.className = "fade";
+            let imgElem = document.createElement("img");
+            imgElem.src = "https://www.cam.ac.uk/sites/www.cam.ac.uk/files/styles/content-885x432/public/news/research/news/crop_178.jpg";
+            imgElem.style.width = '100%';
+            imgElem.display='none';
+            div.appendChild(imgElem);
+            this.imageContainer.appendChild(div);
+            this.elems.push(div);
+        })
+
+        this.imageContainer.appendChild(this.prev);
+        this.imageContainer.appendChild(this.next);
+
+        this.slideIndex = this.elems.length-1;
+        this.showSlides(this.slideIndex);
         return true;
+    }
+
+    showSlides(n) {
+        this.slideIndex = n;
+        if (n > this.elems.length-1) { this.slideIndex = this.elems.length - 1 }
+        if (n < 0) { this.slideIndex = 0 }
+        
+        for (let i = 0; i < this.elems.length; i++) {
+            this.elems[i].style.display = "none";
+        }
+        console.log(this.elems, this.slideIndex)
+        this.elems[this.slideIndex].style.display = "block";
     }
 
     selectNode() { }
@@ -68,5 +123,5 @@ export default class GalleryView {
 
     stopEvent() {
         return true;
-      }
+    }
 }

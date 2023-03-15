@@ -941,12 +941,11 @@ input:focus {
   min-height: 40px;
   margin: 10px;
   flex-direction: column;
+  position: relative;
 }
 
 .gallery-image-container {
   display: flex;
-  max-width: 600px;
-  max-height: 480px;
   border-radius: 8px;
   overflow: hidden;
   margin: 8px;
@@ -962,3 +961,43 @@ input:focus {
   border-radius: 6px;
   cursor: pointer;
 }
+
+/* Fading animation */
+.fade {
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+
+/* Next & previous buttons */
+.image-prev, .image-next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  margin-top: -42px;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.image-next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.image-prev:hover, .image-next:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
