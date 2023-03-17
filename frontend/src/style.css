@@ -287,6 +287,16 @@ input {
   border-radius: 8px;
 }
 
+.ProseMirror code {
+  background-color: #2a3737;
+  color: #b7c3bb;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 4px;
+  border-radius: 8px;
+}
+
 .limpid-equation textarea:focus,
 input:focus {
   outline: 0;
@@ -1021,6 +1031,9 @@ input:focus {
 .image-description {
   font-style: italic;
   text-align: center;
+  cursor: text;
+  margin: 0;
+  padding: 10px;
 }
 
 .image-description:empty:not(:focus):before{

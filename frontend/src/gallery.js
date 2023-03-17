@@ -128,7 +128,6 @@ export default class GalleryView {
                             const innerContent = node.textContent;
 
                             if (textarea.textContent !== innerContent) {
-                                const res = this.node.resolve(offset);
                                 setTimeout(() => {
                                     let tr = this.outerView.state.tr.setNodeAttribute(this.getPos() + 1 + offset, 'description',  textarea.textContent);
                                     this.outerView.dispatch(tr);
@@ -145,7 +144,6 @@ export default class GalleryView {
         })
 
         if (this.elems.length > 0) {
-
             this.imageContainer.appendChild(this.prev);
             this.imageContainer.appendChild(this.next);
         }
@@ -163,7 +161,6 @@ export default class GalleryView {
         for (let i = 0; i < this.elems.length; i++) {
             this.elems[i].style.display = "none";
         }
-        console.log(this.elems, this.slideIndex)
         this.elems[this.slideIndex].style.display = "block";
     }
 

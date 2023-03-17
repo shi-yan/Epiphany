@@ -200,6 +200,20 @@ const marks = {
     ],
     toDOM() { return ["em", 0]; }
   },
+
+  u: {
+    parseDOM: [
+      { tag: "u" },
+    ],
+    toDOM() { return ["u", 0]; }
+  },
+
+  del: {
+    parseDOM: [
+      { tag: "del" },
+    ],
+    toDOM() { return ["del", 0]; }
+  },
   /**
   A strong mark. Rendered as `<strong>`, parse rules also match
   `<b>` and `font-weight: bold`.
@@ -222,10 +236,11 @@ const marks = {
   code: {
     parseDOM: [{ tag: "code" }],
     toDOM() { return ["code", 0]; }
-  }
-};
+  },
 
-console.log('nodes', nodes)
+
+
+};
 
 const textSchema = new Schema({
   nodes,
