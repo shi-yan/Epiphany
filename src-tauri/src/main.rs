@@ -4,19 +4,22 @@
 )]
 
 use tauri::Manager;
+use tauri::State;
 
 mod win_ext;
+mod state;
 
 use win_ext::WindowExt;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
+fn greet(state: tauri::State<state::State>) -> String {
+    format!("Hello, {}! You've been greeted from Rust!", state.workspace_path)
 }
 
 fn main() {
-    tauri::Builder::default().setup(|app| {
+    tauri::Builder::default()  .manage(state::State::new())
+    .setup(|app| {
         let window = app.get_window("main").unwrap();
        // window.open_devtools();
         window.set_transparent_titlebar(true);
