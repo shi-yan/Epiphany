@@ -11,7 +11,7 @@ export default class EquationView {
         this.outerView = view
         this.getPos = getPos
         this.displayId = 0;
-        this.key = new Date().getTime();
+        this.key = node.attrs.id
         this.manager = manager
 
         // The node's representation in the editor (empty, for now)

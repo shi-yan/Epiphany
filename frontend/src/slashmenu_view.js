@@ -176,12 +176,13 @@ export default class SlashMenuView {
                         this.levelTwoItems.style.display = 'flex';
                     }
                     else {
-                        const e = this.currentActive.execute;
+                        const exe = this.currentActive.execute;
+                        console.log("exe", exe)
                         setTimeout(() => {
                             view.dispatch(view.state.tr.deleteRange(newState.queryStartPos - newState.triggerCharacter.length,
                                 view.state.selection.from));
                             view.dispatch(view.state.tr.setMeta({ key: this.pluginkey }, { deactivate: true }));
-                            e(view);
+                            exe(view);
                         }, 100);
                     }
                 }

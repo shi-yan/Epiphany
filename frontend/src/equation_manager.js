@@ -3,6 +3,7 @@ export default class EquationManager {
     constructor() {
         this.equations = new Map();
         this.recountDelay = null;
+        this.counter = 0;
     }
 
     register(key, view) {
@@ -11,6 +12,12 @@ export default class EquationManager {
         if (oldCount != this.equations.size) {
             this.recount();
         }
+    }
+
+    getId() {
+        const id= `eq${this.counter.toString(16)}`;
+        this.counter ++;
+        return id;
     }
 
     remove(key) {

@@ -71,6 +71,9 @@ let nodes = {
     parseDOM: [{ tag: "tags" }]
   },
   equation: {
+    attrs: {
+      id: { default: -1 }
+    },
     group: "block",
     content: "text*",
     defining: true,
@@ -78,7 +81,7 @@ let nodes = {
     toDOM(node) {
       return [{ tag: "equation" }, 0]
     },
-    parseDOM: [{ tag: "equation" }]
+    parseDOM: [{ tag: "equation",getAttrs(dom) { return { id: dom.id } } }]
   },
   inline_equation: {
     atom: true,
