@@ -420,8 +420,9 @@ input:focus {
   padding: 4px;
   height: calc(100% - 8px);
   position: relative;
-  background-image: url('/4Kchalkboard4.png');
-  background-size: auto 100%;
+  background-image: url('/bg0.png');
+  background-size: 400px 400px;
+  background-repeat: repeat;
 }
 
 #sidebar {
