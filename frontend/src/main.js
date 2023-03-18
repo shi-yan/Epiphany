@@ -40,7 +40,7 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
-document.getElementById("main").style.backgroundImage=`url('/bg${getRandomInt(12)}.png')`;
+document.getElementById("main").style.backgroundImage=`url('/bg${getRandomInt(11)}.png')`;
 
 
 let equationManager = new EquationManager();

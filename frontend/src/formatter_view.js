@@ -44,11 +44,11 @@ class FormatterView {
         strikeThroughButton.className = 'formatter-button';
 
         const increaseIndentationButton = document.createElement('button');
-        increaseIndentationButton.innerHTML = '<svg style="min-width:12px;min-height:12px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-indent-increase</title><path  fill="#233231" stroke="#233231"  d="M11,13H21V11H11M11,9H21V7H11M3,3V5H21V3M11,17H21V15H11M3,8V16L7,12M3,21H21V19H3V21Z" /></svg>';
+        increaseIndentationButton.innerHTML = '<svg style="min-width:12px;min-height:12px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-indent-decrease</title><path  fill="#233231" stroke="#233231"  d="M11,13H21V11H11M11,9H21V7H11M3,3V5H21V3M3,21H21V19H3M3,12L7,16V8M11,17H21V15H11V17Z" /></svg>';
         increaseIndentationButton.className = 'formatter-button';
 
         const decreaseIndentationButton = document.createElement('button');
-        decreaseIndentationButton.innerHTML = '<svg style="min-width:12px;min-height:12px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-indent-decrease</title><path  fill="#233231" stroke="#233231"  d="M11,13H21V11H11M11,9H21V7H11M3,3V5H21V3M3,21H21V19H3M3,12L7,16V8M11,17H21V15H11V17Z" /></svg>';
+        decreaseIndentationButton.innerHTML = '<svg style="min-width:12px;min-height:12px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>format-indent-increase</title><path  fill="#233231" stroke="#233231"  d="M11,13H21V11H11M11,9H21V7H11M3,3V5H21V3M11,17H21V15H11M3,8V16L7,12M3,21H21V19H3V21Z" /></svg>';
         decreaseIndentationButton.className = 'formatter-button';
 
         const codeButton = document.createElement('button');
@@ -182,7 +182,7 @@ class FormatterView {
     increaseIndentation() {
         setTimeout(() => {
             window.editorView.focus();
-            const command = liftListItem(textSchema.nodes.paragraph);
+            const command = liftListItem(textSchema.nodes.list_item);
             command(window.editorView.state, window.editorView.dispatch, window.editorView);
         }, 100);
     }
@@ -190,7 +190,7 @@ class FormatterView {
     decreaseIndentation() {
         setTimeout(() => {
             window.editorView.focus();
-            const command = sinkListItem(textSchema.nodes.paragraph);
+            const command = sinkListItem(textSchema.nodes.list_item);
             command(window.editorView.state, window.editorView.dispatch, window.editorView);
         }, 100);
     }
