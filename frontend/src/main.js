@@ -108,7 +108,6 @@ function updateContent() {
           scrollHeadingIntoViewById(id);
         }, 100);
       }
-      console.log("update toc item", node.attrs.id)
       elem.style.paddingLeft = (16 + indentation) + 'px';
       let span = document.createElement('span');
       span.innerText = node.textContent;
@@ -396,4 +395,18 @@ document.getElementById('fold-menu-button').onclick = (e) => {
     menuFolded = false;
     document.getElementById('editor-top-padding').style.display = 'none';
   }
+}
+
+document.getElementById("open-folder-dialog").onclick = async (e) => {
+  const selected = await window.__TAURI__.dialog.open({
+    multiple: false,
+      directory: true,
+      title: 'Choose a directory for notes'
+  });
+
+  console.log('folder selected', selected);
+  document.getElementById('sidebar').style.visibility = 'visible';
+  document.getElementById('editor-container').style.visibility='visible';
+  document.getElementById('welcome').parentNode.removeChild(document.getElementById('welcome'))
+
 }

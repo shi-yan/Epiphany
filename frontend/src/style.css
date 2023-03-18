@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Phudu&family=Pragati+Narrow&family=Quicksand:wght@300&family=Roboto:wght@300&family=Source+Code+Pro&display=swap');
-
+/*@import url('https://fonts.googleapis.com/css2?family=Phudu&family=Pragati+Narrow&family=Quicksand:wght@300&family=Roboto:wght@300&family=Source+Code+Pro&display=swap');*/
+@import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Phudu&family=Pragati+Narrow&family=Quicksand:wght@300&family=Roboto:wght@300&family=Sono&family=Source+Code+Pro&display=swap');
 @font-face {
   font-family: "icon";
   src: url("/icomoon.ttf");
@@ -70,7 +70,7 @@ input:focus {
   opacity: 1;
 }
 
-.editor-container {
+#editor-container {
   position: relative;
   height: 100%;
   display: flex;
@@ -200,6 +200,54 @@ input:focus {
   font-family: 'Pragati Narrow', sans-serif;
   z-index: 100;
   position: relative;
+}
+
+.welcome {
+  color: #3b5a4a;
+  font-family: 'Kaushan Script', cursive;
+  z-index: 100;
+  position: relative;
+  text-align: center;
+  margin-top: 80px;
+}
+
+.welcome-sub {
+  color: #9fb1a3;
+  font-family: 'Pragati Narrow', sans-serif;
+  z-index: 100;
+  position: relative;
+  text-align: center;
+  margin-top: 0px;
+}
+
+.folder-button {
+  background-color: #b9c9bb;
+  border: 1px solid #d5d9d9;
+  border-radius: 8px;
+  box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+  box-sizing: border-box;
+  color: #3b5a4a;
+  display: inline-block;
+  font-family: "Amazon Ember", sans-serif;
+  font-size: 13px;
+  line-height: 29px;
+  padding: 0 10px 0 11px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  cursor: pointer;
+  margin: 60px;
+}
+
+.folder-button:hover {
+  background-color: #f2f2f2;
 }
 
 .ProseMirror h2 {
@@ -466,7 +514,6 @@ input:focus {
 }
 
 #bottom-area button:hover {
-
   color: #337293;
 }
 
