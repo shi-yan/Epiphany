@@ -10,7 +10,7 @@ As someone who has started and abandoned many projects, I'm committed to keeping
 
 ## Build
 
-1. Install tauri-cli
+1. Install [tauri-cli](https://tauri.app/v1/guides/getting-started/setup/html-css-js). I prefer using Cargo.
 ```bash
 cargo install tauri-cli
 ```
