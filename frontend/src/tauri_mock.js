@@ -71,4 +71,13 @@ function tauri_dialog() {
   }
 }
 
-export { tauri_invoke, tauri_dialog };
+async function tauri_convertFileSrc(file) {
+  if (window.__TAURI__) {
+    return window.__TAURI__.tauri.convertFileSrc(file);
+  }
+  else {
+    return "https://www.cam.ac.uk/sites/www.cam.ac.uk/files/styles/content-885x432/public/news/research/news/crop_178.jpg"
+  }
+}
+
+export { tauri_invoke, tauri_dialog,tauri_convertFileSrc };

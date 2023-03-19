@@ -219,7 +219,7 @@ export function prosemirror2djot(doc) {
                     let videoBlock = {
                         "tag": "raw_block",
                         "format": "video",
-                        "text": block.attrs.src
+                        "text": block.attrs.src.trim()
                     };
                     compiled.children[0].children.push(videoBlock);
                     break;
@@ -228,7 +228,7 @@ export function prosemirror2djot(doc) {
                     let twitterBlock = {
                         "tag": "raw_block",
                         "format": "twitter",
-                        "text": block.attrs.src
+                        "text": block.attrs.src.trim()
                     }
                     compiled.children[0].children.push(twitterBlock);
                     break;
@@ -270,11 +270,29 @@ export function prosemirror2djot(doc) {
     return null;
 }
 
+function flattenDoc(doc) {
+    const blocks = [];
+
+    for(const b of  doc.children) {
+        if (b.tag === 'section') {  
+            blocks.push(...flattenDoc(b));
+        }
+        else {
+            blocks.push(b);
+        }
+    }
+    return blocks;
+}
+
 export function djot2prosemirror(doc, id, createAt, lastModifiedAt) {
     console.log(doc);
 
     if (doc.tag === 'doc' && doc.children.length > 0 && doc.children[0].tag === 'section' && doc.children[0].children.length > 0) {
-        const blocks = doc.children[0].children;
+
+       const blocks = flattenDoc(doc.children[0]);
+
+       console.log("blocks ===", blocks)
+
         let content = [];
         for (let b of blocks) {
             switch (b.tag) {
@@ -367,7 +385,7 @@ export function djot2prosemirror(doc, id, createAt, lastModifiedAt) {
                             const converted = {
                                 "type": "video",
                                 "attrs": {
-                                    "src": b.text
+                                    "src": b.text.trim()
                                 }
                             };
                             content.push(converted);
@@ -378,7 +396,7 @@ export function djot2prosemirror(doc, id, createAt, lastModifiedAt) {
                             const converted = {
                                 "type": "twitter",
                                 "attrs": {
-                                    "src": b.text
+                                    "src": b.text.trim()
                                 }
                             };
                             content.push(converted);
@@ -405,13 +423,15 @@ export function djot2prosemirror(doc, id, createAt, lastModifiedAt) {
                                         {
                                             type: "image",
                                             attrs: {
-                                                file: img.file,
+                                                file: img.file.trim(),
                                                 description: img.description ? img.description : '',
                                                 source: img.source ? img.source : ''
                                             }
                                         }
                                     )
                                 }
+                                content.push(converted);
+
                             }
                             catch (err) {
                                 console.error('parsing gallery block failed', err)
@@ -521,7 +541,7 @@ export function djot2prosemirror(doc, id, createAt, lastModifiedAt) {
                     break;
 
                 default:
-                    console.error("unimplemented block", b.tag)
+                    console.error("unimplemented block", b)
                     break;
 
             }

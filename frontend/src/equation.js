@@ -21,29 +21,22 @@ export default class EquationView {
 
         this.input = document.createElement("textarea");
         this.input.className = "limpid-equation-textarea"
-        this.input.classList.add("limpid-equation-textarea-edit-mode");
+       // this.input.classList.add("limpid-equation-textarea-edit-mode");
         this.dom.appendChild(this.input);
 
         this.display = document.createElement("div");
         this.display.className = "limpid-equation-display";
-        this.display.classList.add("limpid-equation-display-edit-mode");
+     //   this.display.classList.add("limpid-equation-display-edit-mode");
         this.dom.appendChild(this.display);
 
         this.idElm = document.createElement("div");
         this.idElm.className = 'limpid-equation-counter';
-        this.idElm.classList.add('limpid-equation-counter-edit-mode');
+     //   this.idElm.classList.add('limpid-equation-counter-edit-mode');
         this.idElm.setAttribute('data-key', this.key);
         this.idElm.innerText = '(' + this.displayId + ')';
         this.dom.appendChild(this.idElm);
 
         let self = this;
-        let ns = new NodeSelection(this.outerView.state.doc.resolve(getPos()));
-
-        let tr = self.outerView.state.tr.setSelection(ns).scrollIntoView()
-        setTimeout(() => {
-            self.outerView.dispatch(tr)
-            self.outerView.focus()
-        });
 
         this.input.addEventListener('keydown', (e) => {
             if (e.code === 'ArrowUp') {
@@ -83,6 +76,24 @@ export default class EquationView {
         });
 
         this.manager.register(this.key, this);
+
+        if (this.node.textContent && this.node.textContent.length > 0) {
+            this.input.blur();
+
+            katex.render(this.node.textContent, this.display, {
+                displayMode: true,
+                throwOnError: false
+            });
+        }
+        else{
+            let ns = new NodeSelection(this.outerView.state.doc.resolve(getPos()));
+
+            let tr = self.outerView.state.tr.setSelection(ns).scrollIntoView()
+            setTimeout(() => {
+                self.outerView.dispatch(tr)
+                self.outerView.focus()
+            });
+        }
     }
 
     update(node) {

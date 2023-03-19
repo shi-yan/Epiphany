@@ -21,6 +21,7 @@ export default class UpdateTimer {
 
         const now = Math.floor(Date.now() / 1000);
         this.interval = this.updateIntervalInMsByDistance(now);
+        console.log("update this interval", this.interval);
         this.timer = setInterval(() => {this.updateElem()}, this.interval);
     }
 

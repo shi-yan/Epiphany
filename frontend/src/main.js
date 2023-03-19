@@ -385,17 +385,40 @@ document.getElementById('fold-menu-button').onclick = (e) => {
 }
 
 
-function setupTree(workspaceData) {
+async function  setupTree(workspaceData) {
   tree = new Tree({ children: workspaceData.content_table }, { parent: document.getElementById('tree-container') });
 
-  tree.on('update', (leaf, tree) => {
+  if (workspaceData.content_table.length > 0) {
+    const leaf = { data: workspaceData.content_table[0] };
+    const noteDjot = await tauri_invoke('load_note', { filename: leaf.data.filename });
+
+    console.log("load data", noteDjot);
+    const parsedDjot = djot.parse(noteDjot, { sourcePositions: true });
+    const prosemirrorDoc = djot2prosemirror(parsedDjot, leaf.data.id, leaf.data.createAt, leaf.data.lastModifiedAt);
+
+    console.log("prosemirrorDoc", prosemirrorDoc);
+    reloadDoc({
+      doc: prosemirrorDoc, selection: {
+        anchor: 1,
+        head: 1,
+        type: "text"
+      }
+    });
+
+    currentLoadedNodeId = leaf.data.id;
+
+  }
+
+  tree.on('update', async (leaf, tree) => {
     console.log("================ update", workspaceData.content_table)
     console.log(leaf);
+    let clonedWorkspace = deepClone(workspaceData);
+    console.log("cloned workspace", clonedWorkspace)
+    await tauri_invoke('update_workspace_content', { newWorkspaceContent: clonedWorkspace });
+
   })
 
   tree.on('clicked', async (leaf, e, tree) => {
-    console.log("================ clicked", workspaceData.content_table)
-    console.log(leaf.data.id, e);
     if (leaf.data.id !== currentLoadedNodeId) {
       const noteDjot = await tauri_invoke('load_note', { filename: leaf.data.filename });
 
@@ -436,6 +459,9 @@ function reloadDoc(newDoc) {
     ]
   }, newDoc);
   window.editorView.updateState(state);
+
+  setTimeout(() => {updateContent();}, 3000);
+
 }
 
 document.getElementById("open-folder-dialog").onclick = async (e) => {

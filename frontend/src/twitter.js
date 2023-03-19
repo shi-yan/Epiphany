@@ -65,6 +65,22 @@ export default class TwitterView {
             e.stopImmediatePropagation();
             e.stopPropagation();
         });
+
+        const src = this.node.attrs.src;
+        if (src) {
+            while (this.display.firstChild) {
+                this.display.removeChild(this.display.firstChild);
+            }
+
+            (async () => {
+                const response = await tauri_invoke('fetch_tweet', src);
+                console.log(response);
+                this.display.innerHTML = response.html;
+                twttr.widgets.load(this.display);
+            })();
+
+            // this.display.innerHTML = '<iframe width="560" height="315" src="'+src+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>'
+        }
     }
 
     validateTwitterUrl(url) {

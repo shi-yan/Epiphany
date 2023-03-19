@@ -6,9 +6,11 @@ use cuid2;
 use directories::{BaseDirs, ProjectDirs, UserDirs};
 use rust_embed::RustEmbed;
 use serde::{Deserialize, Serialize};
-use std::fs::create_dir_all;
-use std::fs::File;
 use tauri::utils::config;
+use std::fs::{metadata, rename, File, create_dir_all};
+use blake3::hash;
+use std::ffi::OsStr;
+
 
 use slugify::slugify;
 
@@ -58,10 +60,66 @@ impl State {
         }
     }
 
-    pub fn save_file(&mut self, id: &str, title: &str, current_filename: &str, content: &str) -> Result<String> {
+    fn move_and_content_index_asset(&self, src: &str) -> String {
+        let workspace_assets_path_buf = PathBuf::new().join(self.workspace_path.as_str()).join("assets");
+
+        let mut hasher = blake3::Hasher::new();
+
+        let mut f = File::open(src).expect("no file found");
+        let metadata = metadata(src).expect("unable to read metadata");
+        let temp_filename = cuid2::cuid();
+        let mut buffer = vec![0; 1024 * 1024 * 1024];
+        println!("{:?}",src);
+        let mut actual_read_bytes = f.read(&mut buffer).expect("buffer overflow");
+
+        let mut f2 = File::create(workspace_assets_path_buf .join(temp_filename.as_str())).expect("unable to read");
+        while actual_read_bytes > 0 {
+            hasher.update(&buffer[0..actual_read_bytes]);
+            // println!("{:?}", &buffer[0..actual_read_bytes]);
+            f2.write_all(&buffer[0..actual_read_bytes]).unwrap();
+            actual_read_bytes = f.read(&mut buffer).expect("buffer overflow");
+        }
+        f2.flush().unwrap();
+        drop(f2);
+        drop(f);
+        let hash2 = hasher.finalize();
+
+        let encoded = bs58::encode(hash2.as_bytes()).into_string();
+        println!("{:?} {:?}", hash2, encoded);
+
+        let final_filename =
+            if let Some(extension) = Path::new(src).extension().and_then(OsStr::to_str) {
+                format!("{}.{}", encoded, extension)
+            } else {
+                format!("{}", encoded)
+            };
+
+        println!("============= {:?} {:?}", temp_filename, final_filename);
+        rename(workspace_assets_path_buf.join(temp_filename.as_str()), workspace_assets_path_buf.join( final_filename.as_str())).expect("rename");
+        
+        return final_filename;
+    }
+
+    pub fn save_image(&mut self, image_filename: &str) -> Result<String> {
+        let new_filename = self.move_and_content_index_asset(image_filename);
+        Ok(new_filename)
+    }
+
+    pub fn to_asset_absolute_path(&mut self, image_filename: &str) -> Result<String> {
+        let workspace_assets_path_buf = PathBuf::new().join(self.workspace_path.as_str()).join("assets");
+
+        Ok(String::from( workspace_assets_path_buf.join(image_filename).to_str().unwrap()))
+    }
+
+    pub fn save_file(
+        &mut self,
+        id: &str,
+        title: &str,
+        current_filename: &str,
+        content: &str,
+    ) -> Result<String> {
         let workspace_path = Path::new(&self.workspace_path);
         let workspace_notes_path_buf = PathBuf::new().join(workspace_path).join("notes");
-
 
         let new_filename =
             if !title.eq("Unnamed Note") && current_filename.eq(format!("{}.djot", id).as_str()) {
@@ -92,24 +150,28 @@ impl State {
                 new_filename
             } else {
                 let slug = slugify!(title, separator = "_");
-                let mut new_filename = format!("{}.djot", slug.as_str());
+                let new_filename = format!("{}.djot", slug.as_str());
 
-                if !new_filename.eq(current_filename) && !workspace_notes_path_buf.join(&new_filename).exists() {
+                if !new_filename.eq(current_filename)
+                    && !workspace_notes_path_buf.join(&new_filename).exists()
+                {
                     new_filename
-                }
-                else {
+                } else {
                     String::from(current_filename)
                 }
             };
 
-            if !new_filename.eq(current_filename) {
-                std::fs::rename(workspace_notes_path_buf.join(current_filename), workspace_notes_path_buf.join(&new_filename)).unwrap();
-            }
+        if !new_filename.eq(current_filename) {
+            std::fs::rename(
+                workspace_notes_path_buf.join(current_filename),
+                workspace_notes_path_buf.join(&new_filename),
+            )
+            .unwrap();
+        }
 
-            let mut file = File::create(workspace_notes_path_buf.join(&new_filename))?;
+        let mut file = File::create(workspace_notes_path_buf.join(&new_filename))?;
 
-            file.write_all(content.as_bytes())?;
-
+        file.write_all(content.as_bytes())?;
 
         Ok(new_filename)
     }

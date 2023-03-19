@@ -19,7 +19,6 @@ export default class VideoView {
 
         this.input = document.createElement("input");
         this.input.className = "limpid-equation-input"
-        this.input.classList.add("limpid-equation-input-edit-mode");
         
         this. icon = document.createElement('span');
 
@@ -33,7 +32,6 @@ export default class VideoView {
         this.dom.appendChild(this.icon);
 
         this.display = document.createElement('div');
-        this.display.style.display = 'none';
         this.dom.appendChild(this.display);
 
         this.input.addEventListener('keydown', (e) => {
@@ -62,6 +60,17 @@ export default class VideoView {
             e.stopImmediatePropagation();
             e.stopPropagation();
         });
+
+        const src = this.node.attrs.src;
+        const url = this.validateYouTubeUrl(src);
+        console.log("youtube url", url, src)
+        if (url) {
+            this.display.innerHTML = '<iframe width="560" height="315" src="'+url+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>'
+        }
+        else{
+            this.input.classList.add("limpid-equation-input-edit-mode");
+            this.display.style.display = 'none';
+        }
     }
 
     validateYouTubeUrl(url) {
@@ -85,13 +94,14 @@ export default class VideoView {
         this.node = node;
 
         const src = this.node.attrs.src;
+        const url = this.validateYouTubeUrl(src);
 
-        if (src) {
+        if (url) {
             while (this.display.firstChild) {
                 this.display.removeChild(this.display.firstChild);
             }
 
-            this.display.innerHTML = '<iframe width="560" height="315" src="'+src+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>'
+            this.display.innerHTML = '<iframe width="560" height="315" src="'+url+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>'
         }
 
         return true;

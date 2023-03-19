@@ -1018,6 +1018,8 @@ input:focus {
   margin-right: auto;
   padding: 10px;
   border-radius: 6px;
+  box-shadow: none;
+  border:none;
   cursor: pointer;
 }
 

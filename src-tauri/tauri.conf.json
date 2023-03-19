@@ -23,8 +23,13 @@
         "unminimize": true,
         "startDragging": true
       },
+      "fs": {
+        "readFile": true,
+        "readDir": true
+      },
       "protocol":{
-        "asset":true
+        "asset":true,
+        "assetScope": ["**"]
       },
       "all": false,
       "shell": {
@@ -71,7 +76,7 @@
       }
     },
     "security": {
-      "csp":  "default-src 'self'; img-src 'self' asset: https://asset.localhost; frame-src https://*.youtube.com"
+      "csp":  "default-src 'self'; img-src 'self' asset: https://asset.localhost asset://localhost; frame-src https://*.youtube.com"
     },
     "updater": {
       "active": false

@@ -69,6 +69,23 @@ fn save_file(state: tauri::State<Mutex<state::State>>, id: &str, title: &str, cu
     Err("Can't save note".to_string())
 }
 
+#[tauri::command]
+fn save_image(state:tauri::State<Mutex<state::State>>, image_filename: &str) -> Result<String, String> {
+    if let Ok(new_filename) = state.lock().unwrap().save_image(image_filename) {
+        return Ok(new_filename);
+    }
+    Err("Can't save note".to_string())
+}
+
+#[tauri::command]
+fn to_asset_absolute_path(state:tauri::State<Mutex<state::State>>, image_filename: &str) -> Result<String, String> {
+    if let Ok(new_filename) = state.lock().unwrap().to_asset_absolute_path(image_filename) {
+        return Ok(new_filename);
+    }
+    Err("Can't save note".to_string())
+}
+
+
 fn main() {
     tauri::Builder::default()  .manage(Mutex::<state::State>::new( state::State::new()))
     .setup(|app| {
@@ -79,7 +96,7 @@ fn main() {
 
         Ok(())
     })
-        .invoke_handler(tauri::generate_handler![greet, load_config, first_time_setup,create_new_file,update_workspace_content,load_note,save_file])
+        .invoke_handler(tauri::generate_handler![greet, load_config, first_time_setup,create_new_file,update_workspace_content,load_note,save_file,save_image,to_asset_absolute_path])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

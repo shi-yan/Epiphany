@@ -28,13 +28,6 @@ export default class InlineEquationView {
         this.dom.appendChild(this.display);
 
         let self = this;
-        let ns = new NodeSelection(this.outerView.state.doc.resolve(getPos()));
-
-        let tr = self.outerView.state.tr.setSelection(ns).scrollIntoView()
-        setTimeout(() => {
-            self.outerView.dispatch(tr)
-            self.outerView.focus()
-        });
 
         this.input.addEventListener('keydown', (e) => {
             if (e.code === 'ArrowLeft') {
@@ -72,6 +65,22 @@ export default class InlineEquationView {
             e.stopPropagation();
         });
 
+        if (this.node.textContent && this.node.textContent.length > 0) {
+            katex.render(this.node.textContent, this.display, {
+                displayMode: false,
+                throwOnError: false
+            });
+        }
+        else{
+            let ns = new NodeSelection(this.outerView.state.doc.resolve(getPos()));
+
+            let tr = self.outerView.state.tr.setSelection(ns).scrollIntoView()
+            setTimeout(() => {
+                self.outerView.dispatch(tr)
+                self.outerView.focus()
+            });
+    
+        }
 
     }
 
