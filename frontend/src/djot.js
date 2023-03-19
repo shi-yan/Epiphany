@@ -193,7 +193,7 @@ export function prosemirror2djot(doc) {
                     let codeBlock = {
                         "tag": "code_block",
                         "text": null,
-                        "lang": codeBlock.attrs.lang
+                        "lang": block.attrs.lang
                     }
 
                     if (block.content && block.content.length < 2) {

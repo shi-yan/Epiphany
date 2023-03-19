@@ -20,33 +20,43 @@ img.src = apiPath
 document.body.appendChild(img)
 })();*/
 
-import tweet_sample from './tweet_sample.json';
-import content_table_sample from './content_table_sample.json'
-import sample_djot from './welcome.djot'
+//import tweet_sample from './dummy/tweet_sample.json';
+//import content_table_sample from './dummy/content_table_sample.json'
+//import sample_djot from './dummy/welcome.djot'
+
+let tweet_sample = null;
+let content_table_sample = null;
+let sample_djot = null;
 
 async function invoke(cmd, payload) {
-  return new Promise((resolve, reject) => {
     switch (cmd) {
       case 'fetch_tweet':
-        resolve(tweet_sample);
-        break;
+        if (!tweet_sample){
+          tweet_sample = await import('./dummy/tweet_sample.json');
+        }
+        return tweet_sample.default;
       case 'load_config':
-        resolve(content_table_sample);
-        break;
+        if (!content_table_sample){
+          content_table_sample = await import('./dummy/content_table_sample.json');
+        }
+        return content_table_sample.default;
       case 'first_time_setup':
-        resolve(content_table_sample);
-        break;
+        if (!content_table_sample){
+          content_table_sample = await import('./dummy/content_table_sample.json');
+        }
+        return content_table_sample.default;
       case 'load_note':
-        resolve(sample_djot);
-        break;
+        if (!sample_djot){
+          sample_djot = await import('./dummy/welcome.djot');
+        }
+        return sample_djot.default;
         case 'save_file':
-          resolve(payload.currentFilename);
-          break;
+          return payload.currentFilename;
+          
       default:
         console.error("unimplemented ", cmd);
         break;
     }
-  })
 }
 
 async function tauri_invoke(cmd, payload) {

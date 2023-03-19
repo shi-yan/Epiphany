@@ -47,7 +47,7 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
-document.getElementById("main").style.backgroundImage = `url('/bg${getRandomInt(11)}.png')`;
+document.getElementById("main").style.backgroundImage = `url('/bg${getRandomInt(12)}.png')`;
 let equationManager = new EquationManager();
 
 function arrowHandler(dir) {
