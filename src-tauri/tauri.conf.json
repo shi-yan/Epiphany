@@ -76,7 +76,7 @@
       }
     },
     "security": {
-      "csp":  "default-src 'self'; img-src 'self' asset: https://asset.localhost asset://localhost; frame-src https://*.youtube.com"
+      "csp":  "default-src 'self'; img-src 'self' asset: https://asset.localhost asset://localhost; frame-src https://*.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com"
     },
     "updater": {
       "active": false
