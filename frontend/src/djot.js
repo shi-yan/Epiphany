@@ -273,8 +273,8 @@ export function prosemirror2djot(doc) {
 function flattenDoc(doc) {
     const blocks = [];
 
-    for(const b of  doc.children) {
-        if (b.tag === 'section') {  
+    for (const b of doc.children) {
+        if (b.tag === 'section') {
             blocks.push(...flattenDoc(b));
         }
         else {
@@ -289,9 +289,7 @@ export function djot2prosemirror(doc, id, createAt, lastModifiedAt) {
 
     if (doc.tag === 'doc' && doc.children.length > 0 && doc.children[0].tag === 'section' && doc.children[0].children.length > 0) {
 
-       const blocks = flattenDoc(doc.children[0]);
-
-       console.log("blocks ===", blocks)
+        const blocks = flattenDoc(doc.children[0]);
 
         let content = [];
         for (let b of blocks) {
