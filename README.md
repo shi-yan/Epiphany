@@ -1,4 +1,4 @@
-# Epiphany
+# Epiphany ([Screen Recording](https://youtu.be/_C0rpXXaETc))
 
 <img width="1582" alt="Screenshot 2023-03-19 at 10 33 29 AM" src="https://user-images.githubusercontent.com/326807/226196690-b31e28b9-4043-4695-998d-15961101d66d.png">
 
