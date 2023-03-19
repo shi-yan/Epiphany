@@ -198,6 +198,8 @@ impl State {
             .join("notes")
             .join(filename);
 
+        println!("loading {:?}", &workspace_notes_path_buf.display());
+
         let mut note_file = File::open(&workspace_notes_path_buf)?;
 
         let mut buf = Vec::<u8>::new();
@@ -244,13 +246,13 @@ impl State {
             let workspace_assets_path_buf = PathBuf::new().join(workspace_path).join("assets");
 
             if !workspace_assets_path_buf.exists() {
-                mkdir_p(&workspace_assets_path_buf);
+                mkdir_p(&workspace_assets_path_buf).unwrap();
             }
 
             let workspace_notes_path_buf = PathBuf::new().join(workspace_path).join("notes");
 
             if !workspace_notes_path_buf.exists() {
-                mkdir_p(&workspace_notes_path_buf);
+                mkdir_p(&workspace_notes_path_buf).unwrap();
             }
 
             let welcome_djot = Assets::get("welcome.djot").unwrap();
@@ -272,10 +274,12 @@ impl State {
                     children: Vec::new(),
                 }],
             };
+            self.workspace_path = String::from(workspace_path.to_str().unwrap());
+
 
             let mut content_table_file = File::create(&workspace_path.join("epiphany.json"))?;
             let serialized_content_table = serde_json::to_vec_pretty(&content_table)?;
-            content_table_file.write_all(&serialized_content_table);
+            content_table_file.write_all(&serialized_content_table)?;
 
             //self.workspace_content = Some(content_table);
 

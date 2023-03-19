@@ -476,6 +476,7 @@ document.getElementById("open-folder-dialog").onclick = async (e) => {
   if (selected) {
     workspaceData = await tauri_invoke('first_time_setup', { workspacePath: selected });
     document.getElementById('welcome').parentNode.removeChild(document.getElementById('welcome'))
+    console.log("==== first time", workspaceData)
     setupTree(workspaceData);
     document.getElementById('sidebar').style.visibility = 'visible';
     document.getElementById('editor-container').style.visibility = 'visible';
