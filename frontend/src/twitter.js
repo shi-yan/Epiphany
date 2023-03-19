@@ -2,7 +2,7 @@ import textSchema from "./textschema";
 import { Transform, StepMap } from "prosemirror-transform"
 import { TextSelection, Selection, NodeSelection } from "prosemirror-state"
 
-import { invoke } from "./tauri_mock";
+import { tauri_invoke } from "./tauri_mock";
 
 export default class TwitterView {
     constructor(node, view, getPos) {
@@ -94,7 +94,7 @@ export default class TwitterView {
             }
 
             (async () => {
-                const response = await invoke('fetch_tweet', src);
+                const response = await tauri_invoke('fetch_tweet', src);
                 console.log(response);
                 this.display.innerHTML = response.html;
                 twttr.widgets.load(this.display);
@@ -137,7 +137,7 @@ export default class TwitterView {
                     this.display.removeChild(this.display.firstChild);
                 }
                 (async () => {
-                    const response = await invoke('fetch_tweet', url);
+                    const response = await tauri_invoke('fetch_tweet', url);
                     this.display.innerHTML = response.html;
                     twttr.widgets.load(this.display);
                 })();

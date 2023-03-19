@@ -223,6 +223,7 @@ class FormatterView {
         window.editorView.dom.removeEventListener("mousedown", this.viewMousedownHandler);
         window.editorView.dom.removeEventListener("mouseup", this.viewMouseupHandler);
         window.editorView.dom.removeEventListener("dragstart", this.dragstartHandler);
+        document.body.removeChild(this.dom);
     }
 
     viewMousedownHandler = () => {

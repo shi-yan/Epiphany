@@ -2,7 +2,7 @@ import { keymap } from "prosemirror-keymap"
 import { Transform, StepMap } from "prosemirror-transform"
 import { EditorState, Plugin, Selection, NodeSelection } from "prosemirror-state"
 import { EditorView, Decoration, DecorationSet } from "prosemirror-view"
-import { Schema, DOMParser } from "prosemirror-model"
+import { Schema, DOMParser, Slice } from "prosemirror-model"
 import 'prosemirror-view/style/prosemirror.css'
 import 'prosemirror-menu/style/menu.css'
 import 'prosemirror-gapcursor/style/gapcursor.css'
@@ -31,18 +31,23 @@ import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { findParentNode } from "@tiptap/core";
 import UpdateTimer from "./update_timer"
-
+import { createId } from '@paralleldrive/cuid2';
+import { djot2prosemirror, prosemirror2djot } from './djot'
+import * as djot from '@djot/djot'
+import { tauri_invoke, tauri_dialog } from "./tauri_mock"
 //https://pictogrammers.com/library/mdi/
 
-dayjs.extend(relativeTime)
+dayjs.extend(relativeTime);
+let tree = null;
+let menuFolded = false;
+let workspaceData = null;
+let currentLoadedNodeId = null;
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
-document.getElementById("main").style.backgroundImage=`url('/bg${getRandomInt(11)}.png')`;
-
-
+document.getElementById("main").style.backgroundImage = `url('/bg${getRandomInt(11)}.png')`;
 let equationManager = new EquationManager();
 
 function arrowHandler(dir) {
@@ -196,6 +201,8 @@ window.editorView = new EditorView(editorElm, {
         docUpdateDelay = null;
         const now = Math.floor(Date.now() / 1000);
         updateTimer.documentUpdated(now);
+
+        saveDocument(currentLoadedNodeId);
       }, 3000);
     }
 
@@ -224,8 +231,6 @@ window.editorView = new EditorView(editorElm, {
         }
       }
     }
-
-
   }
 })
 
@@ -234,9 +239,6 @@ editorElm.onclick = (e) => {
     return;
   }
   e.preventDefault();
-
-
-  let lastNode = window.editorView.state.doc.lastChild;
   let rpos = window.editorView.state.doc.resolve(window.editorView.state.doc.nodeSize - 2);
   let selection = Selection.near(rpos, 1)
   let tr = window.editorView.state.tr.setSelection(selection).scrollIntoView()
@@ -343,16 +345,6 @@ document.body.addEventListener(
   true
 );
 
-/*const { invoke } = window.__TAURI__.tauri;
-
-let greetInputEl;
-let greetMsgEl;
-
-async function greet() {
-  // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-  greetMsgEl.textContent = await invoke("greet", { name: greetInputEl.value });
-}*/
-
 const data = {
   children: [
     {
@@ -376,11 +368,6 @@ const data = {
   ]
 }
 
-const tree = new Tree(data, { parent: document.getElementById('tree-container') })
-
-//document.getElementById('editor-top-doc-time').innerText = dayjs('2023-02-10').fromNow();
-
-let menuFolded = false;
 
 document.getElementById('fold-menu-button').onclick = (e) => {
   if (!menuFolded) {
@@ -397,16 +384,190 @@ document.getElementById('fold-menu-button').onclick = (e) => {
   }
 }
 
+
+function setupTree(workspaceData) {
+  tree = new Tree({ children: workspaceData.content_table }, { parent: document.getElementById('tree-container') });
+
+  tree.on('update', (leaf, tree) => {
+    console.log("================ update", workspaceData.content_table)
+    console.log(leaf);
+  })
+
+  tree.on('clicked', async (leaf, e, tree) => {
+    console.log("================ clicked", workspaceData.content_table)
+    console.log(leaf.data.id, e);
+    if (leaf.data.id !== currentLoadedNodeId) {
+      const noteDjot = await tauri_invoke('load_note', { filename: leaf.data.filename });
+
+      console.log("load data", noteDjot);
+      const parsedDjot = djot.parse(noteDjot, { sourcePositions: true });
+      const prosemirrorDoc = djot2prosemirror(parsedDjot, leaf.data.id, leaf.data.createAt, leaf.data.lastModifiedAt);
+
+      console.log("prosemirrorDoc", prosemirrorDoc);
+      reloadDoc({
+        doc: prosemirrorDoc, selection: {
+          anchor: 1,
+          head: 1,
+          type: "text"
+        }
+      });
+
+      currentLoadedNodeId = leaf.data.id;
+    }
+  })
+
+}
+
+function reloadDoc(newDoc) {
+  equationManager = new EquationManager();
+  const state = EditorState.fromJSON({
+    schema: textSchema,
+    plugins: [
+      menuPlugin(equationManager),
+      formatterPlugin(),
+      keymap(buildKeymap(textSchema)),
+      keymap(baseKeymap),
+      arrowHandlers,
+      gapCursor(),
+      dropCursor(),
+      limpidPlugin(equationManager),
+      trailingSpacePlugin(),
+      history()
+    ]
+  }, newDoc);
+  window.editorView.updateState(state);
+}
+
 document.getElementById("open-folder-dialog").onclick = async (e) => {
-  const selected = await window.__TAURI__.dialog.open({
+  const selected = await tauri_dialog().open({
     multiple: false,
-      directory: true,
-      title: 'Choose a directory for notes'
+    directory: true,
+    title: 'Choose a directory for notes'
   });
 
   console.log('folder selected', selected);
-  document.getElementById('sidebar').style.visibility = 'visible';
-  document.getElementById('editor-container').style.visibility='visible';
-  document.getElementById('welcome').parentNode.removeChild(document.getElementById('welcome'))
+
+  if (selected) {
+    workspaceData = await tauri_invoke('first_time_setup', { workspacePath: selected });
+    document.getElementById('welcome').parentNode.removeChild(document.getElementById('welcome'))
+    setupTree(workspaceData);
+    document.getElementById('sidebar').style.visibility = 'visible';
+    document.getElementById('editor-container').style.visibility = 'visible';
+
+  }
+
+  //setup here and return toc
+
 
 }
+
+const deepClone = obj => {
+  if (obj === null) return null;
+  let clone = Object.assign({}, obj);
+  if (clone.parent) {
+    delete clone.parent;
+  }
+  Object.keys(clone).forEach(
+    key =>
+    (clone[key] =
+      typeof obj[key] === 'object' ? deepClone(obj[key]) : obj[key])
+  );
+  if (Array.isArray(obj)) {
+    clone.length = obj.length;
+    return Array.from(clone);
+  }
+  return clone;
+};
+
+function findLeafHelper(node, id) {
+  if (node.id === id) {
+    return node;
+  }
+  else if (node.children.length > 0) {
+    for (let c of node.children) {
+      const r = findLeafHelper(c, id);
+      if (r) {
+        return r;
+      }
+    }
+  }
+  return null;
+}
+
+async function saveDocument(currentLoadedNodeId) {
+  let leaf = null;
+  for (let c of workspaceData.content_table) {
+    leaf = findLeafHelper(c, currentLoadedNodeId);
+
+    if (leaf) {
+      break;
+    }
+  }
+
+  if (leaf) {
+    console.log("debug 1 ===")
+    const djotAST = prosemirror2djot(window.editorView.state.doc.toJSON());
+
+    console.log("djot ast", djotAST);
+    const djotStr = djot.renderDjot(djotAST.compiled);
+    console.log("djot ", djotStr)
+    try {
+      let newFilename = await tauri_invoke('save_file', {
+        id: leaf.id, title: djotAST.title, currentFilename: leaf.filename,
+        content: djotStr
+      });
+      let shouldUpdateContentTable = false;
+      if (leaf.filename !== newFilename) {
+        leaf.filename = newFilename;
+        shouldUpdateContentTable = true;
+      }
+      leaf.lastModifiedAt = Math.floor(Date.now() / 1000);
+      if (leaf.name !== djotAST.title) {
+        leaf.name = djotAST.title;
+        shouldUpdateContentTable = true;
+      }
+      if (shouldUpdateContentTable) {
+        let clonedWorkspace = deepClone(workspaceData);
+        console.log("cloned workspace", clonedWorkspace)
+        await tauri_invoke('update_workspace_content', { newWorkspaceContent: clonedWorkspace });
+        tree.update();
+      }
+      console.log("saved!")
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+}
+
+
+document.getElementById("new-page-button").onclick = async (e) => {
+  if (tree && workspaceData) {
+    try {
+      const cuid = createId();
+      await tauri_invoke('create_new_file', { newFileId: cuid });
+      workspaceData.content_table.push({ name: 'Unnamed Note', id: cuid, children: [], filename: cuid + '.djot' });
+      tree.update();
+      let clonedWorkspace = deepClone(workspaceData);
+      console.log("before saving", clonedWorkspace);
+      await tauri_invoke('update_workspace_content', { newWorkspaceContent: clonedWorkspace });
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+}
+
+(async () => {
+  try {
+    workspaceData = await tauri_invoke('load_config');
+    document.getElementById('welcome').parentNode.removeChild(document.getElementById('welcome'));
+    setupTree(workspaceData);
+    document.getElementById('sidebar').style.visibility = 'visible';
+    document.getElementById('editor-container').style.visibility = 'visible';
+  }
+  catch (err) {
+    console.log('load config error', err);
+    document.getElementById('welcome').style.visibility = 'visible';
+  }
+})();

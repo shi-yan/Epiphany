@@ -39,8 +39,8 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
-      "copyright": "",
+      "category": "Productivity",
+      "copyright": "Shi Yan 2023",
       "deb": {
         "depends": []
       },

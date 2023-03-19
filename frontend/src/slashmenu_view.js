@@ -310,6 +310,6 @@ export default class SlashMenuView {
     }
 
     destroy() {
-
+        document.body.removeChild(this.dom);
     }
 }

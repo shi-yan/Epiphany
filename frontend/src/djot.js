@@ -1,12 +1,13 @@
 //import sample from './sample.json'
 import * as djot from '@djot/djot'
 import slugify from 'slugify'
+import { createId } from '@paralleldrive/cuid2';
 
-
-function prosemirror2djot(doc) {
+export function prosemirror2djot(doc) {
 
     console.log(doc)
     if (doc.type === 'doc') {
+        let title = "Unnamed Note"
 
         let compiled = {
             "tag": "doc",
@@ -47,6 +48,12 @@ function prosemirror2djot(doc) {
                             return null;
                         }
 
+                        if (textContent.text.length > 0) {
+                            title = textContent.text
+                        }
+                        else {
+                            title = textContent.text = "Unnamed Note"
+                        }
                         compiled.references[textContent.text] = {
                             "tag": "reference",
                             "label": textContent.text,
@@ -59,29 +66,30 @@ function prosemirror2djot(doc) {
                     break;
                 case 'tags':
                     let tagStr = []
-                    for (let e = 0; e < block.content.length; ++e) {
-                        const tag = block.content[e];
+                    if (block.content) {
+                        for (let e = 0; e < block.content.length; ++e) {
+                            const tag = block.content[e];
 
-                        if (tag.type !== 'tag') {
+                            if (tag.type !== 'tag') {
+                                return null;
+                            }
 
-                            return null;
+                            if (tag.content.length != 1) {
+                                return null;
+                            }
+
+                            if (tag.content[0].type !== 'text') {
+                                return null;
+                            }
+
+                            tagStr.push(tag.content[0].text);
                         }
-
-                        if (tag.content.length != 1) {
-                            return null;
-                        }
-
-                        if (tag.content[0].type !== 'text') {
-                            return null;
-                        }
-
-                        tagStr.push(tag.content[0].text);
                     }
 
                     const tagsBlock = {
                         "tag": "raw_block",
                         "format": "tags",
-                        "text": tagStr.join(', ')
+                        "text": tagStr.length > 0 ? tagStr.join(', ') : ""
                     };
 
                     compiled.children[0].children.push(tagsBlock);
@@ -185,7 +193,7 @@ function prosemirror2djot(doc) {
                     let codeBlock = {
                         "tag": "code_block",
                         "text": null,
-                        "lang": codeBlock.attrs.lang 
+                        "lang": codeBlock.attrs.lang
                     }
 
                     if (block.content && block.content.length < 2) {
@@ -257,12 +265,12 @@ function prosemirror2djot(doc) {
                     break;
             }
         }
-        return compiled;
+        return { compiled, title };
     }
     return null;
 }
 
-export function djot2prosemirror(doc) {
+export function djot2prosemirror(doc, id, createAt, lastModifiedAt) {
     console.log(doc);
 
     if (doc.tag === 'doc' && doc.children.length > 0 && doc.children[0].tag === 'section' && doc.children[0].children.length > 0) {
@@ -277,6 +285,11 @@ export function djot2prosemirror(doc) {
                                 content.push(
                                     {
                                         type: "title",
+                                        attrs: {
+                                            createdAt: createAt,
+                                            lastModifiedAt: lastModifiedAt,
+                                            id: id
+                                        },
                                         content: [
                                             {
                                                 type: "text",
@@ -330,17 +343,21 @@ export function djot2prosemirror(doc) {
                             };
 
                             for (const t of tags) {
-                                converted.content.push(
-                                    {
-                                        type: "tag",
-                                        content: [
-                                            {
-                                                type: "text",
-                                                text: t.trim()
-                                            }
-                                        ]
-                                    }
-                                )
+                                let tag = t.trim();
+
+                                if (tag.length > 0) {
+                                    converted.content.push(
+                                        {
+                                            type: "tag",
+                                            content: [
+                                                {
+                                                    type: "text",
+                                                    text: tag
+                                                }
+                                            ]
+                                        }
+                                    )
+                                }
                             }
                             content.push(converted);
                         }
@@ -436,6 +453,20 @@ export function djot2prosemirror(doc) {
                                     text: s.text
                                 });
                             }
+                            else if (s.tag === 'smart_punctuation') {
+                                if (converted.content.length > 0) {
+                                    // workaround an issue in the parser 
+                                    const last = converted.content[converted.content.length - 1];
+                                    switch (s.type) {
+                                        case 'right_single_quote':
+                                            last.text += "'";
+                                            break;
+                                        case 'left_single_quote':
+                                            last.text += "'";
+                                            break;
+                                    }
+                                }
+                            }
                             else if (s.tag === 'url') {
                                 const match = s.text.match(/^eq:([a-zA-Z0-9]+)$/);
                                 if (match && match.length > 1) {
@@ -495,6 +526,15 @@ export function djot2prosemirror(doc) {
 
             }
         }
+        //trailing line
+        if (content.length > 0 && content[content.length - 1].type !== 'paragraph') {
+            content.push({
+                type: "paragraph",
+                content: [
+                ]
+            })
+        }
+
         return {
             type: "doc",
             content: content

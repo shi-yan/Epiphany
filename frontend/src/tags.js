@@ -100,6 +100,22 @@ export default class TagsView {
       e.stopImmediatePropagation();
       e.stopPropagation();
     });
+
+
+    this.node.forEach(
+      (subNode, offset, index) => {
+
+        let tag = document.createElement("span");
+        tag.classList.add('limpid-tag-item');
+        tag.innerText = '#' + subNode.textContent;
+        this.dom.insertBefore(tag, this.dom.firstChild);
+
+        if (this.input.placeholder.length > 0) {
+          this.input.placeholder = '';
+          this.input.style.minWidth = '100px';
+        }
+      }
+    )
   }
 
   update(node) {

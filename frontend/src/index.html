@@ -13,7 +13,7 @@
   <div id="main">
     <div id="sidebar" style="visibility: hidden;">
       <div id="tree-container"></div>
-      <div id="bottom-area"><button><span class="icon">f</span> New Page</button></div>
+      <div id="bottom-area"><button id="new-page-button"><span class="icon">f</span> New Page</button></div>
     </div>
     <div id="editor-container" style="visibility: hidden;">
       <div class="editor-area">
@@ -36,7 +36,7 @@
       </div>
     </div>
 
-    <div id="welcome" class="slash-menu" style="position:absolute; border-radius: 20px; top:calc(50% - 200px); left:calc(50% - 250px); width:500px;height:400px">
+    <div id="welcome" class="slash-menu" style="position:absolute; border-radius: 20px; top:calc(50% - 200px); left:calc(50% - 250px); width:500px;height:400px; visibility: hidden;">
       <h1 class="welcome"> Welcome to Epiphany </h1>
       <h4 class="welcome-sub">where new possibilities await</h2>
       <button id="open-folder-dialog" class="folder-button"><svg xmlns="http://www.w3.org/2000/svg" style="width
