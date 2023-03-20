@@ -22,3 +22,15 @@ npm i
 cd ../src-tauri
 cargo tauri dev
 ```
+
+## How to use
+
+For installers, please check the release page. Only Mac is currently supported.
+
+Create a folder first for your notes. (Tauri doesn't support creating new folders within the folder picking dialog, we have to create a folder heforehand.)
+
+In the app, hit backslash `\` to show the menu. To format text, select the range you want to update, the formatter menu will show.
+
+## Note
+
+This project is at its early stage. It contains known bugs and missing features. It's not recommended for daily use yet.
