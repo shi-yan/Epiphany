@@ -2,15 +2,14 @@ use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 extern crate directories;
 use anyhow::{anyhow, Ok, Result};
+use blake3::hash;
 use cuid2;
 use directories::{BaseDirs, ProjectDirs, UserDirs};
 use rust_embed::RustEmbed;
 use serde::{Deserialize, Serialize};
-use tauri::utils::config;
-use std::fs::{metadata, rename, File, create_dir_all};
-use blake3::hash;
 use std::ffi::OsStr;
-
+use std::fs::{create_dir_all, metadata, rename, File};
+use tauri::utils::config;
 
 use slugify::slugify;
 
@@ -61,18 +60,20 @@ impl State {
     }
 
     fn move_and_content_index_asset(&self, src: &str) -> String {
-        let workspace_assets_path_buf = PathBuf::new().join(self.workspace_path.as_str()).join("assets");
+        let workspace_assets_path_buf = PathBuf::new()
+            .join(self.workspace_path.as_str())
+            .join("assets");
 
         let mut hasher = blake3::Hasher::new();
 
         let mut f = File::open(src).expect("no file found");
-        let metadata = metadata(src).expect("unable to read metadata");
         let temp_filename = cuid2::cuid();
         let mut buffer = vec![0; 1024 * 1024 * 1024];
-        println!("{:?}",src);
+        println!("{:?}", src);
         let mut actual_read_bytes = f.read(&mut buffer).expect("buffer overflow");
 
-        let mut f2 = File::create(workspace_assets_path_buf .join(temp_filename.as_str())).expect("unable to read");
+        let mut f2 = File::create(workspace_assets_path_buf.join(temp_filename.as_str()))
+            .expect("unable to read");
         while actual_read_bytes > 0 {
             hasher.update(&buffer[0..actual_read_bytes]);
             // println!("{:?}", &buffer[0..actual_read_bytes]);
@@ -94,9 +95,12 @@ impl State {
                 format!("{}", encoded)
             };
 
-        println!("============= {:?} {:?}", temp_filename, final_filename);
-        rename(workspace_assets_path_buf.join(temp_filename.as_str()), workspace_assets_path_buf.join( final_filename.as_str())).expect("rename");
-        
+        rename(
+            workspace_assets_path_buf.join(temp_filename.as_str()),
+            workspace_assets_path_buf.join(final_filename.as_str()),
+        )
+        .expect("rename");
+
         return final_filename;
     }
 
@@ -106,9 +110,16 @@ impl State {
     }
 
     pub fn to_asset_absolute_path(&mut self, image_filename: &str) -> Result<String> {
-        let workspace_assets_path_buf = PathBuf::new().join(self.workspace_path.as_str()).join("assets");
+        let workspace_assets_path_buf = PathBuf::new()
+            .join(self.workspace_path.as_str())
+            .join("assets");
 
-        Ok(String::from( workspace_assets_path_buf.join(image_filename).to_str().unwrap()))
+        Ok(String::from(
+            workspace_assets_path_buf
+                .join(image_filename)
+                .to_str()
+                .unwrap(),
+        ))
     }
 
     pub fn save_file(
@@ -255,34 +266,41 @@ impl State {
                 mkdir_p(&workspace_notes_path_buf).unwrap();
             }
 
-            let welcome_djot = Assets::get("welcome.djot").unwrap();
-
-            let welcome_file_path = workspace_notes_path_buf.join("welcome_to_epiphany.djot");
-
-            let mut welcome_file = File::create(&welcome_file_path)?;
-            welcome_file.write_all(welcome_djot.data.as_ref())?;
-
-            let id = cuid2::create_id();
-
-            let content_table = WorkspaceContent {
-                workspace_title: "notes".to_string(),
-                absolute_path: String::from(workspace_path.to_str().unwrap()),
-                content_table: vec![ContentItem {
-                    name: "Welcome to Epiphany".to_string(),
-                    filename: "welcome_to_epiphany.djot".to_string(),
-                    id: id,
-                    children: Vec::new(),
-                }],
-            };
             self.workspace_path = String::from(workspace_path.to_str().unwrap());
 
+            let content_table = if !workspace_path.join("epiphany.json").exists() {
+                let welcome_djot = Assets::get("welcome.djot").unwrap();
 
-            let mut content_table_file = File::create(&workspace_path.join("epiphany.json"))?;
-            let serialized_content_table = serde_json::to_vec_pretty(&content_table)?;
-            content_table_file.write_all(&serialized_content_table)?;
+                let welcome_file_path = workspace_notes_path_buf.join("welcome_to_epiphany.djot");
 
-            //self.workspace_content = Some(content_table);
+                let mut welcome_file = File::create(&welcome_file_path)?;
+                welcome_file.write_all(welcome_djot.data.as_ref())?;
+                let id = cuid2::create_id();
 
+                let content_table = WorkspaceContent {
+                    workspace_title: "notes".to_string(),
+                    absolute_path: String::from(workspace_path.to_str().unwrap()),
+                    content_table: vec![ContentItem {
+                        name: "Welcome to Epiphany".to_string(),
+                        filename: "welcome_to_epiphany.djot".to_string(),
+                        id: id,
+                        children: Vec::new(),
+                    }],
+                };
+
+                let mut content_table_file = File::create(&workspace_path.join("epiphany.json"))?;
+                let serialized_content_table = serde_json::to_vec_pretty(&content_table)?;
+                content_table_file.write_all(&serialized_content_table)?;
+
+                content_table
+            } else {
+                let mut content_table_file = File::open(&workspace_path.join("epiphany.json"))?;
+                let mut buf = Vec::<u8>::new();
+                content_table_file.read_to_end(&mut buf)?;
+                let content_table: WorkspaceContent = serde_json::from_slice(&buf)?;
+
+                content_table
+            };
             return Ok(content_table);
         }
 
