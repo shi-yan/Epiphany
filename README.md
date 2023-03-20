@@ -1,6 +1,6 @@
-# Epiphany ([Screen Recording](https://youtu.be/_C0rpXXaETc))
+# Epiphany
 
-<img width="1582" alt="Screenshot 2023-03-19 at 10 33 29 AM" src="https://user-images.githubusercontent.com/326807/226196690-b31e28b9-4043-4695-998d-15961101d66d.png">
+https://user-images.githubusercontent.com/326807/226399629-66cf21b3-0a0c-4004-9a8b-537eb0e8be3a.mp4
 
 Epiphany is an open-source note-taking app that draws inspiration from Notion. I created Epiphany on a whim because I wanted a platform to document my AI learning journey. After researching various options such as Medium, dev.to, and Substack, I found that they were not suitable for technical writing. Additionally, blogging platforms come and go, and I didn't want to risk losing my content due to platform shutdowns or migrations. With Epiphany, I have complete control over my content, and I don't have to worry about losing it. I can easily export my data in an open format (djot [https://djot.net/](https://djot.net/)) and use it in other applications. 
 
