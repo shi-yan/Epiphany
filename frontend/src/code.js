@@ -2,8 +2,6 @@ import {
     EditorView as CodeMirror, keymap as cmKeymap, drawSelection
 } from "@codemirror/view"
 import { Compartment } from "@codemirror/state"
-
-import { javascript } from "@codemirror/lang-javascript"
 import { defaultKeymap } from "@codemirror/commands"
 import { syntaxHighlighting, defaultHighlightStyle } from "@codemirror/language"
 
@@ -11,12 +9,7 @@ import { exitCode } from "prosemirror-commands"
 import { undo, redo } from "prosemirror-history"
 import textSchema from "./textschema"
 import { TextSelection, Selection, NodeSelection } from "prosemirror-state"
-import { solarizedDark } from 'cm6-theme-solarized-dark'
 import { gruvboxDark } from 'cm6-theme-gruvbox-dark'
-//const module = await import('@codemirror/lang-css')
-
-//console.log("lang-css module", module);
-
 
 export default class CodeBlockView {
     constructor(node, view, getPos) {

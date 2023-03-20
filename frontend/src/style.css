@@ -129,6 +129,7 @@ input:focus {
   height: 18px;
   width: 18px;
   padding: 0px;
+  position: fixed;
 }
 
 .editor-top-button:hover {
