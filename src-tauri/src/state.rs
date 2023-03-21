@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 use std::ffi::OsStr;
 use std::fs::{create_dir_all, metadata, rename, File};
 use tauri::utils::config;
+use tauri::api::http::{ClientBuilder, HttpRequestBuilder, ResponseType};
 
 use slugify::slugify;
 
@@ -58,6 +59,18 @@ impl State {
             workspace_content: None,
         }
     }
+
+    async fn fetch_tweet() {
+        let client = ClientBuilder::new().build().unwrap();
+        let response = client.send(
+          HttpRequestBuilder::new("GET", "https://www.rust-lang.org")
+            .unwrap()
+            .response_type(ResponseType::Binary)
+        ).await;
+        if let std::result::Result:: Ok(response) = response {
+          let bytes = response.bytes();
+        }
+      }
 
     fn move_and_content_index_asset(&self, src: &str) -> String {
         let workspace_assets_path_buf = PathBuf::new()

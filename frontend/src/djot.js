@@ -120,7 +120,7 @@ export function prosemirror2djot(doc) {
                                 case 'equation_ref':
                                     paraBlock.children.push({
                                         "tag": "url",
-                                        "text": "eq:re"
+                                        "text": "eq:"+inlineContent.attrs.id
                                     })
                                     break;
                                 default:
@@ -445,9 +445,9 @@ export function djot2prosemirror(doc, id, createAt, lastModifiedAt) {
 
                 case 'para': {
                     if (b.children.length == 1 && b.children[0].tag === 'display_math') {
-                        //equation
                         const converted = {
                             type: "equation",
+                            attrs:{id:b.children[0].attributes.id},
                             content: [
                                 {
                                     type: "text",
@@ -487,7 +487,10 @@ export function djot2prosemirror(doc, id, createAt, lastModifiedAt) {
                             }
                             else if (s.tag === 'url') {
                                 const match = s.text.match(/^eq:([a-zA-Z0-9]+)$/);
+
                                 if (match && match.length > 1) {
+                                    console.log("matched equation reference", match)
+
                                     const convertedEquationRef = {
                                         type: "equation_ref",
                                         attrs: {

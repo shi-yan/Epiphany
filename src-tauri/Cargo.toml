@@ -16,7 +16,7 @@ tauri-build = { version = "1.2", features = [] }
 serde_json = "1.0"
 cocoa = "0.24"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.2", features = ["devtools", "dialog-all", "fs-read-dir", "fs-read-file", "http-multipart", "protocol-asset", "shell-open", "window-close", "window-hide", "window-maximize", "window-minimize", "window-show", "window-start-dragging", "window-unmaximize", "window-unminimize"] }
+tauri = { version = "1.2", features = ["devtools", "dialog-all", "fs-read-dir", "fs-read-file", "http-api", "http-multipart", "protocol-asset", "shell-open", "window-close", "window-hide", "window-maximize", "window-minimize", "window-show", "window-start-dragging", "window-unmaximize", "window-unminimize"] }
 directories = "4.0"
 anyhow = "1.0"
 rust-embed = "6.6"

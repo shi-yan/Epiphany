@@ -460,7 +460,7 @@ function reloadDoc(newDoc) {
   }, newDoc);
   window.editorView.updateState(state);
 
-  setTimeout(() => {updateContent();}, 3000);
+  setTimeout(() => {updateContent(); equationManager.recount();}, 3000);
 
 }
 
@@ -532,12 +532,9 @@ async function saveDocument(currentLoadedNodeId) {
   }
 
   if (leaf) {
-    console.log("debug 1 ===")
     const djotAST = prosemirror2djot(window.editorView.state.doc.toJSON());
-
-    console.log("djot ast", djotAST);
     const djotStr = djot.renderDjot(djotAST.compiled);
-    console.log("djot ", djotStr)
+
     try {
       let newFilename = await tauri_invoke('save_file', {
         id: leaf.id, title: djotAST.title, currentFilename: leaf.filename,

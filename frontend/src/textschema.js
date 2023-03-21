@@ -72,7 +72,7 @@ let nodes = {
   },
   equation: {
     attrs: {
-      id: { default: -1 }
+      id: { default: "eq" }
     },
     group: "block",
     content: "text*",

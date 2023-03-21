@@ -3,12 +3,10 @@ import { Transform, StepMap } from "prosemirror-transform"
 
 export default class EquationRefView {
     constructor(node, view, getPos, equationManager) {
-        // We'll need these later
         this.node = node
         this.outerView = view
         this.getPos = getPos
        
-        // The node's representation in the editor (empty, for now)
         this.dom = document.createElement("span");
         this.dom.className = "limpid-equation-ref";
         let key = this.node.attrs.id;
