@@ -42,6 +42,7 @@ jobs:
         with:
           releaseId: ${{ inputs.release_id }}
           args: --target aarch64-apple-darwin
+          overwrite: true
 
   publish-release:
     permissions:
