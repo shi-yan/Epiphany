@@ -9,12 +9,12 @@ let nodes = {
   title: {
     attrs: {
       createdAt: { default: Math.floor(Date.now() / 1000) },
-      lastModifiedAt: { default: Math.floor(Date.now() / 1000) },
+      modifiedAt: { default: Math.floor(Date.now() / 1000) },
       id: { default: createId() }
     },
     content: "text*",
     toDOM() { return ["h1", 0] },
-    parseDOM: [{ tag: "h1", getAttrs(dom) { return { id: dom.id, createdAt: dom.createdAt, lastModifiedAt: dom.lastModifiedAt } } }]
+    parseDOM: [{ tag: "h1", getAttrs(dom) { return { id: dom.id, createdAt: dom.createdAt, modifiedAt: dom.modifiedAt } } }]
   },
   paragraph: {
     group: "block",

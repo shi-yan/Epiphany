@@ -3,7 +3,9 @@ import stringPlugin from 'vite-plugin-string';
 // vite.config.js
 export default defineConfig({
     build: {
-        outDir: '../../src'
+        outDir: '../../src',
+        minify: false,
+        cssMinify: false
     },
     plugins: [
         stringPlugin({

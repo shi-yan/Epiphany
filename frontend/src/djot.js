@@ -3,7 +3,7 @@ import * as djot from '@djot/djot'
 import slugify from 'slugify'
 import { createId } from '@paralleldrive/cuid2';
 
-export function prosemirror2djot(doc) {
+export function prosemirror2djot(doc, createdAt, modifiedAt) {
 
     console.log(doc)
     if (doc.type === 'doc') {
@@ -35,7 +35,11 @@ export function prosemirror2djot(doc) {
                     let titleBlock = {
                         "tag": "heading",
                         "level": 1,
-                        "children": []
+                        "children": [],
+                        "attributes": {
+                            "createdAt": createdAt + '',
+                            "modifiedAt": modifiedAt + '',
+                        }
                     };
 
                     if (block.content.length > 1) {
@@ -120,7 +124,7 @@ export function prosemirror2djot(doc) {
                                 case 'equation_ref':
                                     paraBlock.children.push({
                                         "tag": "url",
-                                        "text": "eq:"+inlineContent.attrs.id
+                                        "text": "eq:" + inlineContent.attrs.id
                                     })
                                     break;
                                 default:
@@ -284,10 +288,23 @@ function flattenDoc(doc) {
     return blocks;
 }
 
-export function djot2prosemirror(doc, id, createAt, lastModifiedAt) {
-    console.log(doc);
+export function djot2prosemirror(doc, id, data) {
+    console.log(JSON.stringify(doc));
 
-    if (doc.tag === 'doc' && doc.children.length > 0 && doc.children[0].tag === 'section' && doc.children[0].children.length > 0) {
+    if (doc.tag === 'doc' && doc.children.length > 0
+        && doc.children[0].tag === 'section' && doc.children[0].children.length > 0) {
+
+        if (doc.children[0].attributes) {
+            const attributes = doc.children[0].attributes;
+
+            if (attributes.createdAt) {
+                data.created_at = parseInt(attributes.createdAt)
+            }
+
+            if (attributes.modifiedAt) {
+                data.modified_at = parseInt(attributes.modifiedAt)
+            }
+        }
 
         const blocks = flattenDoc(doc.children[0]);
 
@@ -302,8 +319,8 @@ export function djot2prosemirror(doc, id, createAt, lastModifiedAt) {
                                     {
                                         type: "title",
                                         attrs: {
-                                            createdAt: createAt,
-                                            lastModifiedAt: lastModifiedAt,
+                                            createdAt: data.created_at,
+                                            modifiedAt: data.modified_at,
                                             id: id
                                         },
                                         content: [
@@ -447,7 +464,7 @@ export function djot2prosemirror(doc, id, createAt, lastModifiedAt) {
                     if (b.children.length == 1 && b.children[0].tag === 'display_math') {
                         const converted = {
                             type: "equation",
-                            attrs:{id:b.children[0].attributes.id},
+                            attrs: { id: b.children[0].attributes.id },
                             content: [
                                 {
                                     type: "text",

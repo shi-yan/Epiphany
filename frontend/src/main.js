@@ -133,10 +133,7 @@ const findHeading = findParentNode(
   (node) => node.type.name === "heading"
 );
 
-
-const before = Math.floor(Date.now() / 1000) - 3600 * 34;
-const updateTimer = new UpdateTimer(document.getElementById('editor-top-doc-time'), before);
-
+let updateTimer = null;
 let docUpdateDelay = null;
 
 window.editorView = new EditorView(editorElm, {
@@ -199,8 +196,10 @@ window.editorView = new EditorView(editorElm, {
 
       docUpdateDelay = setTimeout(() => {
         docUpdateDelay = null;
-        const now = Math.floor(Date.now() / 1000);
-        updateTimer.documentUpdated(now);
+        if (updateTimer) {
+          const now = Math.floor(Date.now() / 1000);
+          updateTimer.documentUpdated(now);
+        }
 
         saveDocument(currentLoadedNodeId);
       }, 3000);
@@ -385,7 +384,7 @@ document.getElementById('fold-menu-button').onclick = (e) => {
 }
 
 
-async function  setupTree(workspaceData) {
+async function setupTree(workspaceData) {
   tree = new Tree({ children: workspaceData.content_table }, { parent: document.getElementById('tree-container') });
 
   if (workspaceData.content_table.length > 0) {
@@ -394,7 +393,7 @@ async function  setupTree(workspaceData) {
 
     console.log("load data", noteDjot);
     const parsedDjot = djot.parse(noteDjot, { sourcePositions: true });
-    const prosemirrorDoc = djot2prosemirror(parsedDjot, leaf.data.id, leaf.data.createAt, leaf.data.lastModifiedAt);
+    const prosemirrorDoc = djot2prosemirror(parsedDjot, leaf.data.id, leaf.data);
 
     console.log("prosemirrorDoc", prosemirrorDoc);
     reloadDoc({
@@ -404,6 +403,7 @@ async function  setupTree(workspaceData) {
         type: "text"
       }
     });
+    updateTimer = new UpdateTimer(document.getElementById('editor-top-doc-time'), leaf.data.created_at);
 
     currentLoadedNodeId = leaf.data.id;
 
@@ -424,7 +424,7 @@ async function  setupTree(workspaceData) {
 
       console.log("load data", noteDjot);
       const parsedDjot = djot.parse(noteDjot, { sourcePositions: true });
-      const prosemirrorDoc = djot2prosemirror(parsedDjot, leaf.data.id, leaf.data.createAt, leaf.data.lastModifiedAt);
+      const prosemirrorDoc = djot2prosemirror(parsedDjot, leaf.data.id, leaf.data);
 
       console.log("prosemirrorDoc", prosemirrorDoc);
       reloadDoc({
@@ -459,9 +459,7 @@ function reloadDoc(newDoc) {
     ]
   }, newDoc);
   window.editorView.updateState(state);
-
-  setTimeout(() => {updateContent(); equationManager.recount();}, 3000);
-
+  setTimeout(() => { updateContent(); equationManager.recount(); }, 3000);
 }
 
 document.getElementById("open-folder-dialog").onclick = async (e) => {
@@ -532,7 +530,7 @@ async function saveDocument(currentLoadedNodeId) {
   }
 
   if (leaf) {
-    const djotAST = prosemirror2djot(window.editorView.state.doc.toJSON());
+    const djotAST = prosemirror2djot(window.editorView.state.doc.toJSON(), Math.floor(Date.now() / 1000), Math.floor(Date.now() / 1000));
     const djotStr = djot.renderDjot(djotAST.compiled);
 
     try {
@@ -540,22 +538,18 @@ async function saveDocument(currentLoadedNodeId) {
         id: leaf.id, title: djotAST.title, currentFilename: leaf.filename,
         content: djotStr
       });
-      let shouldUpdateContentTable = false;
       if (leaf.filename !== newFilename) {
         leaf.filename = newFilename;
-        shouldUpdateContentTable = true;
       }
-      leaf.lastModifiedAt = Math.floor(Date.now() / 1000);
+      leaf.modified_at = Math.floor(Date.now() / 1000);
       if (leaf.name !== djotAST.title) {
         leaf.name = djotAST.title;
-        shouldUpdateContentTable = true;
       }
-      if (shouldUpdateContentTable) {
-        let clonedWorkspace = deepClone(workspaceData);
-        console.log("cloned workspace", clonedWorkspace)
-        await tauri_invoke('update_workspace_content', { newWorkspaceContent: clonedWorkspace });
-        tree.update();
-      }
+      let clonedWorkspace = deepClone(workspaceData);
+      console.log("cloned workspace", clonedWorkspace)
+      await tauri_invoke('update_workspace_content', { newWorkspaceContent: clonedWorkspace });
+      tree.update();
+
       console.log("saved!")
     }
     catch (err) {

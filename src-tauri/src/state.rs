@@ -11,6 +11,7 @@ use std::ffi::OsStr;
 use std::fs::{create_dir_all, metadata, rename, File};
 use tauri::utils::config;
 use tauri::api::http::{ClientBuilder, HttpRequestBuilder, ResponseType};
+use std::time::SystemTime;
 
 use slugify::slugify;
 
@@ -34,13 +35,15 @@ pub struct ContentItem {
     filename: String,
     id: String,
     children: Vec<ContentItem>,
+    created_at: Option<u64>,
+    modified_at: Option<u64>
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct WorkspaceContent {
     workspace_title: String,
     absolute_path: String,
-    content_table: Vec<ContentItem>,
+    content_table: Vec<ContentItem>
 }
 
 fn mkdir_p<P: AsRef<Path>>(path: &P) -> Result<()> {
@@ -290,6 +293,9 @@ impl State {
                 welcome_file.write_all(welcome_djot.data.as_ref())?;
                 let id = cuid2::create_id();
 
+                let now = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap();
+
+
                 let content_table = WorkspaceContent {
                     workspace_title: "notes".to_string(),
                     absolute_path: String::from(workspace_path.to_str().unwrap()),
@@ -298,6 +304,8 @@ impl State {
                         filename: "welcome_to_epiphany.djot".to_string(),
                         id: id,
                         children: Vec::new(),
+                        created_at: Some(now.as_secs()),
+                        modified_at: Some(now.as_secs())
                     }],
                 };
 
