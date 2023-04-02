@@ -94,6 +94,7 @@ input:focus {
   overflow-y: auto;
   overflow-x: hidden;
   justify-content: space-between;
+  container-type: inline-size;
 }
 
 #editor-top {
@@ -914,6 +915,12 @@ input:focus {
   border-left-color: #9fb1a3;
   display: flex;
   flex-direction: column;
+}
+
+@container (max-width : 880px) {
+  .toc-container {
+    display: none;
+  }
 }
 
 #toc-container-list ul {

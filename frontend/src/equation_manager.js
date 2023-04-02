@@ -15,8 +15,8 @@ export default class EquationManager {
     }
 
     getId() {
-        const id= `eq${this.counter.toString(16)}`;
-        this.counter ++;
+        const id = `eq${this.counter.toString(16)}`;
+        this.counter++;
         return id;
     }
 
