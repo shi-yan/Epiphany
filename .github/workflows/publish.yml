@@ -36,11 +36,13 @@ jobs:
           npm i
           npm run build
           cd .. # change this to npm or pnpm depending on which one you use
-      - uses: tauri-apps/tauri-action@v0
+      - uses: tauri-apps/tauri-action@v0.3.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           releaseId: ${{ inputs.release_id }}
+        args:
+          --target aarch64-apple-darwin
 
   publish-release:
     permissions:
