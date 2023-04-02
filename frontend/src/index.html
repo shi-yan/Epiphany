@@ -10,10 +10,13 @@
 
 <body>
   <div id="main">
-    <div id="sidebar" style="visibility: hidden;">
-      <div id="tree-container"></div>
-      <div id="bottom-area"><button id="new-page-button"><span class="icon">f</span> New Page</button></div>
+    <div id="sidebar-container">
+      <div  id="sidebar" style="visibility: hidden;">
+        <div id="tree-container"></div>
+        <div id="bottom-area"><button id="new-page-button"><span class="icon">f</span> New Page</button></div>
+      </div>
     </div>
+    <div id="resize-bar"></div>
     <div id="editor-container" style="visibility: hidden;">
       <div class="editor-area">
         <div id="editor-top">
@@ -35,11 +38,16 @@
       </div>
     </div>
 
-    <div id="welcome" class="slash-menu" style="position:absolute; border-radius: 20px; top:calc(50% - 200px); left:calc(50% - 250px); width:500px;height:400px; visibility: hidden;">
+    <div id="welcome" class="slash-menu"
+      style="position:absolute; border-radius: 20px; top:calc(50% - 200px); left:calc(50% - 250px); width:500px;height:400px; visibility: hidden;">
       <h1 class="welcome"> Welcome to Epiphany </h1>
       <h4 class="welcome-sub">where new possibilities await</h2>
-      <button id="open-folder-dialog" class="folder-button"><svg xmlns="http://www.w3.org/2000/svg" style="width
-      :24px;height:24px;margin-right:30px" viewBox="0 0 24 24"><title>folder-open-outline</title><path fill="#3b5a4a"  d="M6.1,10L4,18V8H21A2,2 0 0,0 19,6H12L10,4H4A2,2 0 0,0 2,6V18A2,2 0 0,0 4,20H19C19.9,20 20.7,19.4 20.9,18.5L23.2,10H6.1M19,18H6L7.6,12H20.6L19,18Z" /></svg>Select a folder for your notes.</button>
+        <button id="open-folder-dialog" class="folder-button"><svg xmlns="http://www.w3.org/2000/svg" style="width
+      :24px;height:24px;margin-right:30px" viewBox="0 0 24 24">
+            <title>folder-open-outline</title>
+            <path fill="#3b5a4a"
+              d="M6.1,10L4,18V8H21A2,2 0 0,0 19,6H12L10,4H4A2,2 0 0,0 2,6V18A2,2 0 0,0 4,20H19C19.9,20 20.7,19.4 20.9,18.5L23.2,10H6.1M19,18H6L7.6,12H20.6L19,18Z" />
+          </svg>Select a folder for your notes.</button>
     </div>
   </div>
   <script type="module" src="/main.js"></script>

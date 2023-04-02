@@ -469,20 +469,12 @@ input:focus {
   flex-direction: row;
   flex-grow: 1;
   padding: 4px;
-  height: calc(100% - 8px);
+  
   position: relative;
   background-image: url('/bg0.png');
   background-size: 400px 400px;
   background-repeat: repeat;
-}
-
-#sidebar {
-  padding-top: 45px;
-  width: 240px;
-  /*background-color: #4d625d;*/
-  display: flex;
-  flex-direction: column;
-  position: relative;
+  height: calc(100% - 8px);
 }
 
 #bottom-area {
@@ -498,7 +490,6 @@ input:focus {
   white-space: nowrap;
   overflow-x: hidden;
   cursor: pointer;
-  padding: 8px;
   color: #2a3737;
 
   background-color: #b7c3bb;
@@ -1101,3 +1092,28 @@ input:focus {
   font-style:italic;
 }
 
+#resize-bar {
+  width:4px;
+  background-color: brown;
+  cursor:ew-resize;
+  background-color: transparent;
+}
+
+#sidebar-container {
+  height:100%;
+  position:relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 240px;
+  overflow: hidden;
+}
+
+#sidebar {
+  margin-top: 45px;
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: calc(100% - 45px);
+}

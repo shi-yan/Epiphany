@@ -370,16 +370,24 @@ const data = {
 
 document.getElementById('fold-menu-button').onclick = (e) => {
   if (!menuFolded) {
-    document.getElementById('sidebar').style.display = 'none';
+    document.getElementById('sidebar-container').visibility = 'hidden';
     document.getElementById('fold-menu-button').innerText = 'g';
+    document.getElementById('fold-menu-button').style.transition = 'width 0.5s';
+    document.getElementById('fold-menu-button').style.marginLeft = '66px';
     menuFolded = true;
+    document.getElementById('sidebar-container').style.transition = 'width 0.5s';
+    document.getElementById('sidebar-container').style.width = '0px';
     document.getElementById('editor-top-padding').style.display = 'inline-block';
   }
   else {
-    document.getElementById('sidebar').style.display = 'flex';
+    document.getElementById('sidebar-container').visibility = 'visible';
     document.getElementById('fold-menu-button').innerText = 'h';
     menuFolded = false;
     document.getElementById('editor-top-padding').style.display = 'none';
+    document.getElementById('sidebar-container').style.transition = 'width 0.5s';
+    document.getElementById('sidebar-container').style.width = '240px';
+    document.getElementById('fold-menu-button').style.transition = 'width 0.5s';
+    document.getElementById('fold-menu-button').style.marginLeft = '6px';
   }
 }
 
@@ -474,16 +482,10 @@ document.getElementById("open-folder-dialog").onclick = async (e) => {
   if (selected) {
     workspaceData = await tauri_invoke('first_time_setup', { workspacePath: selected });
     document.getElementById('welcome').parentNode.removeChild(document.getElementById('welcome'))
-    console.log("==== first time", workspaceData)
     setupTree(workspaceData);
     document.getElementById('sidebar').style.visibility = 'visible';
     document.getElementById('editor-container').style.visibility = 'visible';
-
   }
-
-  //setup here and return toc
-
-
 }
 
 const deepClone = obj => {
@@ -589,3 +591,78 @@ document.getElementById("new-page-button").onclick = async (e) => {
     document.getElementById('welcome').style.visibility = 'visible';
   }
 })();
+
+const resizeBar = document.getElementById('resize-bar');
+let resizeBarMouseX = 0;
+
+let resizeBarOnMouseMove = function (e) {
+  e.stopPropagation();
+  e.preventDefault();
+  const dx = e.screenX - resizeBarMouseX;
+  const panelLeft = document.getElementById('sidebar-container').getBoundingClientRect().width;
+  let left = panelLeft + dx;
+  if (left > 240) {
+    left = 240;
+  }
+
+  document.getElementById('sidebar-container').style.width = `${left}px`;
+
+  if (left <= 60) {
+    document.getElementById('fold-menu-button').style.marginLeft = `${60 - left + 6}px`;
+  }
+  else {
+    document.getElementById('fold-menu-button').style.marginLeft = `${6}px`;
+  }
+  resizeBarMouseX = e.screenX;
+};
+
+let resizeBarOnMouseUp = function (event) {
+  event.stopPropagation();
+  event.preventDefault();
+  document.removeEventListener("mousemove", resizeBarOnMouseMove);
+  document.removeEventListener("mouseup", resizeBarOnMouseUp);
+
+  const panelLeft = document.getElementById('sidebar-container').getBoundingClientRect().width;
+  if (panelLeft < 80) {
+
+
+
+    document.getElementById('sidebar-container').visibility = 'hidden';
+    document.getElementById('sidebar-container').style.transition = 'width 0.5s';
+    document.getElementById('sidebar-container').style.width = '0px';
+
+    document.getElementById('fold-menu-button').innerText = 'g';
+    document.getElementById('fold-menu-button').style.transition = 'width 0.5s';
+    document.getElementById('fold-menu-button').style.marginLeft = `${60 + 6}px`;
+
+    menuFolded = true;
+    document.getElementById('editor-top-padding').style.display = 'inline-block';
+  }
+  else if (panelLeft > 160) {
+    document.getElementById('sidebar-container').visibility = 'visible';
+    document.getElementById('fold-menu-button').innerText = 'h';
+    document.getElementById('fold-menu-button').style.transition = 'width 0.5s';
+    document.getElementById('fold-menu-button').style.marginLeft = `${6}px`;
+
+    menuFolded = false;
+    document.getElementById('editor-top-padding').style.display = 'none';
+    document.getElementById('sidebar-container').style.transition = 'width 0.5s';
+    document.getElementById('sidebar-container').style.width = '240px';
+  }
+
+};
+
+resizeBar.onmousedown = (e) => {
+  resizeBarMouseX = e.screenX;
+  document.addEventListener("mousemove", resizeBarOnMouseMove);
+  document.addEventListener("mouseup", resizeBarOnMouseUp);
+  e.stopPropagation();
+  e.preventDefault();
+  document.getElementById('sidebar-container').style.display = 'flex';
+  document.getElementById('sidebar-container').style.transition = null;
+  document.getElementById('fold-menu-button').style.transition = null;
+
+
+
+}
+
