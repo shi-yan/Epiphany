@@ -1,0 +1,226 @@
+@import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Open+Sans:wght@300&family=Phudu&family=Pragati+Narrow&family=Quicksand:wght@300&family=Roboto:wght@300&family=Sono&family=Source+Code+Pro&display=swap');
+
+:root {
+    --theme: rgb(29, 30, 32);
+    --entry: rgb(46, 46, 51);
+    --primary: rgb(218, 218, 219);
+    --secondary: rgb(155, 156, 157);
+    --tertiary: rgb(65, 66, 68);
+    --content: rgb(196, 196, 197);
+    --hljs-bg: rgb(46, 46, 51);
+    --code-bg: rgb(55, 56, 62);
+    --border: rgb(51, 51, 51);
+}
+
+html {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--theme);
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.content {
+    flex-grow: 1;
+    min-height: 100%;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.title {
+    font-family: 'Kaushan Script', cursive;
+    background-color: var(--theme);
+    width: 100%;
+    color: var(--primary);
+    margin: 0;
+    padding: 12px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.foot-note {
+    background-color: var(--theme);
+    min-height: 50px;
+    flex-shrink: 0;
+    color: var(--secondary);
+    font-family: 'Roboto';
+    width: 100%;
+    text-align: center;
+}
+
+.recent-card {
+    margin-top: 100px;
+    margin-bottom: 100px;
+    max-width: 720px;
+    color: var(--primary);
+    cursor: pointer;
+}
+
+.recent-article-title {
+    font-family: 'Pragati Narrow';
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.recent-article-summary {
+    font-family: 'Open Sans';
+    font-size: 18px;
+    word-break: break-word;
+    color: var(--secondary);
+
+}
+
+.recent-article-date {
+    font-family: 'Phudu';
+    font-size: 12px;
+    color: var(--secondary);
+}
+
+.previous-card {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    max-width: 720px;
+    color: var(--primary);
+    cursor: pointer;
+    background-color: var(--entry);
+    border-radius: 8px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.previous-article-title {
+    font-family: 'Pragati Narrow';
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.previous-article-summary {
+    font-family: 'Open Sans';
+    font-size: 16px;
+    word-break: break-word;
+    color: var(--secondary);
+}
+
+.previous-article-date {
+    font-family: 'Phudu';
+    font-size: 11px;
+    color: var(--secondary);
+
+}
+
+a:link {
+    color: var(--secondary);
+    text-decoration: none;
+}
+
+/* visited link */
+a:visited {
+    color: var(--secondary);
+    text-decoration: none;
+}
+
+/* mouse over link */
+a:hover {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+/* selected link */
+a:active {
+    color: var(--secondary);
+    text-decoration: none;
+}
+
+
+.article-content {
+    font-family: 'Open Sans';
+    font-size: 18px;
+    word-break: break-word;
+    color: var(--secondary);
+    margin-top: 100px;
+    margin-bottom: 100px;
+    max-width: 720px;
+    color: var(--primary);
+    display: flex;
+    flex-direction: column;
+    margin-right: 0px;
+    margin-left: auto;
+}
+
+.article-title {
+    font-family: 'Pragati Narrow';
+    font-size: 56px;
+    font-weight: bold;
+}
+
+.article-date {
+    font-family: 'Phudu';
+    font-size: 12px;
+    color: var(--secondary);
+
+}
+
+.article-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.article-left {
+    width: 61.8%;
+}
+
+.article-right {
+    width: 38%;
+    left: 61.8%;
+    position: fixed;
+}
+
+.toc {
+    font-family: 'Pragati Narrow';
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--secondary);
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    display: inline-block;
+    left: 32%;
+    top: 80px;
+}
+
+.article-nav {
+    display: flex;
+    flex-direction: row;
+}
+
+.article-nav a {
+    color: var(--secondary);
+    font-size: 14px;
+    cursor: pointer;
+    margin: 10px;
+    flex-grow: 1;
+    display: block;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.article-nav a:hover {
+    background-color: var(--entry);
+}
+
+.article-nav span {
+    color: var(--tertiary);
+    font-family: 'Pragati Narrow';
+    font-weight: bold;
+    font-size: 18px;
+}
+

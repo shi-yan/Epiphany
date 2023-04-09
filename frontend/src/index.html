@@ -13,15 +13,20 @@
     <div id="sidebar-container">
       <div  id="sidebar" style="visibility: hidden;">
         <div id="tree-container"></div>
-        <div id="bottom-area"><button id="new-page-button"><span class="icon">f</span> New Page</button></div>
+        <div id="bottom-area"><button id="new-page-button"><i class="icon icon-plus-circled">&#x32;</i> New Page</button></div>
       </div>
     </div>
     <div id="resize-bar"></div>
     <div id="editor-container" style="visibility: hidden;">
+      <div class="editor-sidebar">
+        <div style="flex-grow: 1; flex-shrink: 1;"></div>
+        <button id="fold-menu-button" class="editor-top-button"><i class="icon icon-left-open-1">&#x31;</i></button>
+        <div style="flex-grow: 1; flex-shrink: 1;"></div>
+        <button class="editor-top-button">h</button>
+      </div>
       <div class="editor-area">
         <div id="editor-top">
           <div id="editor-top-padding"></div>
-          <button id="fold-menu-button" class="editor-top-button">h</button>
           <div id="editor-top-space">
             <div id="editor-top-doc-time"></div>
           </div>
