@@ -371,9 +371,8 @@ const data = {
 document.getElementById('fold-menu-button').onclick = (e) => {
   if (!menuFolded) {
     document.getElementById('sidebar-container').visibility = 'hidden';
-    document.getElementById('fold-menu-button').innerText = 'g';
+    document.getElementById('fold-menu-button').innerHTML = '<i class="icon icon-left-open-1">&#x31;</i>';
     document.getElementById('fold-menu-button').style.transition = 'width 0.5s';
-    document.getElementById('fold-menu-button').style.marginLeft = '66px';
     menuFolded = true;
     document.getElementById('sidebar-container').style.transition = 'width 0.5s';
     document.getElementById('sidebar-container').style.width = '0px';
@@ -381,13 +380,13 @@ document.getElementById('fold-menu-button').onclick = (e) => {
   }
   else {
     document.getElementById('sidebar-container').visibility = 'visible';
-    document.getElementById('fold-menu-button').innerText = 'h';
+    document.getElementById('fold-menu-button').innerHTML = '<i class="icon icon-right-open">&#x31;</i>';
+
     menuFolded = false;
     document.getElementById('editor-top-padding').style.display = 'none';
     document.getElementById('sidebar-container').style.transition = 'width 0.5s';
-    document.getElementById('sidebar-container').style.width = '240px';
+    document.getElementById('sidebar-container').style.width = '66px';
     document.getElementById('fold-menu-button').style.transition = 'width 0.5s';
-    document.getElementById('fold-menu-button').style.marginLeft = '6px';
   }
 }
 
@@ -631,18 +630,17 @@ let resizeBarOnMouseUp = function (event) {
     document.getElementById('sidebar-container').style.transition = 'width 0.5s';
     document.getElementById('sidebar-container').style.width = '0px';
 
-    document.getElementById('fold-menu-button').innerText = 'g';
+    document.getElementById('fold-menu-button').innerHTML = '<i class="icon icon-right-open">&#x31;</i>';
     document.getElementById('fold-menu-button').style.transition = 'width 0.5s';
-    document.getElementById('fold-menu-button').style.marginLeft = `${60 + 6}px`;
+    
 
     menuFolded = true;
     document.getElementById('editor-top-padding').style.display = 'inline-block';
   }
   else if (panelLeft > 160) {
     document.getElementById('sidebar-container').visibility = 'visible';
-    document.getElementById('fold-menu-button').innerText = 'h';
+    document.getElementById('fold-menu-button').innerHTML = '<i class="icon icon-left-open-1">&#x31;</i>';
     document.getElementById('fold-menu-button').style.transition = 'width 0.5s';
-    document.getElementById('fold-menu-button').style.marginLeft = `${6}px`;
 
     menuFolded = false;
     document.getElementById('editor-top-padding').style.display = 'none';

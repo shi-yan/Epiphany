@@ -177,7 +177,7 @@ export class Tree extends Events {
             className: `${this.prefixClassName}-expand`
         })
         leaf.name = utils.html({ parent: leaf.content, html: data.name, className: `${this.prefixClassName}-name` })
-        leaf.controls = utils.html({parent: leaf.content, html: '<button>f</button><button>e</button>', className: `${this.prefixClassName}-control`});
+        leaf.controls = utils.html({parent: leaf.content, html: '<button><i class="icon icon-plus">&#x34;</i></button><button><i class="icon icon-menu">&#x33;</i></button>', className: `${this.prefixClassName}-control`});
         leaf.content.addEventListener('mousedown', e => this._input._down(e))
         leaf.content.addEventListener('touchstart', e => this._input._down(e))
 

@@ -62,6 +62,8 @@ body {
   background-color: #4d625d;
   position: relative;
   overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .limpid-tag-item {
@@ -159,7 +161,7 @@ input:focus {
   text-align: right;
 }
 
-.editor-top-button {
+.editor-sidebar-button {
   color: #627369;
   border: none;
   background-color: transparent;
@@ -171,7 +173,7 @@ input:focus {
   padding: 0px;
 }
 
-.editor-top-button:hover {
+.editor-sidebar-button:hover {
   color: #3e8eb7;
 }
 
@@ -648,7 +650,6 @@ input:focus {
 }
 
 .yy-tree-control button {
-  font-family: icon;
   font-size: medium;
   background-color: transparent;
   border: none;
