@@ -801,7 +801,7 @@ input:focus {
   border-radius: 8px;
   box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
   box-sizing: border-box;
-  color: #3b5a4a;
+  color: #337287;
   display: inline-block;
   font-family: "Amazon Ember", sans-serif;
   font-size: 13px;
@@ -989,7 +989,8 @@ input:focus {
   border-radius: .25rem;
   box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
   box-sizing: border-box;
-  color: #337287;
+  /*color: #337287;*/
+  color: #233231;
   cursor: pointer;
   display: inline-flex;
   font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
