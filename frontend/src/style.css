@@ -11,6 +11,14 @@
   font-style: normal;
 }
 
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
 .icon {
   font-family: "fontello";
   font-style: normal;
