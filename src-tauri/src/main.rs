@@ -4,13 +4,10 @@
 )]
 #[macro_use] extern crate slugify;
 
-use tauri::Manager;
+use tauri::{Manager, TitleBarStyle, WebviewUrl, WebviewWindowBuilder};
 use tauri::State;
 use std::sync::Mutex;
-mod win_ext;
 mod state;
-
-use win_ext::WindowExt;
 use anyhow::{anyhow, Result};
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -87,15 +84,43 @@ fn to_asset_absolute_path(state:tauri::State<Mutex<state::State>>, image_filenam
 
 
 fn main() {
-    tauri::Builder::default()  .manage(Mutex::<state::State>::new( state::State::new()))
-    .setup(|app| {
-        let window = app.get_window("main").unwrap();
-       // window.open_devtools();
-        window.set_transparent_titlebar(true);
-        window.maximize().unwrap();
+    tauri::Builder::default()
+        .manage(Mutex::<state::State>::new(state::State::new()))
+        .setup(|app| {
+            let win_builder = WebviewWindowBuilder::new(app, "main", WebviewUrl::default())
+                .title("Epiphany")
+                .inner_size(800.0, 600.0);
 
-        Ok(())
-    })
+            // set transparent title bar only when building for macOS
+            #[cfg(target_os = "macos")]
+            let win_builder = win_builder.title_bar_style(TitleBarStyle::Transparent);
+
+            let window = win_builder.build().unwrap();
+
+            // window.open_devtools();
+            window.maximize().unwrap();
+
+            // set background color only when building for macOS
+            #[cfg(target_os = "macos")]
+            {
+                use cocoa::appkit::{NSColor, NSWindow};
+                use cocoa::base::{id, nil};
+
+                let ns_window = window.ns_window().unwrap() as id;
+                unsafe {
+                    let bg_color = NSColor::colorWithRed_green_blue_alpha_(
+                        nil,
+                        50.0 / 255.0,
+                        158.0 / 255.0,
+                        163.5 / 255.0,
+                        1.0,
+                    );
+                    ns_window.setBackgroundColor_(bg_color);
+                }
+            }
+
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![greet, load_config, first_time_setup,create_new_file,update_workspace_content,load_note,save_file,save_image,to_asset_absolute_path])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
