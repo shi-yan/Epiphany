@@ -39,6 +39,8 @@ export function prosemirror2djot(doc, createdAt, modifiedAt) {
                         "attributes": {
                             "createdAt": createdAt + '',
                             "modifiedAt": modifiedAt + '',
+                            "summary": block.attrs.summary,
+                            "published": block.attrs.published+''
                         }
                     };
 
@@ -304,6 +306,14 @@ export function djot2prosemirror(doc, id, data) {
             if (attributes.modifiedAt) {
                 data.modified_at = parseInt(attributes.modifiedAt)
             }
+
+            if (attributes.published) {
+                data.published = (attributes.published === 'true');
+            }
+
+            if (attributes.summary) {
+                data.summary = attributes.summary
+            }
         }
 
         const blocks = flattenDoc(doc.children[0]);
@@ -321,6 +331,8 @@ export function djot2prosemirror(doc, id, data) {
                                         attrs: {
                                             createdAt: data.created_at,
                                             modifiedAt: data.modified_at,
+                                            summary: data.summary,
+                                            published: data.published,
                                             id: id
                                         },
                                         content: [
@@ -577,6 +589,10 @@ export function djot2prosemirror(doc, id, data) {
             type: "doc",
             content: content
         };
+    }
+    else {
+        console.log("something wrong")
+        return null;
     }
 }
 

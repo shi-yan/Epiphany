@@ -632,7 +632,7 @@ let resizeBarOnMouseUp = function (event) {
 
     document.getElementById('fold-menu-button').innerHTML = '<i class="icon icon-right-open">&#x31;</i>';
     document.getElementById('fold-menu-button').style.transition = 'width 0.5s';
-    
+
 
     menuFolded = true;
     document.getElementById('editor-top-padding').style.display = 'inline-block';
@@ -659,8 +659,37 @@ resizeBar.onmousedown = (e) => {
   document.getElementById('sidebar-container').style.display = 'flex';
   document.getElementById('sidebar-container').style.transition = null;
   document.getElementById('fold-menu-button').style.transition = null;
-
-
-
 }
 
+document.getElementById('post-settings-button').onclick = (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  document.getElementById('post-settings').style.visibility = 'visible';
+}
+
+document.getElementById('post-settings-cancel').onclick = (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  document.getElementById('post-settings').style.visibility = 'hidden';
+}
+
+document.getElementById('post-settings-apply').onclick = (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  window.editorView.state.doc.forEach((node, offset, index) => {
+    if (node.type.name === 'title') {
+      const content = document.getElementById('summary').value;
+      const published = document.getElementById('published').checked;
+      console.log("set summary", published, content)
+      let tr = window.editorView.state.tr.setNodeAttribute(offset, 'summary', content);
+      let tr2 = tr.setNodeAttribute(offset, 'published', published);
+      document.getElementById('post-settings').style.visibility = 'hidden';
+
+      window.editorView.focus();
+      window.editorView.dispatch(tr2);
+
+      return false;
+    }
+  })
+
+}
