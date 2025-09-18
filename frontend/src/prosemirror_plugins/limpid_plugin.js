@@ -191,21 +191,6 @@ export default function limpidPlugin(equationManager) {
 
       menuView.appendChild(videoButton);
 
-      let twitterButton = document.createElement('button');
-      twitterButton.classList.add('temp-button');
-      twitterButton.id = 'twitterbutton';
-      twitterButton.innerText = "Tw";
-
-      twitterButton.onclick = (e) => {
-        e.preventDefault();
-        window.editorView.dispatch(window.editorView.state.tr.replaceSelectionWith(textSchema.nodes.twitter.create({
-          src:
-            'ttt'
-        })));
-      }
-
-      menuView.appendChild(twitterButton);
-
       let codeButton = document.createElement('button');
       codeButton.classList.add('temp-button');
       codeButton.id = 'codeButton';

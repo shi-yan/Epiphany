@@ -128,12 +128,6 @@
             ]
         },
         {
-            "type": "twitter",
-            "attrs": {
-                "src": "ttt"
-            }
-        },
-        {
             "type": "paragraph",
             "content": [
                 {

@@ -8,31 +8,30 @@ import 'prosemirror-menu/style/menu.css'
 import 'prosemirror-gapcursor/style/gapcursor.css'
 import './style.css'
 import { baseKeymap, setBlockType } from "prosemirror-commands"
-import TagsView from "./tags"
-import GalleryView from "./gallery"
-import EquationView from "./equation"
+import TagsView from "./prosemirror_views/tags.js"
+import GalleryView from "./prosemirror_views/gallery.js"
+import EquationView from "./prosemirror_views/equation.js"
 import { gapCursor } from "prosemirror-gapcursor"
 import textSchema from "./textschema"
-import EquationManager from "./equation_manager"
-import InlineEquationView from "./inline_equation"
-import EquationRefView from "./equation_ref"
-import VideoView from "./video"
-import TwitterView from "./twitter"
+import EquationManager from "./equation_manager.js"
+import InlineEquationView from "./prosemirror_views/inline_equation.js"
+import EquationRefView from "./prosemirror_views/equation_ref.js"
+import VideoView from "./prosemirror_views/video.js"
 import { undo, redo, history } from "prosemirror-history"
 import { buildKeymap } from "./keymap"
 import { dropCursor } from "prosemirror-dropcursor"
-import CodeBlockView from "./code"
+import CodeBlockView from "./prosemirror_views/code.js"
 import limpidPlugin from "./limpid_plugin"
 import trailingSpacePlugin from "./trailing_space_plugin"
 import { Tree } from "./tree"
-import menuPlugin from "./slashmenu"
+import menuPlugin from "./slashmenu/slashmenu.js"
 import formatterPlugin from "./formatter_view"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { findParentNode } from "@tiptap/core";
 import UpdateTimer from "./update_timer"
 import { createId } from '@paralleldrive/cuid2';
-import { djot2prosemirror, prosemirror2djot } from './djot'
+import { djot2prosemirror, prosemirror2djot } from './djot.js'
 import * as djot from '@djot/djot'
 import { tauri_invoke, tauri_dialog } from "./tauri_mock"
 //https://pictogrammers.com/library/mdi/
@@ -162,9 +161,6 @@ window.editorView = new EditorView(editorElm, {
     },
     video(node, view, getPos) {
       return new VideoView(node, view, getPos);
-    },
-    twitter(node, view, getPos) {
-      return new TwitterView(node, view, getPos);
     },
     code_block(node, view, getPos) { return new CodeBlockView(node, view, getPos); }
   },
